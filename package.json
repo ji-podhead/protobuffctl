@@ -17,9 +17,10 @@
     "author": "ji-podhead",
     "license": "GPL-3.0-or-later",
     "dependencies": {
-      
+        "@ji-podhead/protoc-helper": "^1.0.6",
         "chokidar": "^3.6.0",
         "commander": "^12.0.0",
+        "protobufjs": "^7.2.6",
         "protoc": "^1.1.3"
     }
 }

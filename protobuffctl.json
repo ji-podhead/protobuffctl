@@ -1,4 +1,24 @@
 {
-  "watchers": [],
-  "components": []
+  "content": [],
+  "messeage": [],
+  "Enum": [],
+  "ProtoFilePath": [
+    "/run/media/ji/myStuff/git/protobuffctl/"
+  ],
+  "ProtoFile": [
+    "helloworld.proto"
+  ],
+  "Client": [],
+  "Request": [],
+  "Callback": [],
+  "Stream": [],
+  "ProtobuffFilePath": [],
+  "ProtobuffFile": [],
+  "ProtobuffUserPath": [],
+  "ProtobuffUser": [],
+  "ProtobuffUserComponentPreset": [],
+  "ProtobuffUserComponent": [],
+  "EndpointPath": [],
+  "Endpoint": [],
+  "MainEndpoint": []
 }
