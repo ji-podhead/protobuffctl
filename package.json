@@ -1,0 +1,25 @@
+{
+    "name": "ji-ui",
+    "version": "1.0.0",
+    "description": "a grpc based ui framework",
+    "main": "main.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/ji-podhead/ji_ui"
+    },
+    "keywords": [
+        "ui",
+        "crossplattform"
+    ],
+    "author": "ji-podhead",
+    "license": "GPL-3.0-or-later",
+    "dependencies": {
+      
+        "chokidar": "^3.6.0",
+        "commander": "^12.0.0",
+        "protoc": "^1.1.3"
+    }
+}
