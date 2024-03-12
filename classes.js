@@ -381,6 +381,27 @@ class WatcherManager {
        console.log('All watchers stopped.');
     }
  }
+ const componentMap = new Map([
+    ['content', new Map()],
+    ['messeage', new Map()],
+    ['Enum', new Map()],
+    ['ProtoFilePath', new Map()],
+    ['ProtoFile', new Map()],
+    ['Client', new Map()],
+    ['Request', new Map()],
+    ['Callback', new Map()],
+    ['Stream', new Map()],
+    ['ProtobuffFilePath', new Map()],
+    ['ProtobuffFile', new Map()],
+    ['ProtobuffUserPath', new Map()],
+    ['ProtobuffUser', new Map()],
+    ['ProtobuffUserComponentPreset', new Map()],
+    ['ProtobuffUserComponent', new Map()],
+    ['EndpointPath', new Map()],
+    ['Endpoint', new Map()],
+    ['MainEndpoint',new Map()]
+ ]);
+ 
 module.exports = {
     content,
     messeage,
@@ -401,5 +422,6 @@ module.exports = {
     Endpoint,
     WatcherManager,
     MainEndpoint,
-    Filewatcher
+    Filewatcher,
+    componentMap
 }

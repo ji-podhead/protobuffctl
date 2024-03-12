@@ -1,5 +1,6 @@
 const { Command } = require('commander');
-const { init, save, deserialize, generateProtobuff, createComponent, addWatcher, removeWatcher, stopAll, startAll } = require("./shared")
+const {init, save, deserialize, generateProtobuff,  createProtoComponent,addWatcher,removeWatcher, stopAll,startAll, createConfig} =require("./shared")
+
 const cli = new Command();
 cli
     // Ensure WatcherManager is instantiated before use
@@ -22,22 +23,28 @@ cli
     .command('init')
     .description('initialize using your protobuffctl.json')
     .action(() => { init() });
-cli
-    .command('generateProtobuff  <language> <proto_path> <proto_file> <outputPath>')
-    .description('generate a protobuff file. many languages supported')
-    .action(() => { generateProtobuff(language, proto_path,proto_file, outputPath) });
-cli
+    cli
     .command('createComponent  <filePath>')
     .description('save to your protobuffctl.json')
     .action(() => { save(filePath) });
 cli
-    .command('createComponent <type> [args...]')
-    .description('Create a component with the specified type and arguments')
+    .command('generateProtobuff  <language> <proto_path> <proto_file> <outputPath>')
+    .description('generate a protobuff file. many languages supported')
+    .action(() => { generateProtobuff(language, proto_path,proto_file, outputPath) });
+
+cli
+    .command('createProtoComponent <type> [args...]')
+    .description('Create a ProtoComponent with the specified type and arguments')
     .action((type, args) => {
         // Convert args from an array to a list of arguments
         const componentArgs = args.split(',');
-        createComponent(type, ...componentArgs);
+        createProtoComponent(type, ...componentArgs);
     });
+cli
+    .command('createConfig')
+    .description('Erstellt eine Konfigurationsdatei, falls noch nicht vorhanden')
+    .action(() => {createConfig(); });
+
        
 cli.parse(process.argv);
-module.exports = { program: cli }
+module.exports = {  cli }
