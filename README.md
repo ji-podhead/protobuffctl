@@ -65,3 +65,47 @@ Protobuffctl is a command-line interface (CLI) tool designed to manage component
  node main.js createComponent yourComponentType arg1,arg2,arg3
  ````
 
+---
+//    |-- Database_Schema
+//    |       |
+//    |       |-- ProtoFile
+//    |       |   |-- Name
+//    |       |   |-- Index
+//    |       |   |-- ProtoFilePath
+//    |       |   |-- Message
+//    |       |   |   |-- Content
+//    |       |   |   |-- Lang
+//    |       |   |   |-- Parent
+//    |       |   |
+//    |       |   |-- Enum
+//    |       |   |   |-- Content
+//    |       |   |   |-- Lang
+//    |       |   |   |-- Parent
+//    |       |
+//    |       |-- Endpoint 
+//    |       |   |-- Name
+//    |       |   |-- Index
+//    |       |   |-- EndpointPath
+//    |       |   |-- Protofiles
+//    |       |   |-- ProtobuffFiles
+//    |       |       |-- ProtoFilePath
+//    |       |       |-- ProtobuffFilePath
+//    |       |       |-- Clients
+//    |       |       |-- Requests
+//    |       |       |-- Callbacks
+//    |       |       |-- Streams
+//    |       |
+//    |       |-- ProtobuffUser
+//    |       |   |
+//    |       |   |-- ProtobuffUserPath
+//    |       |   |-- ProtobuffUserComponent
+//    |       |        |-- type
+//    |       |        |-- parent
+//    |       |        |-- line
+//    |       |        |-- content
+//    |       |
+//    |       |-- ProtobuffUserComponentPreset
+//    |       |    |
+//    |       |    |-- type
+//    |       |    |-- lang
+//    |       |    |-- preset const 
