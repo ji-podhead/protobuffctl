@@ -64,7 +64,6 @@ Protobuffctl has a command-line interface (CLI) tool designed to manage componen
 ```javascript
  node main.js createComponent yourComponentType arg1,arg2,arg3
  ````
----
 ```
 //    |-- Database_Schema//    |       |
 //    |       |-- ProtoFile
