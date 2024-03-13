@@ -1,3 +1,4 @@
+--made some major changes to the logic
 # protobuffctl 
 - watches for filechanges in your proto files.
 - automatically generates protobuff files for all your backends and languages
