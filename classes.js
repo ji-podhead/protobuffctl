@@ -277,14 +277,14 @@ class ComponentRegistry {
         this.services = new Map();
         this.methods = new Map();
         this.types = new Map();
-        this.Enum = new Map();
-        this.EnumValues = new Map();
-        this.ProtoFiles = new Map();
-        this.ProtoFilePaths = new Map();
-        this.ProtobuffFiles = new Map();
+        this.enums = new Map();
+        this.enumValues = new Map();
+        this.protoFiles = new Map();
+        this.protoFilePaths = new Map();
+        this.protobuffFiles = new Map();
         // ProtoBuffRegistry 
         this.protobuffComponents = new Map();
-        this.ProtobuffFiles = new Map();
+        this.protobuffFiles = new Map();
         this.ProtobuffFilePaths = new Map();
         // ProtoUserRegistry {
         this.clients = new Map();
@@ -292,7 +292,7 @@ class ComponentRegistry {
         this.Streams = new Map();
         this.callbacks=new Map();
         this.protobuffUserComponents= new Map();
-        this.ProtobuffFiles = new Map();
+        this.protobuffFiles = new Map();
         this.protoUserFiles = new Map();
 }
 }

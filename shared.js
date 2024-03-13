@@ -33,7 +33,7 @@ function extractTypesFromProtoFile(protoFilePath) {
         const parts = protoFilePath.split('/');
         const pathWithoutFileName = parts.slice(0, -1).join('/');
         const partBeforeFileName = parts[parts.length - 1];
-        protobuffctl.componentRegistry.ProtoFilePaths.set(partBeforeFileName, pathWithoutFileName);
+        protobuffctl.componentRegistry.protoFilePaths.set(partBeforeFileName, pathWithoutFileName);
         const protoObj = new ProtoFile(partBeforeFileName, [], [], [], []);
 
         getroot(protoFilePath).then((root) => {
@@ -97,14 +97,14 @@ function traverseProtoElements(current, fn,protoObj) {
                 jsonObj = current.toJSON();
                 const values = [];
                 Object.entries(jsonObj["values"]).map(([key, val]) => {
-                    const cEnumValues = protobuffctl.componentRegistry.EnumValues;
+                    const cEnumValues = protobuffctl.componentRegistry.enumValues;
                     const id = name + "_" + key;
                     if (cEnumValues.get(key) == undefined) {
                         cEnumValues.set(id, val);
                     }
                     values.push(id);
                 });
-                protobuffctl.componentRegistry.EnumValues.set(name, values);
+                protobuffctl.componentRegistry.enumValues.set(name, values);
                 protoObj.enums.push(name);
                 fn(current, 'Enum',protoObj);
                 break;
@@ -197,7 +197,7 @@ function generateProtobuff(protoFile,lang,out) {
     const protoName=protoFile.file.split(".proto")[0]
     console.log(protoName)
     const protobuff_file_name=protoName+".pb."+ languageFileExtensions[lang]["fileExtension"]
-    const path=protobuffctl.componentRegistry.ProtoFilePaths.get(file)
+    const path=protobuffctl.componentRegistry.protoFilePaths.get(file)
     generator.generateProtobuf(lang,path,file,out)
     protobuffctl.componentRegistry.ProtobuffFilePaths.set(protobuff_file_name,out)
     const protobuffFileObj=new ProtobuffFile(out,file, lang,path,[],[],[],[],[])
