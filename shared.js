@@ -1,14 +1,9 @@
 const {  
     Protobuffctl,
-    content,
     ProtoFile,
-    Client,
-    Request,
-    Callback,
-    Stream,
     ProtobuffFile,
+    ProtobuffComponent,
     ProtobuffUser,
-    ProtobuffUserComponentPreset,
     ProtobuffUserComponent,
     Endpoint,
     MainEndpoint,
@@ -27,7 +22,7 @@ const { types } = require('util');
 const dir = String(__dirname) + "/helloworld.proto"
 const protobuffctl = new Protobuffctl()
 extractTypesFromProtoFile(dir).then(()=>{
-   // console.log(protobuffctl.componentRegistry)
+    console.log(protobuffctl.componentRegistry)
 })
 async function getroot(protoFilePath) {
     const root = await protobuf.load(protoFilePath);
@@ -207,7 +202,18 @@ function generateProtobuff(protoFile,lang,out) {
     protobuffctl.componentRegistry.ProtobuffFilePaths.set(protobuff_file_name,out)
     const protobuffFileObj=new ProtobuffFile(out,file, lang,path,[],[],[],[],[])
     console.log(protobuffFileObj)
+    //TODO add obj
 }
+/**
+ * *------------------ addProtobuffUser --------------------- *  
+ * This function creates a new ProtobuffUser object  *  and establishes a clear assignment between both components in the component registry, *  acting as a bridge. The 'components' map consists of the name of the prototype or the name *  of the ProtobuffUserComponent, ensuring a direct link between the two within the registry. */
+function addProtobuffUser(file, targetProtobuff,targetFields,targetMethods){
+
+    const protobuffUserObj=new ProtobuffUser()
+
+}
+
+
 function createProtoComponent(type, ...args) {
     if (!componentMap.has(type)) {
         throw new Error(`Unsupported component type: ${type}`);
@@ -225,6 +231,10 @@ function stopAll() {
 }
 function startAll() {
     protobuffctl.watcherManager.startAllWatchers();
+}
+
+const mainRegistry = {
+    
 }
 module.exports = {
     protobuffctl, init, save, deserialize, generateProtobuff, createProtoComponent, addWatcher, removeWatcher, stopAll, startAll, createConfig
