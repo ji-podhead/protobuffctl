@@ -122,20 +122,20 @@ class ProtobuffFile {
 /**         ------------------ ProtobuffUser ---------------------    
  * @description ${classDescriptions.ProtobuffUser.description}
  */
-class ProtobuffUser {
-    constructor(name, path, lang, protobuffComponents, components) {
+class ProtoUser {
+    constructor(name, path, lang, protobuffComponents, protoUserComponent) {
         this.name = name; // The name of the file
         this.path = path; // The path to the file
         this.lang=lang
         this.protobuffComponents=protobuffComponents    
-        this.components = components; // The components defined within the file
+        this.protoUserComponent = protoUserComponent; // The components defined within the file
     }
 }
 /**         ------------------ ProtobuffUserComponent ---------------------    
  * @description ${classDescriptions.ProtobuffUserComponent.description}
  */
 //componentID->client->request&callback -> args
-class ProtobuffUserComponent {
+class ProtoUserComponent {
     constructor(id,protobuffComponent,callback,lang,file) {
        this.protobuffComponent=protobuffComponent
        this.callback=callback
@@ -281,7 +281,6 @@ class ComponentRegistry {
         this.enumValues = new Map();
         this.protoFiles = new Map();
         this.protoFilePaths = new Map();
-        this.protobuffFiles = new Map();
         // ProtoBuffRegistry 
         this.protobuffComponents = new Map();
         this.protobuffFiles = new Map();
@@ -291,9 +290,9 @@ class ComponentRegistry {
         this.methods = new Map();
         this.Streams = new Map();
         this.callbacks=new Map();
-        this.protobuffUserComponents= new Map();
-        this.protobuffFiles = new Map();
+        this.protoUserComponents= new Map();
         this.protoUserFiles = new Map();
+        this.protoUsers = new Map();
 }
 }
 /**         ------------------ Daemon ---------------------    
@@ -374,8 +373,8 @@ module.exports = {
     ProtobuffComponent,
     ProtobuffFile,
     ProtobuffComponent,
-    ProtobuffUser,
-    ProtobuffUserComponent,
+    ProtoUser,
+    ProtoUserComponent,
     Endpoint,
     MainEndpoint,
     languageFileExtensions

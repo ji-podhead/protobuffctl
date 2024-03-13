@@ -3,8 +3,8 @@ const {
     ProtoFile,
     ProtobuffFile,
     ProtobuffComponent,
-    ProtobuffUser,
-    ProtobuffUserComponent,
+    ProtoUser,
+    ProtoUserComponent,
     Endpoint,
     MainEndpoint,
     languageFileExtensions
@@ -209,7 +209,7 @@ function generateProtobuff(protoFile,lang,out) {
  * This function creates a new ProtobuffUser object  *  and establishes a clear assignment between both components in the component registry, *  acting as a bridge. The 'components' map consists of the name of the prototype or the name *  of the ProtobuffUserComponent, ensuring a direct link between the two within the registry. */
 function addProtobuffUser(file, targetProtobuff,targetFields,targetMethods){
 
-    const protobuffUserObj=new ProtobuffUser()
+    const protobuffUserObj=new ProtoUser()
 
 }
 
@@ -233,9 +233,6 @@ function startAll() {
     protobuffctl.watcherManager.startAllWatchers();
 }
 
-const mainRegistry = {
-    
-}
 module.exports = {
     protobuffctl, init, save, deserialize, generateProtobuff, createProtoComponent, addWatcher, removeWatcher, stopAll, startAll, createConfig
 };
