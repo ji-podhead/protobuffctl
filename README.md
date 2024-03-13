@@ -4,6 +4,8 @@
 - automatically generates protobuff files for all your backends and languages
 - automatically generate demo code for your services and messeages
 -  Protobuffs for many available languages are getting created using my <a href="https://github.com/ji-podhead/protoc-helper">protoc-helper repo</a>. it uses  compiled protoc binary with javascript
+-  creates a libary of all your protobuff apearances and proto types,serices,enums, etc
+-  browse trough your components in vs code extension. click on a listed file to open it
   
 # Protobuffctl CLI Documentation
 Protobuffctl has a command-line interface (CLI) tool designed to manage components and watchers for a project,   possibly related to Protocol Buffers (protobuf). This documentation provides an overview of the available commands and their usage. `The the export module functions do exactly the same`
