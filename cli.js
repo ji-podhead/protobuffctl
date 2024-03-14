@@ -1,5 +1,7 @@
 const { Command } = require('commander');
-const {init, save, deserialize, generateProtobuff,  createProtoComponent,addWatcher,removeWatcher, stopAll,startAll, createConfig} =require("./shared")
+const {init, save, generateProtobuff,  createProto,addWatcher,removeWatcher, stopAll,startAll,  getProto} =require("./shared")
+
+
 
 const cli = new Command();
 cli
@@ -23,6 +25,19 @@ cli
     .command('init')
     .description('initialize using your protobuffctl.json')
     .action(() => { init() });
+    cli
+    .command('createProto <filePath>')
+    .description('generate a Protofile Object from path to File')
+    .action((filePath) => { 
+        const parts = filePath.split('/');
+         const path  = parts.slice(0, -1).join('/');
+        const file = parts[parts.length - 1];
+        createProto(file,path) });
+    cli
+    .command('getProto <id><file><filePath>')
+    .description('get a Protofile Object from the registry by path, or by id')
+    .action((filePath) => { getProto(id,file,filePath) });
+
     cli
     .command('createComponent  <filePath>')
     .description('save to your protobuffctl.json')

@@ -4,7 +4,10 @@ const fs = require('fs');
 const path = require('path');
 const { ProtobuffGenerator } = require("@ji-podhead/protoc-helper")
 const { classDescriptions } = require("./descriptions/classdescriptions")
-
+//also irgendwie versteh ich mein code hier nicht. ich nehme eine map und package zum klassennahmen die methods rein, aber vorher gucke ich in der registry nach ob die methods schon existieren, adde sie dann aber nicht dazu falls nicht, also wird das niemals wahr sein.
+//was mich aber viel  mehr stört ist, das ich später die mthoden in der protouser und protobufffile brauche. naja eigentlich auch nicht so wirklich, dann ist ein callback/request immer erstmal einem service zugewiesen und hat zusätzlich ein unterpunkt method. aber ich wollte in der protouser sektion eigentlich codespezifische namen nehmen wie client, request. was für ein type das ist, ist ja dem anderen server egal... hmm naja nicht wenn der ein genaues objekt erwartet. ich kann das ja so machen 
+//dann hat die registry kein methods feld, aber eine art übersetzung dazu
+//also wir halten fest: in der protoregistry sind die methods den services untergeordnet und haben kein eigenes feld. das wäre ja schwachsinning, aber wir können  noch eine gesammtliste machen, wo wir das für suchfunktionen übernehmen können, das ist dann aber nicht codespezifisch zu verwenden, (bzw nur beim erstellen neuer types durch kopie) weil das die struktur und die typensicherheit gefährden würde. ich wollte das uhrsprünglich machen damit unterschiedliche services auf den selben method pointen können, aber das geht ja mit protofiles eh nicht oder?
 // ---------------------------- STATIC ------------------------------------
 const prototypes = ["nested", "double", "float", "int32", "int64", "uint32", "uint64", "sint32", "sint64", "fixed32", "fixed64", "sfixed32", "sfixed64", "bool", "string", "bytes"]
 const languageFileExtensions = {
@@ -141,24 +144,30 @@ class ProtobuffFile {
 /**         ------------------ ProtobuffUser ---------------------    
  * @description ${classDescriptions.ProtobuffUser.description}
  */
+// componentID->client->request&callback -> args
 class ProtobuffUser {
-    constructor(name, path, protobuffImports, components) {
+    constructor(name, path, lang, protobuffFiles, components) {
         this.name = name; // The name of the file
         this.path = path; // The path to the file
-        this.protobuffImports = protobuffImports; // The imported Protobufs
+        this.lang=lang
+        this.protobuffFiles = protobuffFiles; // The imported Protobufs
         this.components = components; // The components defined within the file
     }
 }
 /**         ------------------ ProtobuffUserComponent ---------------------    
  * @description ${classDescriptions.ProtobuffUserComponent.description}
  */
-class ProtobuffUserComponentPreset {
-    constructor(type, lang, preset) {
-        this.type = type;
-        this.lang = lang;
-        this.preset = preset;
-    }
+//componentID->client->request&callback -> args
+class ProtobuffUserComponent {
+    constructor(protobuffFile, client, request,callback,id) {
+       this.protobuffFile=protobuffFile
+       this.client=client
+       this.request=request
+       this.callback=callback
+       this.id=id
+        }
 }
+
 /**         ------------------ ProtobuffUserComponentPreset ---------------------    
  * @description ${classDescriptions.ProtobuffUserComponentPreset.description}
  */
@@ -317,12 +326,14 @@ class ProtoBuffRegistry {
         this.ProtobuffFilePaths = new Map();
     }
 }
+//componentID->client->request&callback -> args
 class ProtoUserRegistry {
     constructor() {
         this.Client = new Map();
         this.methods = new Map();
         this.Callback = new Map();
         this.Streams = new Map();
+        this.components=new Map()
         this.ProtobuffFiles = new Map();
         this.protoUserFiles = new Map();
     }
