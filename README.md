@@ -12,21 +12,22 @@
 
 ```mermaid
 graph TD;
-    CLI["💻 Command Line Interface"]-->Protobuffctl;
-    Protobuffctl-->WatcherManager;
-    Protobuffctl-->ComponentRegistry;
+    CLI["💻 Command Line Interface"]-->Api;
+    Api-->WatcherManager;
+    Api-->ComponentRegistry;
     WatcherManager-->FileWatcher;
-    FileWatcher-->Protobuffctl;
-    Protobuffctl-->ProtobuffFile;
-    Protobuffctl-->ProtoUser;
-    Protobuffctl-->ProtoFile;
+    FileWatcher-->Api;
+    Api-->ProtobuffFile;
+    Api-->ProtoUser;
+    Api-->ProtoFile;
     ProtoFile-->ProtobuffFile;
     ProtoFile-->ComponentRegistry;
     ProtobuffFile-->ProtoUser;
     ProtobuffFile-->ComponentRegistry;
     ProtoUser-->ComponentRegistry;
+  Daemon-->Api;
     subgraph protobuffctl [🏢 protobuffctl]
-        Protobuffctl;
+        Api;
         WatcherManager;
         FileWatcher;
         ComponentRegistry;
@@ -36,17 +37,12 @@ graph TD;
         ProtobuffFile;
         ProtoUser;
     end
-    Daemon-->Protobuffctl;
-    subgraph middleware [🔌 Middleware/API]
-        Daemon;
-        API;
-    end
     style components fill:#f9d71c,stroke:#333,stroke-width:2px
     style ComponentRegistry fill:#f9d71c,stroke:#333,stroke-width:2px
     style components fill:#f9d71c,stroke:#333,stroke-width:2px
     style ComponentRegistry fill:#f9d71c,stroke:#333,stroke-width:2px
     style Daemon fill:#f9d71c,stroke:#333,stroke-width:2px
-    style API fill:#f9d71c,stroke:#333,stroke-width:2px
+
 ```
 
 ### Update
