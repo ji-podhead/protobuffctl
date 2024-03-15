@@ -54,7 +54,7 @@ graph TD;
 
 ### TODO
 > **files and object cant be redundant**, however if failures arise due to the user, or missing drives, the config/save-file can get damaged which can lead to weird behaviour when automated processes are using the faulty objects, so i decided to add a health-state field for each object. **unhealthy files will be ignored and not further be processed**, but also the main statehandler wont delete that file, if it may become usuable again later.
-- **Health State Field**: Add a health-state field for each object to handle failures and misconfigurations. Unhealthy files will be ignored and not further processed.
+- **Health State Field**: Add a health-state field for each object to handle failures and misconfigurations.
 - **Health Check**: Add a health check to ensure the integrity of the objects.
 - **Merge Function**: Add a merge function for the user to copy fields back over to a healthy file if there were misconfigurations.
 - **Component Creator**: Edited through the API rather than through a text editor.
