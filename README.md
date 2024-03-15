@@ -1,11 +1,12 @@
 # protobuffctl 
 - registers all your protobuff-Users,callbacks, components(fields, services, enums...)  **[see example json](https://github.com/ji-podhead/protobuffctl/blob/main/protobuffctl.json)**
 - watches for filechanges in your proto files.
-- automatically generates protobuff files for all your backends and languages
-- automatically generates for protousers and protofiles directly trough the api
--  Protobuffs for many available languages are getting created using my <a href="https://github.com/ji-podhead/protoc-helper">protoc-helper repo</a>. it uses  compiled protoc binary with javascript
--  browse trough your components in vs code extension. click on a listed file to open it
--  create new types,fields and services from presets, or a copy from the registry
+- create new types,fields and services from presets, or a copy from the registry
+- automatically generates protobuff files for all your backends and languages using my <a href="https://github.com/ji-podhead/protoc-helper">protoc-helper repo</a>. it uses  compiled protoc binary with javascript
+- procedural code generation in protoUserFiles using the given clients, methods,etc
+- browse trough your components in vs code extension. click on a listed file to open it.
+- get complete visual feedback for all you related methods, components and files directly in your ide
+
 
 ```mermaid
 graph TD;
