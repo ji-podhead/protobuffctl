@@ -7,48 +7,35 @@ const fs = require('fs');
 const path = require('path');
 const { ProtobuffGenerator } = require("protoc-helper")
 const { classDescriptions } = require("./descriptions/classdescriptions")
-const {Protobuffctl} = require("./protobuffctl")
-const{getUniqueName,isSubdirectory,splitPath,joinPath,prototypes,languageFileExtensions}= require("./util/utils")
+const { Protobuffctl } = require("./protobuffctl")
+const { getUniqueName, isSubdirectory, prototypes, languageFileExtensions,mergeFields, initObject } = require("./util/utils")
 const protobuf = require('protobufjs');
 const protobuffctl = new Protobuffctl()
-generator=new ProtobuffGenerator()
-// ---------------------------- OOP ------------------------------------
-// EXAMPLES NUR FÜR PROTO. js code wird automatisch erzeugt
+generator = new ProtobuffGenerator()
 /**         ------------------ ProtoFile ---------------------    
  * @description ${classDescriptions.ProtoFile.description}
  */
 class ProtoFile {
-    constructor(file, path, services, methods, types, enums, protobuffFiles, protobuffComponents, protoUserComponent,id) {
-        const protoFilePath=path+"/"+file
-        console.log("creating " + protoFilePath)
-        const uniqueId = getUniqueName(protobuffctl.componentRegistry.protoFiles,file);
-       console.log("___________________  ")
-       console.log( uniqueId)
+    constructor(file_name, file_path, services, methods, types, enums, protobuffFiles, protobuffComponents, protoUserComponent, id) {
+        this.absolute_path= path.join(file_path,file_name)
+        initObject(this,["services","methods","types","enums","protobuffFiles","protobuffComponents","protoUserComponent"])
+        console.log("creating " + this.absolute_path)
+        const uniqueId = file_name+"_"+getUniqueName(protobuffctl.componentRegistry.protoFiles, file_name);
+        console.log("___________________  ")
+        console.log(uniqueId)
         const existingProtoFile = Array.from(protobuffctl.componentRegistry.protoFiles.values()).find(
-            protoFile => protoFile.file === file && protoFile.path === path
+            protoFile => protoFile.absolute_path=== this.absolute_path
         );
-        this.id = existingProtoFile ? existingProtoFile.id : id? id: uniqueId;
-        this.services = existingProtoFile ? existingProtoFile.services : services || [];
-        this.methods = existingProtoFile ? existingProtoFile.methods : methods || [];
-        this.types = existingProtoFile ? existingProtoFile.types : types || [];
-        this.enums = existingProtoFile ? existingProtoFile.enums : enums || [];
-        this.protobuffFiles = existingProtoFile ? existingProtoFile.protobuffFiles : protobuffFiles || [];
-        this.protobuffComponents = existingProtoFile ? existingProtoFile.protobuffComponents : protobuffComponents || [];
-        this.protoUserComponent = existingProtoFile ? existingProtoFile.protoUserComponent : protoUserComponent || [];
-        this.file=file
-        this.path = existingProtoFile ? existingProtoFile.path : path || [];
-        if(existingProtoFile!=undefined){
+        this.file_name = file_name
+        this.file_path = file_path
+        if (existingProtoFile != undefined) {
+            mergeFields(this,existingProtoFile,["services","methods","types","enums","protobuffFiles","protobuffComponents","protoUserComponent"])
+            this.id=existingProtoFile.id
         }
-        else{
-            protobuffctl.componentRegistry.protoFilePaths.set(file, path);
-            this.path=protobuffctl.componentRegistry.protoFilePaths.get(file)
-        }
-        
-        protobuffctl.componentRegistry.protoFiles.set(file, this);
-
-        this.extractTypesFromProtoFile(protoFilePath).then(()=>{
+        protobuffctl.componentRegistry.protoFilePaths.set(file_name, this.absolute_path);
+        this.extractTypesFromProtoFile(this.absolute_path).then(() => {
             console.log(protobuffctl.componentRegistry)
-            const buff = new ProtobuffFile(__dirname,this,"ts")
+            const buff = new ProtobuffFile(__dirname, this, "ts")
         })
     }
     async getroot(protoFilePath) {
@@ -60,14 +47,14 @@ class ProtoFile {
 
             this.getroot(protoFilePath).then((root) => {
                 this.traverseProtoElements(root, function (obj, type) {
-                },this).then(() => {
-                 //   console.log(protobuffctl.componentRegistry)
+                }, this).then(() => {
+                    //   console.log(protobuffctl.componentRegistry)
                     console.log("_____________")
                     protobuffctl.save()
-                 //   generateProtobuff(this,"go",__dirname)
-                    resolve(); 
+                    //   generateProtobuff(this,"go",__dirname)
+                    resolve();
                 }).catch(reject);
-            }).catch(reject); 
+            }).catch(reject);
         });
     }
     traverseProtoElements(current, fn) {
@@ -160,7 +147,6 @@ class ProtobuffComponent {
         this.protoBuffFile = protoBuffFile;
         this.ProtoFile = ProtoFile;
     }
-
 }
 /**         ------------------ ProtobuffFile ---------------------    
  * @description ${classDescriptions.ProtobuffFile.description}
@@ -172,37 +158,35 @@ class ProtobuffFile {
         this.lang = lang;
         this.protoUsers = [];
         this.protobuffComponents = []; // { name, client, method, args, returns, line, protoBuffFile, ProtoFile }
-        console.log(protoFile)
-        this.protoName = protoFile.file.split(".proto")[0];
-        this.file_name = this.protoName + ".pb" + languageFileExtensions[lang]["fileExtension"];
-        this.path =  out + "/" + this.file_name;
+        this.file_name = path.basename(this.protoFile.file_name,".proto")+languageFileExtensions[lang]["fileExtension"]
+        this.absolute_path = path.join(out,this.file_name)
         try {
             this.generateProtobuff();
         } catch (err) {
-            console.log("error while creating ProtobuffFile");
+            console.log("error while creating ProtobuffFile" + err);
             return err;
         }
         const existingProtobuffFile = Array.from(protobuffctl.componentRegistry.protobuffFiles.values()).find(
-            protobuffFile => protobuffFile.file_name === this.file_name && protobuffFile.path === this.path
+            protobuffFile => protobuffFile.file_name === this.file_name && protobuffFile.absolute_path === this.absolute_path
         );
-        this.id = existingProtobuffFile ? existingProtobuffFile.id : getUniqueName(protobuffctl.componentRegistry.protobuffFiles, this.file_name);
-       console.log(protobuffctl.componentRegistry.protobuffFilePaths)
+        this.id = existingProtobuffFile ? existingProtobuffFile.id : this.file_name+"_"+getUniqueName(protobuffctl.componentRegistry.protobuffFiles, this.file_name);
+        console.log(protobuffctl.componentRegistry.protobuffFilePaths)
         protobuffctl.componentRegistry.protobuffFiles.set(this.id, this);
-        protobuffctl.componentRegistry.protobuffFilePaths.set(this.id, this.path);
-        const endPoint = new Endpoint({lang:this.lang,path:this.path, protoUsers:[this.protoUsers],protobuffFiles:[this],protoFiles:[this.protoFile]})
+        protobuffctl.componentRegistry.protobuffFilePaths.set(this.id, this.absolute_path);
+        const endPoint = new Endpoint({ lang: this.lang, file_path: this.absolute_path, protoUsers: [this.protoUsers], protobuffFiles: [this], protoFiles: [this.protoFile] })
         console.log(protoFile);
         console.log(this.file_name);
-        console.log(this.protoName);
         console.log(this.endPoint);
         protobuffctl.save()
         console.log(protobuffctl)
     }
     generateProtobuff() {
         console.log(
-            this.lang+"\n"+ this.protoFile.path+"\n"+ this.protoFile.file+"\n"+ this.out
+            this.lang + "\n" + this.protoFile.path + "\n" + this.protoFile.file_name + "\n" + this.out
         )
-        generator.generateProtobuf(this.lang, this.protoFile.path, this.protoFile.file, this.out);
+        generator.generateProtobuf(this.lang, this.protoFile.file_path, this.protoFile.file_name, this.out);
         protobuffctl.save()
+        protobuffctl.convertToJsonCompatible(__dirname+"/protobuffctl.json")
     }
     generateProtobuffComponent(protobuffFile, protoFile, service, method) {
         const protobufComponent = new ProtobuffComponent();
@@ -241,63 +225,53 @@ class ProtoUser {
  */
 //componentID->client->request&callback -> args
 class ProtoUserComponent {
-    constructor(id,protobuffComponent,callback,lang,file) {
-       this.protobuffComponent=protobuffComponent
-       this.callback=callback
-       this.file =file
-       this.id=id //name/field of the function needs to be atomar like serviceeUser_1 
-       this.lang=lang;    
+    constructor(id, protobuffComponent, callback, lang, file_name ) {
+        this.protobuffComponent = protobuffComponent
+        this.callback = callback
+        this.file_name= file_name
+        this.id = id //name/field of the function needs to be atomar like serviceeUser_1 
+        this.lang = lang;
     }
 }
 /**         ------------------ Endpoint ---------------------    
  * @description creates a new Endpoint and will check for parent-, or child-endpoints and merge if so
  */
 class Endpoint {
-    merge(finalpath, point){
-        this.path=finalpath
-        this.id=point.id
-        this.protobuffFiles=Array.concat(point.protoBuffFiles,this.protobuffFiles)
-        this.protoUsers=Array.concat(point.protoUsers,this.protoUsers)
-        this.protoFiles=Array.concat(point.protoFiles,this.protoFiles)
-        protobuffctl.componentRegistry.endPoints.set(point.id, this)
-    }
-    constructor({lang,path,protoUsers,protobuffFiles,protoFiles}) {
+    constructor({ lang, file_path, protoUsers, protobuffFiles, protoFiles }) {
         let finalObject
-        let isParent=false
-        let splittedPath=splitPath(this.path).slice(0,-1)
-        const folder = splittedPath[splittedPath.length-1]
-        path=joinPath(splittedPath) 
-        this.lang=lang
-        let tempID=lang+"_"+folder+"_"
-        tempID = tempID+getUniqueName(protobuffctl.componentRegistry.endPoints)
-        this.path=path
-        this.id=tempID;
-        this.protobuffFiles=protobuffFiles 
-        this.protoUsers=protoUsers 
-        this.protoFiles=protoFiles
+        let isParent = false
+        this.path = path.dirname(file_path)
+        const folder = path.basename(this.path)
+        this.lang = lang
+        let tempID = lang + "_" + folder + "_"
+        this.id = tempID + getUniqueName(protobuffctl.componentRegistry.endPoints, tempID)
+        this.protobuffFiles = protobuffFiles
+        this.protoUsers = protoUsers
+        this.protoFiles = protoFiles
         for (const point of protobuffctl.componentRegistry.endPoints.values()) {
             if (point.lang === lang) {
                 // merge because of same directory
-                if(point.path==path){
-                    this.merge(path,point)
-                break
-                }
-                else{ 
-                    const a =isSubdirectory(path,point.path)
-                    if(a<2){
-                    finalObject=point    
-                    if (a==0){
-                        isParent=true
-                    }
+                if (point.path == this.path) {
+                    mergeFields(this,finalObject,["protoUsers","protobuffFiles","protoFiles"])
+                    this.id= finalObject.id
                     break
                 }
+                else {
+                    const a = isSubdirectory(this.path, point.path)
+                    if (a < 2) {
+                        finalObject = point
+                        if (a == 0) {
+                            isParent = true
+                        }
+                        break
+                    }
                 }
-           }
+            }
         }
         if (finalObject) { // merge because is parent or child
-       
-            this.merge(isParent?path:point.path,finalObject)
-       
+            mergeFields(this,finalObject["protoUsers","protobuffFiles","protoFiles"])
+            this.path=isParent ? this.path : finalObject.path
+            this.id=isParent ? this.id : finalObject.id
         }
         protobuffctl.componentRegistry.endPoints.set(this.id, this)
     }

@@ -3,7 +3,6 @@ const { exec } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 const protobuf = require('protobufjs');
-
 /**         ------------------ ProtoFile ---------------------    
  * @description returns: 0 (a>b) | 1 (b>a) | 2  no related
  */
@@ -25,8 +24,33 @@ function isSubdirectory(path_a, path_b) {
     } else {
         return 2; // not_related
     }
+}
+function mergeFields(target, source, fields) {
+    fields.forEach(field => {
+        if (Array.isArray(target[field]) && Array.isArray(source[field])) {
+            // Konkatenation für Array-Typen
+            target[field] = Array.concat(source[field], target[field]);
+        } else if (typeof target[field] !== 'undefined' && typeof source[field] !== 'undefined') {
+            // Überschreiben für nicht-Array-Typen
+            target[field] = source[field];
+        } else if (Array.isArray(target[field])) {
+            // Wenn das Zielfeld ein Array ist, aber das Quellfeld nicht definiert ist, überspringen Sie die Überschreibung
+            console.log(`Quellfeld ${field} ist nicht definiert, Zielfeld bleibt unverändert.`);
+        } else if (Array.isArray(source[field])) {
+            // Wenn das Quellfeld ein Array ist, aber das Zielfeld nicht definiert ist, setzen Sie das Zielfeld auf das Quellfeld
+            target[field] = source[field];
+        } else {
+            console.error(`Feld ${field} ist weder ein Array noch definiert in beiden Ziel- und Quellobjekten.`);
+        }
+    });
+}
+function initObject(object,fields){
+    fields.forEach(field => {
+        if(object[field]==undefined){
+            object[field]=[]
+        }
+    })
 } 
-
 function splitPath(fullPath) {
     const isWindows = process.platform === 'win32';
     const separator = isWindows ? '\\' : '/';
@@ -37,64 +61,63 @@ function joinPath(pathParts) {
     const separator = isWindows ? '\\' : '/';
     return pathParts.join(separator);
 }
-
 // ---------------------------- STATIC ------------------------------------
 const prototypes = ["double", "float", "int32", "int64", "uint32", "uint64", "sint32", "sint64", "fixed32", "fixed64", "sfixed32", "sfixed64", "bool", "string", "bytes"]
 const languageFileExtensions = {
     go: {
-        fileExtension: '.go',
+        fileExtension: '.pb.go',
         command: '--go_out'
     },
     java: {
-        fileExtension: '.java',
+        fileExtension: '.pb.java',
         command: '--java_out'
     },
     python: {
-        fileExtension: '.py',
+        fileExtension: '.pb2.py',
         command: '--python_out'
     },
     csharp: {
-        fileExtension: '.cs',
+        fileExtension: '.pb.cs',
         command: '--csharp_out'
     },
     ruby: {
-        fileExtension: '.rb',
+        fileExtension: '.pb.rb',
         command: '--ruby_out'
     },
     objc: {
-        fileExtension: '.m',
+        fileExtension: '.pb.m',
         command: '--objc_out'
     },
     php: {
-        fileExtension: '.php',
+        fileExtension: '.pb.php',
         command: '--php_out'
     },
     dart: {
-        fileExtension: '.dart',
+        fileExtension: '.pb.dart',
         command: '--dart_out'
     },
     rust: {
-        fileExtension: '.rs',
+        fileExtension: '.pb.rs',
         command: '--rust_out'
     },
     swift: {
-        fileExtension: '.swift',
+        fileExtension: '.pb.swift',
         command: '--swift_out'
     },
     kotlin: {
-        fileExtension: '.kt',
+        fileExtension: '.pb.kt',
         command: '--kotlin_out'
     },
     scala: {
-        fileExtension: '.scala',
+        fileExtension: '.pb.scala',
         command: '--scala_out'
     },
     js: {
-        fileExtension: '.js',
+        fileExtension: '.pb.js',
         command: '--js_out'
     },
     ts: {
-        fileExtension: '.ts',
+        fileExtension: '.pb.ts',
         command: '--ts_out'
     }
 };
@@ -127,6 +150,9 @@ module.exports={
     isSubdirectory,
     splitPath,
     joinPath,
+    mergeFields,
+    initObject,
     prototypes,
-    languageFileExtensions
+    languageFileExtensions,
+    CustomMap
 }
