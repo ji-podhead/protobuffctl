@@ -58,6 +58,7 @@ graph TD;
 - **Health Check**: Add a health check to ensure the integrity of the objects.
 - **Merge Function**: Add a merge function for the user to copy fields back over to a healthy file if there were misconfigurations.
 - **Component Creator**: Edited through the API rather than through a text editor.
+- **user Watcher**: Add a watcher for the Users to update the registry if files are changed.
 
 # Protobuffctl CLI Documentation
 Protobuffctl has a command-line interface (CLI) tool designed to manage components and watchers for a project,   possibly related to Protocol Buffers (protobuf). This documentation provides an overview of the available commands and their usage. `The the export module functions do exactly the same`
