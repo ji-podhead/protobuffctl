@@ -13,6 +13,7 @@
 ```mermaid
 graph TD;
     CLI["💻 Command Line Interface"]-->Api;
+CLI["💻 Command Line Interface"]-->Daemon;
     Api-->WatcherManager;
     Api-->ComponentRegistry;
     WatcherManager-->FileWatcher;
