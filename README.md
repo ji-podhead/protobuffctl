@@ -1,15 +1,19 @@
 # protobuffctl 
-- registers all your proto-files, proto-Users,callbacks, components(fields, services, enums...)  **[see example json](https://github.com/ji-podhead/protobuffctl/blob/main/protobuffctl.json)**
-- watches for filechanges in your proto files.
-- create new types,fields and services from presets, or a copy from the registry
-- automatically generates protobuff files for all your backends and languages using my <a href="https://github.com/ji-podhead/protoc-helper">protoc-helper repo</a>.=> compiled protoc binary for node
-- procedural code generation in protoUserFiles using the given clients, methods,etc
-- get complete visual feedback for all you related methods, components and files directly in your ide
-- browse, manage, edit and create your files,components and implementations via ui / vs code extension
+# protobuffctl
+
+`protobuffctl` is a powerful tool designed to manage components and watchers for a project related to Protocol Buffers (protobuf). It provides a comprehensive set of features to streamline the development process:
+
+- **Registry Management**: Registers all your proto-files, proto-Users, callbacks, components (fields, services, enums, etc.). [See example JSON](https://github.com/ji-podhead/protobuffctl/blob/main/protobuffctl.json).
+- **File Watching**: Watches for file changes in your proto files.
+- **Component Creation**: Create new types, fields, and services from presets, or a copy from the registry.
+- **Protobuf Generation**: Automatically generates protobuf files for all your backends and languages using the [protoc-helper repo](https://github.com/ji-podhead/protoc-helper).
+- **Procedural Code Generation**: Generates procedural code in protoUserFiles using the given clients, methods, etc. `todo`
+- **Visual Feedback**: Provides complete visual feedback for all related methods, components, and files directly in your IDE. `todo`
+- **UI/VS Code Extension**: Browse, manage, edit, and create your files, components, and implementations via UI or VS Code extension. `todo`
 
 ```mermaid
 graph TD;
-    CLI["Command Line Interface"]-->Protobuffctl;
+    CLI["💻 Command Line Interface"]-->Protobuffctl;
     Protobuffctl-->WatcherManager;
     Protobuffctl-->ComponentRegistry;
     WatcherManager-->FileWatcher;
@@ -22,19 +26,19 @@ graph TD;
     ProtobuffFile-->ProtoUser;
     ProtobuffFile-->ComponentRegistry;
     ProtoUser-->ComponentRegistry;
-    subgraph protobuffctl [protobuffctl]
+    subgraph protobuffctl [🏢 protobuffctl]
         Protobuffctl;
         WatcherManager;
         FileWatcher;
         ComponentRegistry;
     end
-    subgraph components [Components]
+    subgraph components [🔧 Components]
         ProtoFile;
         ProtobuffFile;
         ProtoUser;
     end
     Daemon-->Protobuffctl;
-    subgraph middleware [Middleware/API]
+    subgraph middleware [🔌 Middleware/API]
         Daemon;
         API;
     end
@@ -45,20 +49,21 @@ graph TD;
     style Daemon fill:#f9d71c,stroke:#333,stroke-width:2px
     style API fill:#f9d71c,stroke:#333,stroke-width:2px
 ```
-# Update
-- fast saving and loading, but also added a daemon to keep the mainObject alive including the registry
-- protobuffregistry+creation is working fine
-- added:export the registry to json **[see example json](https://github.com/ji-podhead/protobuffctl/blob/main/protobuffctl.json)**
-- all components are getting stored and can get reproduced
-- create new services, types, enums via cli command by coping from the registry or via command
-- proto files are edited trough api rather than trough texteditor => related protobufffiles will automatically get compiled to their target folders using <a href="https://github.com/ji-podhead/protoc-helper">protoc-helper repo</a>
-> **files and object cant be redundant***, however if failures arise due to the user, or missing drives, the config/save-file can get damaged which can lead to weird behaviour when automated processes are using the faulty objects, so i decided to add a health-state field for each object. **unhealthy files will be ignored** and not further processed, but also the main statehandler wont delete that file, if it may become usuable again later.
 
-> **add health_state field**
+### Update
+- **Fast Saving and Loading**: Added a daemon to keep the main object alive, including the registry.
+- **Protobuff Registry**: Protobuff registry and creation are working fine.
+- **Export to JSON**: All components are stored and can be reproduced. [See example JSON](https://github.com/ji-podhead/protobuffctl/blob/main/protobuffctl.json).
+- **New Services, Types, Enums**: Create new services, types, enums via CLI command by copying from the registry or via command. 
+- **automated Proto-gen**:  Related protobuf files will automatically get compiled to their target folders using the [protoc-helper repo](https://github.com/ji-podhead/protoc-helper).
 
-> **add health check**
+### TODO
+> **files and object cant be redundant**, however if failures arise due to the user, or missing drives, the config/save-file can get damaged which can lead to weird behaviour when automated processes are using the faulty objects, so i decided to add a health-state field for each object. **unhealthy files will be ignored and not further be processed**, but also the main statehandler wont delete that file, if it may become usuable again later.
+- **Health State Field**: Add a health-state field for each object to handle failures and misconfigurations. Unhealthy files will be ignored and not further processed.
+- **Health Check**: Add a health check to ensure the integrity of the objects.
+- **Merge Function**: Add a merge function for the user to copy fields back over to a healthy file if there were misconfigurations.
+- **Component Creator**: Edited through the API rather than through a text editor.
 
-> **add a merge function for the user** if he had misconfigurations but wants to copy the fields back over to a healthy file 
 # Protobuffctl CLI Documentation
 Protobuffctl has a command-line interface (CLI) tool designed to manage components and watchers for a project,   possibly related to Protocol Buffers (protobuf). This documentation provides an overview of the available commands and their usage. `The the export module functions do exactly the same`
 ## Commands
