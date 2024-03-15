@@ -6,7 +6,7 @@ const {
     Endpoint,
     MainEndpoint,
     languageFileExtensions
-} = require('./classes.js');
+} = require('./components.js');
 const { protobuffctl } = require("./protobuffctl")
 //const ProtoFileExtractor=require("./extractors.js")
 const { exec } = require('child_process');

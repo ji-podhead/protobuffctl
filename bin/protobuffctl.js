@@ -6,7 +6,7 @@ const path = require('path');
 const serialize = require('serialize-javascript');
 
 const { ProtobuffGenerator } = require("protoc-helper")
-const { classDescriptions } = require("./descriptions/classdescriptions")
+const { classDescriptions } = require("../descriptions/classdescriptions")
 
 
 class Filewatcher {

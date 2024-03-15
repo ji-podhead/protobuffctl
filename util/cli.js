@@ -1,5 +1,5 @@
 const { Command } = require('commander');
-const {init, save, generateProtobuff,  createProto,addWatcher,removeWatcher, stopAll,startAll,  getProto} =require("../shared")
+const {init, save, generateProtobuff,  createProto,addWatcher,removeWatcher, stopAll,startAll,  getProto} =require("../bin/shared")
 
 
 
