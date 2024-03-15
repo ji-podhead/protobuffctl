@@ -1,3 +1,6 @@
+// TO DO !!!!! 
+// >>>> USE PATH LIBARY FOR WINDOWS USERS!!!   <<<<
+// Funktion, um zu überprüfen, ob ein Pfad ein Unterordner eines anderen Pfades ist
 const chokidar = require('chokidar');
 const { exec } = require('child_process');
 const fs = require('fs');
@@ -5,16 +8,10 @@ const path = require('path');
 const { ProtobuffGenerator } = require("protoc-helper")
 const { classDescriptions } = require("./descriptions/classdescriptions")
 const {Protobuffctl} = require("./protobuffctl")
-const{getUniqueName,isSubdirectory,splitPath,joinPath,prototypes,languageFileExtensions}= require("./utils")
+const{getUniqueName,isSubdirectory,splitPath,joinPath,prototypes,languageFileExtensions}= require("./util/utils")
 const protobuf = require('protobufjs');
 const protobuffctl = new Protobuffctl()
-
 generator=new ProtobuffGenerator()
-// TO DO !!!!! 
-// >>>> USE PATH LIBARY FOR WINDOWS USERS!!!   <<<<
-// Funktion, um zu überprüfen, ob ein Pfad ein Unterordner eines anderen Pfades ist
-
-
 // ---------------------------- OOP ------------------------------------
 // EXAMPLES NUR FÜR PROTO. js code wird automatisch erzeugt
 /**         ------------------ ProtoFile ---------------------    
@@ -40,9 +37,7 @@ class ProtoFile {
         this.protoUserComponent = existingProtoFile ? existingProtoFile.protoUserComponent : protoUserComponent || [];
         this.file=file
         this.path = existingProtoFile ? existingProtoFile.path : path || [];
-
         if(existingProtoFile!=undefined){
-        
         }
         else{
             protobuffctl.componentRegistry.protoFilePaths.set(file, path);
@@ -54,7 +49,6 @@ class ProtoFile {
         this.extractTypesFromProtoFile(protoFilePath).then(()=>{
             console.log(protobuffctl.componentRegistry)
             const buff = new ProtobuffFile(__dirname,this,"ts")
-            
         })
     }
     async getroot(protoFilePath) {
@@ -210,12 +204,10 @@ class ProtobuffFile {
         generator.generateProtobuf(this.lang, this.protoFile.path, this.protoFile.file, this.out);
         protobuffctl.save()
     }
-
     generateProtobuffComponent(protobuffFile, protoFile, service, method) {
         const protobufComponent = new ProtobuffComponent();
         protobuffctl.save()
     }
-   
 }
 /**         ------------------ ProtobuffUser ---------------------    
  * @description ${classDescriptions.ProtobuffUser.description}
@@ -241,7 +233,6 @@ class ProtoUser {
             protobuffctl.componentRegistry.protoUserPaths.set(name, path);
             this.path = protobuffctl.componentRegistry.protoUserPaths.get(name);
         }
-
         protobuffctl.componentRegistry.protoUsers.set(name, this);
     }
 }
@@ -258,7 +249,6 @@ class ProtoUserComponent {
        this.lang=lang;    
     }
 }
-
 /**         ------------------ Endpoint ---------------------    
  * @description creates a new Endpoint and will check for parent-, or child-endpoints and merge if so
  */
@@ -337,18 +327,5 @@ class MainEndpoint extends Endpoint {
     constructor(protoFiles, protobuffFiles, name, index, path, buildTarget) {
         super(protoFiles, protobuffFiles, name, index, path);
         this.buildTarget = buildTarget; // Additional property for the build target
-    }
-}
-class CustomMap extends Map {
-    constructor(callback) {
-        super();
-        this.callback = callback;
-    }
-
-    set(key, value) {
-        // Führen Sie die Callback-Funktion aus, bevor der Wert gesetzt wird
-        this.callback(key, value);
-        // Rufen Sie die ursprüngliche set-Methode auf
-        super.set(key, value);
     }
 }
