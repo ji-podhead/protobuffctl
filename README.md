@@ -33,10 +33,17 @@ graph TD;
         ProtobuffFile;
         ProtoUser;
     end
+    Daemon-->Protobuffctl;
+    subgraph middleware [Middleware/API]
+        Daemon;
+        API;
+    end
     style components fill:#f9d71c,stroke:#333,stroke-width:2px
     style ComponentRegistry fill:#f9d71c,stroke:#333,stroke-width:2px
     style components fill:#f9d71c,stroke:#333,stroke-width:2px
     style ComponentRegistry fill:#f9d71c,stroke:#333,stroke-width:2px
+    style Daemon fill:#f9d71c,stroke:#333,stroke-width:2px
+    style API fill:#f9d71c,stroke:#333,stroke-width:2px
 ```
 # Update
 - fast saving and loading, but also added a daemon to keep the mainObject alive including the registry
