@@ -5,7 +5,7 @@ const fs = require('fs');
 const path = require('path');
 const serialize = require('serialize-javascript');
 
-const { ProtobuffGenerator } = require("@ji-podhead/protoc-helper")
+const { ProtobuffGenerator } = require("protoc-helper")
 const { classDescriptions } = require("./descriptions/classdescriptions")
 
 
@@ -127,7 +127,7 @@ class ComponentRegistry {
         // ProtoBuffRegistry 
         this.protobuffComponents = new Map();
         this.protobuffFiles = new Map();
-        this.ProtobuffFilePaths = new Map();
+        this.protobuffFilePaths = new Map();
         // ProtoUserRegistry {
         this.clients = new Map();
         this.methods = new Map();
@@ -148,7 +148,6 @@ class Daemon {
             return Daemon.instance;
         }
         Daemon.instance = this;
-        this.componentRegistry = new ComponentRegistry()
     }
     start() {
         this.running = true;

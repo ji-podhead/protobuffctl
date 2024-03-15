@@ -1,5 +1,5 @@
 //newtest
-const {ProtobuffGenerator} = require("@ji-podhead/protoc-helper")
+const {ProtobuffGenerator} = require("protoc-helper")
 
 
 console.log(__dirname)

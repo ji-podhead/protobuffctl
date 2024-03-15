@@ -17,24 +17,6 @@ const { types } = require('util');
 const serialize = require('serialize-javascript');
 const fs = require('fs');
 
-function toJson() {
-    const configPath = path.join(__dirname, 'protobuffctl.json');
-    const defaultConfig = {}
-    componentMap.forEach((value, key) => {
-        console.log(key)
-        console.log(value)
-        defaultConfig[key] = [];
-    });
-    defaultConfig["ProtoFilePath"][0] = dir
-    defaultConfig["ProtoFile"][0] = "helloworld.proto"
-    if (!fs.existsSync(configPath)) {
-        fs.writeFileSync(configPath, JSON.stringify(defaultConfig, null, 2), 'utf8');
-        console.log('Konfigurationsdatei wurde erstellt.');
-    } else {
-        console.log('Konfigurationsdatei existiert bereits.');
-    }
-}
-
 function init() {
     protobuffctl.watcherManager.init();
 }function save() {
