@@ -6,6 +6,38 @@
 -  Protobuffs for many available languages are getting created using my <a href="https://github.com/ji-podhead/protoc-helper">protoc-helper repo</a>. it uses  compiled protoc binary with javascript
 -  creates a libary of all your protobuff apearances and proto types,serices,enums, etc **[see example json](https://github.com/ji-podhead/protobuffctl/blob/main/protobuffctl.json)**
 -  browse trough your components in vs code extension. click on a listed file to open it
+
+```mermaid
+graph TD;
+    CLI["Command Line Interface"]-->Protobuffctl;
+    Protobuffctl-->WatcherManager;
+    Protobuffctl-->ComponentRegistry;
+    WatcherManager-->FileWatcher;
+    FileWatcher-->Protobuffctl;
+    Protobuffctl-->ProtobuffFile;
+    Protobuffctl-->ProtoUser;
+    Protobuffctl-->ProtoFile;
+    ProtoFile-->ProtobuffFile;
+    ProtoFile-->ComponentRegistry;
+    ProtobuffFile-->ProtoUser;
+    ProtobuffFile-->ComponentRegistry;
+    ProtoUser-->ComponentRegistry;
+    subgraph protobuffctl [protobuffctl]
+        Protobuffctl;
+        WatcherManager;
+        FileWatcher;
+        ComponentRegistry;
+    end
+    subgraph components [Components]
+        ProtoFile;
+        ProtobuffFile;
+        ProtoUser;
+    end
+    style components fill:#f9d71c,stroke:#333,stroke-width:2px
+    style ComponentRegistry fill:#f9d71c,stroke:#333,stroke-width:2px
+    style components fill:#f9d71c,stroke:#333,stroke-width:2px
+    style ComponentRegistry fill:#f9d71c,stroke:#333,stroke-width:2px
+```
 # Update
 - fast saving and loading, but also added a daemon to keep the mainObject alive including the registry
 - protobuffregistry+creation is working fine
