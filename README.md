@@ -13,9 +13,12 @@
 - all components are getting stored and can get reproduced
 - create new services, types, enums via cli command by coping from the registry or via command
 - proto files are edited trough api rather than trough texteditor => related protobufffiles will automatically get compiled to their target folders using <a href="https://github.com/ji-podhead/protoc-helper">protoc-helper repo</a>
-> files and object cant be redundant, however if failures arise due to the user, or missing drives, the config/save-file can get damaged which can lead to weird behaviour when automated processes are using the faulty objects, so i decided to add a health-state field for each object. unhealthy files will be ignored and not further processed, but also the main statehandler wont delete that file, if it may become usuable again later.
+> **files and object cant be redundant***, however if failures arise due to the user, or missing drives, the config/save-file can get damaged which can lead to weird behaviour when automated processes are using the faulty objects, so i decided to add a health-state field for each object. **unhealthy files will be ignored** and not further processed, but also the main statehandler wont delete that file, if it may become usuable again later.
+
 > **add health_state field**
+
 > **add health check**
+
 > **add a merge function for the user** if he had misconfigurations but wants to copy the fields back over to a healthy file 
 # Protobuffctl CLI Documentation
 Protobuffctl has a command-line interface (CLI) tool designed to manage components and watchers for a project,   possibly related to Protocol Buffers (protobuf). This documentation provides an overview of the available commands and their usage. `The the export module functions do exactly the same`
