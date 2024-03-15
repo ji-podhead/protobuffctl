@@ -4,9 +4,9 @@
 - create new types,fields and services from presets, or a copy from the registry
 - automatically generates protobuff files for all your backends and languages using my <a href="https://github.com/ji-podhead/protoc-helper">protoc-helper repo</a>. it uses  compiled protoc binary with javascript
 - procedural code generation in protoUserFiles using the given clients, methods,etc
-- browse trough your components in vs code extension. click on a listed file to open it.
-- get complete visual feedback for all you related methods, components and files directly in your ide
 
+- get complete visual feedback for all you related methods, components and files directly in your ide
+- browse, manage, edit and create your files,components and implementations via ui / vs code extension
 
 ```mermaid
 graph TD;
