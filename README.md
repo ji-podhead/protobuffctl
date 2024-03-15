@@ -1,4 +1,3 @@
-# protobuffctl 
 # protobuffctl
 
 `protobuffctl` is a tool designed to manage components and watchers for a project related to Protocol Buffers (protobuf). It provides a comprehensive set of features to streamline the development process:
