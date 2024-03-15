@@ -1,7 +1,7 @@
 # protobuffctl 
 # protobuffctl
 
-`protobuffctl` is a powerful tool designed to manage components and watchers for a project related to Protocol Buffers (protobuf). It provides a comprehensive set of features to streamline the development process:
+`protobuffctl` is a tool designed to manage components and watchers for a project related to Protocol Buffers (protobuf). It provides a comprehensive set of features to streamline the development process:
 
 - **Registry Management**: Registers all your proto-files, proto-Users, callbacks, components (fields, services, enums, etc.). [See example JSON](https://github.com/ji-podhead/protobuffctl/blob/main/protobuffctl.json).
 - **File Watching**: Watches for file changes in your proto files.
