@@ -14,10 +14,10 @@ const { exec } = require('child_process');
 const chokidar = require('chokidar');
 const { Console } = require('console');
 const path = require('path');
-const { types } = require('util');
+const {extractStringsFromArrayString } = require('../util/utils.js');
 const serialize = require('serialize-javascript');
 const fs = require('fs');
-const { Protobuffctl } = require("./protobuffctl")
+const { Protobuffctl,set:setParam } = require("./protobuffctl")
 const protobuffctl = new Protobuffctl()
 function init() {
     protobuffctl.watcherManager.init();
@@ -36,17 +36,35 @@ function stopAll() {
 function startAll() {
     protobuffctl.watcherManager.startAllWatchers();
 }
-function set(type, name, component_names_and_values, protoFiles, createProtobuff) {
-    if (type == "service") {
-        setService(name, component_names_and_values, protoFiles, createProtobuff)
-        // const proto = protobuffctl.componentRegistry.protoFiles.get(protofile).setService(name,component_names_and_values.false)
-        console.log(proto)
-    }
+
+
+/**
+ * Sets or updates a component within the Protobuf project management system.
+´
+ * @param {string} type - The type of component to be set or updated. This could be
+ *                        'service', 'method', 'type', etc.
+ * @param {string} name - The name of the specific component within the given type.
+ * @param {string|Array|Object} values - The values to be assigned to the component.
+ *                                     This can be a single value, an array of values, or an object.
+ * @example
+ * // Set a service named 'Greeter' with the method 'SayHello'
+ * set('service', 'Greeter', 'SayHello');
+ * @example
+ * // Set a method named 'SayHello' with multiple types
+ * set('method', 'SayHello', ['type1', 'type2']);
+ * @returns {void}
+ * @throws {Error} Will throw an error if the type is not recognized or if the component
+ *                 cannot be found or updated.
+ */
+function set(type, name, values) {
+        setParam(type,name,values)
 }
-
-function getAll(type) {
+function get(type,name,depth){
+    element=protobuffctl.componentRegistry[type][name]
+    console.log(element)
+}
+function getAll(type, depth) {
     const protobuffctl = new Protobuffctl()
-
     const elements = []
     //   console.log(protobuffctl)
     protobuffctl.componentRegistry[type].forEach((value, key) => {
@@ -64,7 +82,6 @@ function createProto(file, path) {
         console.log("had err while creating proto" + err)
         return ("had err while creating proto" + err)
     }
-
 }
 function getProto(id, file, path) {
     let proto
@@ -90,12 +107,10 @@ function generateProtobuff(protoFile, lang, out) {
         protoFile = protobuffctl.componentRegistry.protoFiles.get(protoFile)
     }
 }
-function updateProtoFiles(protoFiles,rescan){
-   
+function updateProtoFiles(protoFiles, rescan) {
     for (file of protoFiles) {
         const proto = protobuffctl.componentRegistry.protoFiles.get(file)
         proto.services
-       
         if (this.protobuffFiles != []) {
             for (buff of this.protobuffFiles) {
                 buff = protobuffctl.protobuffFiles.get(buff)
@@ -103,30 +118,25 @@ function updateProtoFiles(protoFiles,rescan){
                 })
             }
         }
- else {
-        console.warn("no protobuff-file objects! please create those before! flagg ignored ")
-        //const buff = new ProtobuffFile(__dirname, this, "ts")
+        else {
+            console.warn("no protobuff-file objects! please create those before! flagg ignored ")
+            //const buff = new ProtobuffFile(__dirname, this, "ts")
+        }
     }
+}
+/*
 
-}
-}
-/**
-   * Fügt ein neues Element (Service, Type, Enum) zum Protofile hinzu.
-   * @param {string} elementType - Der Typ des Elements (Service, Type, Enum).
-   * @param {Object} details - Die Details des Elements, abhängig vom Typ.
-   */
-function setService(service_name, component_names_and_values, protoFiles, createProtobuff) {
+function setService(type, name, values, protoFiles, createProtobuff) {
     console.log("SSSSSSSSSSSSSSSSS")
     createProtobuff = createProtobuff === undefined ? false : createProtobuff;
-    let element = protobuffctl.componentRegistry.services.get(service_name)
+    let element = protobuffctl.componentRegistry[type].set(values)
     if (element != undefined) {
-
     }
     else {
-        protobuffctl.componentRegistry.services.set(service_name, [])
+        protobuffctl.componentRegistry[type].set(service_name, [])
         element = protobuffctl.componentRegistry.services.get(service_name)
-        for (file of protoFiles){
-            protobuffctl.protoFiles.get(file).set("services",service_name)
+        for (file of protoFiles) {
+            protobuffctl.protoFiles.get(file).set("services", service_name)
         }
     }
     for (item of component_names_and_values) {
@@ -134,20 +144,19 @@ function setService(service_name, component_names_and_values, protoFiles, create
         const values = item[1]
         protobuffctl.componentRegistry.services.set("methods", { [name]: values });
         element.push(name)
-        for (file of protoFiles){
-            const proto=protobuffctl.componentRegistry.protoFiles.get(file)
-            proto.set("methods",name)
+        for (file of protoFiles) {
+            const proto = protobuffctl.componentRegistry.protoFiles.get(file)
+            proto.set("methods", name)
         }
     }
-  
     protobuffctl.save()
     protobuffctl.convertToJsonCompatible(__dirname + "/protobuffctl.json")
 
-    if(createProtobuff){
-        updateProtoFiles(protoFiles,false)
+    if (createProtobuff) {
+        updateProtoFiles(protoFiles, false)
     }
 }
-
+*/
 
 
 

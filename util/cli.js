@@ -46,17 +46,11 @@ cli
     .description('save to your protobuffctl.json')
     .action((type) => { getAll(type) });
 cli
-    .command('set <type> <element_name> <protofile> <component_names_and_values> <createProtobuff>')
+    .command('set <type> <element_name> <values>')
     .description('save to your protobuffctl.json')
-    .action((type,element_name, protofile, component_names_and_values,createProtobuff) => { 
-        console.log(`
-            ${type}
-            \n ${element_name}
-            \n ${protofile}
-            \n ${component_names_and_values}
-            \n ${createProtobuff}
-        `)
-        set(type,element_name, protofile, component_names_and_values,createProtobuff) })
+    .action((type,element_name, values) => { 
+       
+        set(type,element_name, values) })
         ;
 cli
     .command('generateProtobuff  <language> <proto_path> <proto_file> <outputPath>')

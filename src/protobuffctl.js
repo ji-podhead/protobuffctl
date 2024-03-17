@@ -9,6 +9,7 @@ const { fork } = require('child_process');
 const { ProtobuffGenerator } = require("protoc-helper")
 const { classDescriptions } = require("../descriptions/classdescriptions");
 const { time } = require('console');
+const {extractStringsFromArrayString } = require('../util/utils.js');
 
 
 class Filewatcher {
@@ -108,6 +109,7 @@ class WatcherManager {
         }
         console.log('All watchers stopped.');
     }
+
 }
 
 /**         ------------------ Registry ---------------------    
@@ -124,6 +126,7 @@ class ComponentRegistry {
         this.types = new Map();
         this.enums = new Map();
         this.enumValues = new Map();
+        this.protoComponentAppearances=new Map();
         this.protoFiles = new Map();
         this.protoFilePaths = new Map();
         // ProtoBuffRegistry 
@@ -301,10 +304,62 @@ class Protobuffctl {
 
 }
 
-class BuffUtils {
-    constructor() {
-        this.componentPreset = new Map();
+
+/**
+ * Sets or updates a component within the Protobuf project management system.
+´
+ * @param {string} type - The type of component to be set or updated. This could be
+ *                        'service', 'method', 'type', etc.
+ * @param {string} name - The name of the specific component within the given type.
+ * @param {string|Array|Object} values - The values to be assigned to the component.
+ *                                     This can be a single value, an array of values, or an object.
+ * @example
+ * // Set a service named 'Greeter' with the method 'SayHello'
+ * set('service', 'Greeter', 'SayHello');
+ * @example
+ * // Set a method named 'SayHello' with multiple types
+ * set('method', 'SayHello', ['type1', 'type2']);
+ * @returns {void}
+ * @throws {Error} Will throw an error if the type is not recognized or if the component
+ *                 cannot be found or updated.
+ */
+function set(type, name, values) {
+    if (type) {
+        const protobuffctl = new Protobuffctl();
+        let element;
+        if (type.charAt(type.length - 1) !== 's') {
+            type += 's';
+        }
+        if (!protobuffctl.componentRegistry[type]) {
+            console.log(`componentRegistry has no'${type}'. please select one of the following`);
+            const fieldNames = Object.keys(protobuffctl.componentRegistry[type]);
+            console.log(fieldNames);
+        } else {
+            values=typeof(values)=="string"?extractStringsFromArrayString(values):values
+            console.log(values)
+            element = protobuffctl.componentRegistry[type].get(name);
+            if (element) {
+                console.log(` adding to ${name}`)
+                if (!Array.isArray(values)) {
+                    values=[values]
+                }
+                element=element.concat(values)
+                protobuffctl.componentRegistry[type].set(name,element)
+            } else 
+            {
+            if (Array.isArray(values) || typeof values === "string") {
+                console.log("creating" + " " + name);
+                element = Array.isArray(values) ? values : [values];
+                protobuffctl.componentRegistry[type].set(name, element);
+            } else {
+                console.log("please pass either an array of values, a string, or an object");
+                return;
+            }
+        }
+            protobuffctl.save();
+            console.log(`successfully set ${type} ${name}\n ${JSON.stringify( protobuffctl.componentRegistry[type].get(name))}`);
+        }
     }
 }
 
-module.exports = { Protobuffctl }
+module.exports = { Protobuffctl,set }

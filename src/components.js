@@ -7,7 +7,7 @@ const fs = require('fs');
 const path = require('path');
 const { ProtobuffGenerator } = require("protoc-helper")
 const { classDescriptions } = require("../descriptions/classdescriptions")
-const { Protobuffctl } = require("./protobuffctl")
+const { Protobuffctl,set } = require("./protobuffctl")
 const { getUniqueName, isSubdirectory, prototypes, languageFileExtensions,mergeFields, initObject } = require("../util/utils")
 const protobuf = require('protobufjs');
 const protobuffctl = new Protobuffctl()
@@ -61,10 +61,10 @@ async function updateProtoFile(protoFilePath, newElements) {
  * @description ${classDescriptions.ProtoFile.description}
  */
 class ProtoFile {
-    constructor(file_name, file_path, services, methods, types, enums, protobuffFiles, protobuffComponents, protoUserComponent, id) {
+    constructor(file_name, file_path, services, methods, types, enums,fields, protobuffFiles, protobuffComponents, protoUserComponent, id) {
         this.absolute_path= path.join(file_path,file_name)
         this.services=services;this.methods=methods;this.types=types;this.enums=enums;this.protobuffFiles=protobuffFiles;this.protobuffComponents=protobuffComponents;this.protoUserComponent=protoUserComponent;this.id=id;
-        initObject(this,["services","methods","types","enums","protobuffFiles","protobuffComponents","protoUserComponent"])
+        initObject(this,["services","methods","types","enums","fields","protobuffFiles","protobuffComponents","protoUserComponent"])
         console.log("creating " + this.absolute_path)
         this.id = file_name+"_"+getUniqueName(protobuffctl.componentRegistry.protoFiles, file_name);
         console.log("___________________  ")
@@ -93,45 +93,7 @@ class ProtoFile {
         return root
     }
 
-    /**
-     * Fügt ein neues Element (Service, Type, Enum) zum Protofile hinzu.
-     * @param {string} elementType - Der Typ des Elements (Service, Type, Enum).
-     * @param {Object} details - Die Details des Elements, abhängig vom Typ.
-     */
-    setService(service_name,component_names_and_values,createProtobuff){
-       console.log("SSSSSSSSSSSSSSSSS")
-        createProtobuff = createProtobuff === undefined ? false : createProtobuff;
-        let element = protobuffctl.componentRegistry.services.get(service_name)
-        if(element!=undefined){
-        }
-        else{
-            protobuffctl.componentRegistry.services.set(service_name,[])
-            element = protobuffctl.componentRegistry.services.get(service_name)
-        }
-        for (item of component_names_and_values){ 
-            const name =item[0]
-            const values=item[1]
-            protobuffctl.componentRegistry.set("methods", { [name]: values });                
-            element.push(name)
-        }
-        this.save()
-        if (createBuff){
-            if(this.protobuffFiles!=[])
-            {
-            for (buff of this.protobuffFiles){
-            buff=protobuffctl.protobuffFiles.get(buff)
-            createBuff(buff.lang, buff.out,file_name, file_path,  ).then(()=>{
-            })
-        }
-    }
-        else{
-            console.warn("no protobuff-file objects! please create those before! flagg ignored ")
-            //const buff = new ProtobuffFile(__dirname, this, "ts")
-        }
-        protobuffctl.save()
-        protobuffctl.convertToJsonCompatible(__dirname+"/protobuffctl.json")
-    }
-}
+  
    
     extractTypesFromProtoFile(protoFilePath) {
         return new Promise((resolve, reject) => {
@@ -159,14 +121,17 @@ class ProtoFile {
                     console.log(name);
                     const fields = [];
                     Object.entries(jsonObj["fields"]).map(([key, val]) => {
-                        const cFields = protobuffctl.componentRegistry.fields;
-                        const id = name + "_" + key;
-                        if (cFields.get(key) == undefined) {
-                            cFields.set(id, {name:val});
-                        }
+                        //const cFields = protobuffctl.componentRegistry.fields;
+                        const id =  key;
+                        set("fields",id,val)
+                        //if (cFields.get(key) == undefined) {
+                        //    cFields.set(id, {name:val});
+                        //}
                         fields.push(id);
                     });
-                    protobuffctl.componentRegistry.types.set(name, fields);
+                    set("types",name,fields)
+                    //protobuffctl.componentRegistry.types.set(name, fields);
+                    this.fields.push(fields)
                     this.types.push(name);
                     fn(current, 'Type');
                     break;
@@ -177,16 +142,15 @@ class ProtoFile {
                     console.log(name);
                     const methods = [];
                     Object.entries(jsonObj["methods"]).map(([key, val]) => {
-                        const cMethods = protobuffctl.componentRegistry.methods;
+                       // const cMethods = protobuffctl.componentRegistry.methods;
                         const id =  key;
-                        if (cMethods.get(key) == undefined) {
-                            cMethods.set(id, val);
-                        }
+                        set("methods",id,val)
                         methods.push(id);
                     });
+                  //  protobuffctl.componentRegistry.services.set(name, methods);
+                    set("services",name,methods)
                     this.methods.push(methods)
-                    protobuffctl.componentRegistry.services.set(name, methods);
-                    this.services.push(name);
+                    this.services.push(name,methods);
                     fn(current, 'Service');
                     break;
                 case current instanceof protobuf.Enum:
@@ -195,14 +159,16 @@ class ProtoFile {
                     console.log(name);
                     const values = [];
                     Object.entries(jsonObj["values"]).map(([key, val]) => {
-                        const cEnumValues = protobuffctl.componentRegistry.enumValues;
-                        const id = name + "_" + key;
-                        if (cEnumValues.get(key) == undefined) {
-                            cEnumValues.set(id, val);
-                        }
+                       // const cEnumValues = protobuffctl.componentRegistry.enumValues;
+                        const id =  key;
+                        //if (cEnumValues.get(key) == undefined) {
+                        //    cEnumValues.set(id, val);
+                        //}
+                        set("enumvalues",id,val )
                         values.push(id);
                     });
-                    protobuffctl.componentRegistry.enumValues.set(name, values);
+                    //protobuffctl.componentRegistry.enumValues.set(name, values);
+                    set("enums",name,values)
                     this.enums.push(name);
                     fn(current, 'Enum');
                     break;
@@ -362,6 +328,7 @@ class Endpoint {
         protobuffctl.componentRegistry.endPoints.set(this.id, this)
     }
 }
+
 /// ---------------------------- exports ------------------------------------
 module.exports = {
     ProtoFile,

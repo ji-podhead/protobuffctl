@@ -3,6 +3,20 @@ const { exec } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 const protobuf = require('protobufjs');
+function extractStringsFromArrayString(arrayString) {
+    if (arrayString.startsWith('[') && arrayString.endsWith(']')) {
+        // Entfernen Sie die eckigen Klammern am Anfang und am Ende
+        const cleanedString = arrayString.slice(1, -1);
+        // Teilen Sie den String an den Kommas auf
+        const substrings = cleanedString.split(',');
+        // Entfernen Sie mögliche Anführungszeichen um die Elemente
+        const strings = substrings.map(substring => substring.trim().replace(/^"|"$/g, ''));
+        return strings;
+    } else {
+        // Der String repräsentiert kein Array
+        return null;
+    }
+}
 /**         ------------------ ProtoFile ---------------------    
  * @description returns: 0 (a>b) | 1 (b>a) | 2  no related
  */
@@ -154,5 +168,6 @@ module.exports={
     initObject,
     prototypes,
     languageFileExtensions,
+    extractStringsFromArrayString,
     CustomMap
 }
