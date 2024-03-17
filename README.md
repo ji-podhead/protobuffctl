@@ -53,7 +53,7 @@ CLI["💻 Command Line Interface"]-->Daemon;
 - **New Services, Types, Enums**: Create new services, types, enums via CLI command by copying from the registry or via command. 
 - **automated Proto-gen**:  Related protobuf files will automatically get compiled to their target folders using the [protoc-helper repo](https://github.com/ji-podhead/protoc-helper).
 - this thing works, which is nice. complete api to edit your protobuff  projects and files. you can set every important value via cli know and ill add support to get all protofiles from certain folders.
-- you can apply changes via api know -> registry is getting updated -> protofiles are getting updates -> protobuff-files are getting upddated
+- you can apply changes via api know -> registry is getting updated -> protofiles are getting updates -> *protobuff-files are getting upddated* <- i actually need to implement that :) 
 ### TODO
 > **files and object cant be redundant**, however if failures arise due to the user, or missing drives, the config/save-file can get damaged which can lead to weird behaviour when automated processes are using the faulty objects, so i decided to add a health-state field for each object. **unhealthy files will be ignored and not further be processed**, but also the main statehandler wont delete that file, if it may become usuable again later.
 - **Health State Field**: Add a health-state field for each object to handle failures and misconfigurations.
