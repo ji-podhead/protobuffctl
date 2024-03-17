@@ -58,9 +58,7 @@ CLI["💻 Command Line Interface"]-->Daemon;
 > **files and object cant be redundant**, however if failures arise due to the user, or missing drives, the config/save-file can get damaged which can lead to weird behaviour when automated processes are using the faulty objects, so i decided to add a health-state field for each object. **unhealthy files will be ignored and not further be processed**, but also the main statehandler wont delete that file, if it may become usuable again later.
 - **Health State Field**: Add a health-state field for each object to handle failures and misconfigurations.
 - **Health Check**: Add a health check to ensure the integrity of the objects.
-- **Merge Function**: Add a merge function for the user to copy fields back over to a healthy file if there were misconfigurations.
-- **Component Creator**: Edited through the API rather than through a text editor.
-- **user Watcher**: Add a watcher for the Users to update the registry if files are changed.
+- ~~**Merge Function**: Add a merge function for the user to copy fields back over to a healthy file if there were misconfigurations.~~
 
 # Protobuffctl CLI Documentation
 Protobuffctl has a command-line interface (CLI) tool designed to manage components and watchers for a project,   possibly related to Protocol Buffers (protobuf). This documentation provides an overview of the available commands and their usage. `The the export module functions do exactly the same`
