@@ -117,7 +117,7 @@ const languageFileExtensions = {
         command: '--js_out'
     },
     ts: {
-        fileExtension: '.pb.ts',
+        fileExtension: '.ts',
         command: '--ts_out'
     }
 };

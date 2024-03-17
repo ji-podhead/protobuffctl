@@ -1,5 +1,5 @@
 const { Command } = require('commander');
-const {init, save, generateProtobuff,  createProto,addWatcher,removeWatcher, stopAll,startAll,  getProto} =require("../bin/shared")
+const {init, getAll, save, generateProtobuff,  set,createProto,addWatcher,removeWatcher, stopAll,startAll,  getProto} =require("../src/shared")
 
 
 
@@ -25,7 +25,7 @@ cli
     .command('init')
     .description('initialize using your protobuffctl.json')
     .action(() => { init() });
-    cli
+cli
     .command('createProto <filePath>')
     .description('generate a Protofile Object from path to File')
     .action((filePath) => { 
@@ -33,20 +33,35 @@ cli
          const path  = parts.slice(0, -1).join('/');
         const file = parts[parts.length - 1];
         createProto(file,path) });
-    cli
+cli
     .command('getProto <id><file><filePath>')
     .description('get a Protofile Object from the registry by path, or by id')
     .action((filePath) => { getProto(id,file,filePath) });
-
-    cli
+cli
     .command('createComponent  <filePath>')
     .description('save to your protobuffctl.json')
     .action(() => { save(filePath) });
 cli
+    .command('getAll  <type>')
+    .description('save to your protobuffctl.json')
+    .action((type) => { getAll(type) });
+cli
+    .command('set <type> <element_name> <protofile> <component_names_and_values> <createProtobuff>')
+    .description('save to your protobuffctl.json')
+    .action((type,element_name, protofile, component_names_and_values,createProtobuff) => { 
+        console.log(`
+            ${type}
+            \n ${element_name}
+            \n ${protofile}
+            \n ${component_names_and_values}
+            \n ${createProtobuff}
+        `)
+        set(type,element_name, protofile, component_names_and_values,createProtobuff) })
+        ;
+cli
     .command('generateProtobuff  <language> <proto_path> <proto_file> <outputPath>')
     .description('generate a protobuff file. many languages supported')
     .action(() => { generateProtobuff(language, proto_path,proto_file, outputPath) });
-
 cli
     .command('createProtoComponent <type> [args...]')
     .description('Create a ProtoComponent with the specified type and arguments')
