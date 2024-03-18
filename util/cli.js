@@ -1,5 +1,5 @@
 const { Command } = require('commander');
-const {init, getAll, save, generateProtobuff,  set,createProto,addWatcher,removeWatcher, stopAll,startAll,  getProto} =require("../src/shared")
+const {init, getAll,get, save, generateProtobuff,  set,createProto,addWatcher,removeWatcher, stopAll,startAll,  getProto} =require("../src/shared")
 
 
 
@@ -49,9 +49,12 @@ cli
     .command('set <type> <element_name> <values>')
     .description('save to your protobuffctl.json')
     .action((type,element_name, values) => { 
-       
-        set(type,element_name, values) })
-        ;
+        set(type,element_name, values) });
+cli
+    .command('get <type> <name> <depth>')
+    .description('save to your protobuffctl.json')
+    .action((type,name,depth) => { 
+        get(type,name,depth) });
 cli
     .command('generateProtobuff  <language> <proto_path> <proto_file> <outputPath>')
     .description('generate a protobuff file. many languages supported')

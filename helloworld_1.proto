@@ -17,12 +17,12 @@ service Greeter2{
 }
 
 // The request message containing the user's name.
-message HelloRequest2 {
+message helloworld_1__HelloRequest2 {
   string name = 1;
 float id1 =2;
 }
 
 // The response message containing the greetings
-message HelloReply {
+message helloworld_1__HelloReply {
   string message = 1;
 }

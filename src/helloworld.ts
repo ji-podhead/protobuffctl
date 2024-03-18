@@ -6,16 +6,20 @@
 import * as pb_1 from "google-protobuf";
 import * as grpc_1 from "@grpc/grpc-js";
 export namespace helloworld {
-    export class HelloRequest extends pb_1.Message {
+    export class HelloRequest2 extends pb_1.Message {
         #one_of_decls: number[][] = [];
         constructor(data?: any[] | {
             name?: string;
+            id1?: number;
         }) {
             super();
             pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [], this.#one_of_decls);
             if (!Array.isArray(data) && typeof data == "object") {
                 if ("name" in data && data.name != undefined) {
                     this.name = data.name;
+                }
+                if ("id1" in data && data.id1 != undefined) {
+                    this.id1 = data.id1;
                 }
             }
         }
@@ -25,21 +29,35 @@ export namespace helloworld {
         set name(value: string) {
             pb_1.Message.setField(this, 1, value);
         }
+        get id1() {
+            return pb_1.Message.getFieldWithDefault(this, 2, 0) as number;
+        }
+        set id1(value: number) {
+            pb_1.Message.setField(this, 2, value);
+        }
         static fromObject(data: {
             name?: string;
-        }): HelloRequest {
-            const message = new HelloRequest({});
+            id1?: number;
+        }): HelloRequest2 {
+            const message = new HelloRequest2({});
             if (data.name != null) {
                 message.name = data.name;
+            }
+            if (data.id1 != null) {
+                message.id1 = data.id1;
             }
             return message;
         }
         toObject() {
             const data: {
                 name?: string;
+                id1?: number;
             } = {};
             if (this.name != null) {
                 data.name = this.name;
+            }
+            if (this.id1 != null) {
+                data.id1 = this.id1;
             }
             return data;
         }
@@ -49,17 +67,22 @@ export namespace helloworld {
             const writer = w || new pb_1.BinaryWriter();
             if (this.name.length)
                 writer.writeString(1, this.name);
+            if (this.id1 != 0)
+                writer.writeFloat(2, this.id1);
             if (!w)
                 return writer.getResultBuffer();
         }
-        static deserialize(bytes: Uint8Array | pb_1.BinaryReader): HelloRequest {
-            const reader = bytes instanceof pb_1.BinaryReader ? bytes : new pb_1.BinaryReader(bytes), message = new HelloRequest();
+        static deserialize(bytes: Uint8Array | pb_1.BinaryReader): HelloRequest2 {
+            const reader = bytes instanceof pb_1.BinaryReader ? bytes : new pb_1.BinaryReader(bytes), message = new HelloRequest2();
             while (reader.nextField()) {
                 if (reader.isEndGroup())
                     break;
                 switch (reader.getFieldNumber()) {
                     case 1:
                         message.name = reader.readString();
+                        break;
+                    case 2:
+                        message.id1 = reader.readFloat();
                         break;
                     default: reader.skipField();
                 }
@@ -69,8 +92,8 @@ export namespace helloworld {
         serializeBinary(): Uint8Array {
             return this.serialize();
         }
-        static deserializeBinary(bytes: Uint8Array): HelloRequest {
-            return HelloRequest.deserialize(bytes);
+        static deserializeBinary(bytes: Uint8Array): HelloRequest2 {
+            return HelloRequest2.deserialize(bytes);
         }
     }
     export class HelloReply extends pb_1.Message {
@@ -164,39 +187,39 @@ export namespace helloworld {
         (message: P, metadata: grpc_1.Metadata, options?: grpc_1.CallOptions): Promise<R>;
         (message: P, options?: grpc_1.CallOptions): Promise<R>;
     }
-    export abstract class UnimplementedGreeterService {
+    export abstract class UnimplementedGreeter2Service {
         static definition = {
             SayHello: {
-                path: "/helloworld.Greeter/SayHello",
+                path: "/helloworld.Greeter2/SayHello",
                 requestStream: false,
                 responseStream: false,
-                requestSerialize: (message: HelloRequest) => Buffer.from(message.serialize()),
-                requestDeserialize: (bytes: Buffer) => HelloRequest.deserialize(new Uint8Array(bytes)),
+                requestSerialize: (message: HelloRequest2) => Buffer.from(message.serialize()),
+                requestDeserialize: (bytes: Buffer) => HelloRequest2.deserialize(new Uint8Array(bytes)),
                 responseSerialize: (message: HelloReply) => Buffer.from(message.serialize()),
                 responseDeserialize: (bytes: Buffer) => HelloReply.deserialize(new Uint8Array(bytes))
             },
             SayHelloStreamReply: {
-                path: "/helloworld.Greeter/SayHelloStreamReply",
+                path: "/helloworld.Greeter2/SayHelloStreamReply",
                 requestStream: false,
                 responseStream: true,
-                requestSerialize: (message: HelloRequest) => Buffer.from(message.serialize()),
-                requestDeserialize: (bytes: Buffer) => HelloRequest.deserialize(new Uint8Array(bytes)),
+                requestSerialize: (message: HelloRequest2) => Buffer.from(message.serialize()),
+                requestDeserialize: (bytes: Buffer) => HelloRequest2.deserialize(new Uint8Array(bytes)),
                 responseSerialize: (message: HelloReply) => Buffer.from(message.serialize()),
                 responseDeserialize: (bytes: Buffer) => HelloReply.deserialize(new Uint8Array(bytes))
             }
         };
         [method: string]: grpc_1.UntypedHandleCall;
-        abstract SayHello(call: grpc_1.ServerUnaryCall<HelloRequest, HelloReply>, callback: grpc_1.sendUnaryData<HelloReply>): void;
-        abstract SayHelloStreamReply(call: grpc_1.ServerWritableStream<HelloRequest, HelloReply>): void;
+        abstract SayHello(call: grpc_1.ServerUnaryCall<HelloRequest2, HelloReply>, callback: grpc_1.sendUnaryData<HelloReply>): void;
+        abstract SayHelloStreamReply(call: grpc_1.ServerWritableStream<HelloRequest2, HelloReply>): void;
     }
-    export class GreeterClient extends grpc_1.makeGenericClientConstructor(UnimplementedGreeterService.definition, "Greeter", {}) {
+    export class Greeter2Client extends grpc_1.makeGenericClientConstructor(UnimplementedGreeter2Service.definition, "Greeter2", {}) {
         constructor(address: string, credentials: grpc_1.ChannelCredentials, options?: Partial<grpc_1.ChannelOptions>) {
             super(address, credentials, options);
         }
-        SayHello: GrpcUnaryServiceInterface<HelloRequest, HelloReply> = (message: HelloRequest, metadata: grpc_1.Metadata | grpc_1.CallOptions | grpc_1.requestCallback<HelloReply>, options?: grpc_1.CallOptions | grpc_1.requestCallback<HelloReply>, callback?: grpc_1.requestCallback<HelloReply>): grpc_1.ClientUnaryCall => {
+        SayHello: GrpcUnaryServiceInterface<HelloRequest2, HelloReply> = (message: HelloRequest2, metadata: grpc_1.Metadata | grpc_1.CallOptions | grpc_1.requestCallback<HelloReply>, options?: grpc_1.CallOptions | grpc_1.requestCallback<HelloReply>, callback?: grpc_1.requestCallback<HelloReply>): grpc_1.ClientUnaryCall => {
             return super.SayHello(message, metadata, options, callback);
         };
-        SayHelloStreamReply: GrpcStreamServiceInterface<HelloRequest, HelloReply> = (message: HelloRequest, metadata?: grpc_1.Metadata | grpc_1.CallOptions, options?: grpc_1.CallOptions): grpc_1.ClientReadableStream<HelloReply> => {
+        SayHelloStreamReply: GrpcStreamServiceInterface<HelloRequest2, HelloReply> = (message: HelloRequest2, metadata?: grpc_1.Metadata | grpc_1.CallOptions, options?: grpc_1.CallOptions): grpc_1.ClientReadableStream<HelloReply> => {
             return super.SayHelloStreamReply(message, metadata, options);
         };
     }

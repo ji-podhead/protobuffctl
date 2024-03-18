@@ -5,13 +5,10 @@ const fs = require('fs');
 const path = require('path');
 const serialize = require('serialize-javascript');
 const { fork } = require('child_process');
-
 const { ProtobuffGenerator } = require("protoc-helper")
 const { classDescriptions } = require("../descriptions/classdescriptions");
 const { time } = require('console');
-const {extractStringsFromArrayString } = require('../util/utils.js');
-
-
+const {extractStringsFromArrayString,addS,componentTypes, childless } = require('../util/utils.js');
 class Filewatcher {
     constructor(protoFile) {
         this.proto = protoFile
@@ -111,7 +108,6 @@ class WatcherManager {
     }
 
 }
-
 /**         ------------------ Registry ---------------------    
  * @description ${componentRegistryDocs.description}
  * @param {Object} params - An object containing all the parameters for the ComponentRegistry constructor.
@@ -126,13 +122,10 @@ class ComponentRegistry {
         this.types = new Map();
         this.enums = new Map();
         this.enumValues = new Map();
-        this.protoComponentAppearances=new Map();
         this.protoFiles = new Map();
-        this.protoFilePaths = new Map();
         // ProtoBuffRegistry 
         this.protobuffComponents = new Map();
         this.protobuffFiles = new Map();
-        this.protobuffFilePaths = new Map();
         // ProtoUserRegistry {
         this.clients = new Map();
         this.methods = new Map();
@@ -141,14 +134,18 @@ class ComponentRegistry {
         this.protoUserComponents = new Map();
         this.protoUserFiles = new Map();
         this.protoUsers = new Map();
-
+        // ADDITIONAL
+        this.protoFilePaths = new Map();
+        this.protobuffFilePaths = new Map();
+        this.protoComponentAppearances=new Map();
+        this.hashlookupTable=new Map();
     }
 }
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 /**         ------------------ Daemon ---------------------    
-* @description ${classDescriptions.Daemon.description}
+* @descript0ion ${classDescriptions.Daemon.description}
 */
 class Daemon {
     constructor() {
@@ -159,7 +156,6 @@ class Daemon {
         this.daemonProcess = null;
         this.running = false;
     }
-
     async start() {
         if (!this.running) {
 
@@ -173,21 +169,16 @@ class Daemon {
             console.log("_____________ DAEMON IS RUNNING ALREADY")
         }
     }
-
-
     stop() {
         if (this.running) {
             this.daemonProcess.kill();
             this.running = false;
             console.log("daemon killed")
-
         }
     }
-
     isRunning() {
         return this.running;
     }
-
     sendMessage(message) {
         if (this.running) {
             this.daemonProcess.send(message);
@@ -196,9 +187,6 @@ class Daemon {
         }
     }
 }
-
-
-
 /**         ------------------ Protobuffctl ---------------------    
  * @description ${classDescriptions.Protobuffctl.description}
  */
@@ -327,9 +315,7 @@ function set(type, name, values) {
     if (type) {
         const protobuffctl = new Protobuffctl();
         let element;
-        if (type.charAt(type.length - 1) !== 's') {
-            type += 's';
-        }
+        type=addS(type)
         if (!protobuffctl.componentRegistry[type]) {
             console.log(`componentRegistry has no'${type}'. please select one of the following`);
             const fieldNames = Object.keys(protobuffctl.componentRegistry[type]);
@@ -338,22 +324,36 @@ function set(type, name, values) {
             values=typeof(values)=="string"?extractStringsFromArrayString(values):values
             console.log(values)
             element = protobuffctl.componentRegistry[type].get(name);
-            if (element) {
+            if (element&&!typeof(values)=="object" ) {
                 console.log(` adding to ${name}`)
                 if (!Array.isArray(values)) {
                     values=[values]
                 }
+                console.log(element)
+                console.log(values)
                 element=element.concat(values)
                 protobuffctl.componentRegistry[type].set(name,element)
-            } else 
-            {
+                protobuffctl.componentRegistry.hashlookupTable.set(name,type)
+            } 
+            else {
             if (Array.isArray(values) || typeof values === "string") {
                 console.log("creating" + " " + name);
                 element = Array.isArray(values) ? values : [values];
                 protobuffctl.componentRegistry[type].set(name, element);
+                protobuffctl.componentRegistry.hashlookupTable.set(name,type)
+
             } else {
-                console.log("please pass either an array of values, a string, or an object");
-                return;
+                if (childless.includes(type)){
+                    protobuffctl.componentRegistry[type].set(name, values);
+                    protobuffctl.componentRegistry.hashlookupTable.set(name,type)
+
+
+                }else{
+                    console.log("please pass either an array of values, a string, or an object");
+                    return;
+                }
+                
+                
             }
         }
             protobuffctl.save();
