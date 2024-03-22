@@ -1,227 +1,18 @@
-const {
-    ProtoFile,
-    ProtobuffFile,
-    ProtoUser,
-    ProtoUserComponent,
-    Endpoint,
-    MainEndpoint,
-    languageFileExtensions,
-    // protobuffctl
-} = require('./components.js');
-//const { protobuffctl } = require("./protobuffctl.js")
+const { ProtoFile, ProtobuffFile, ProtoUser, ProtoUserComponent, Endpoint, MainEndpoint, languageFileExtensions, } = require('./components.js');
 //const ProtoFileExtractor=require("./extractors.js")
 const { exec } = require('child_process');
-const chokidar = require('chokidar');
-const { Console } = require('console');
 const path = require('path');
-const serialize = require('serialize-javascript');
-const { addS, childless,deepClone } = require("../util/utils.js")
+const { addS, childless, deepClone } = require("../util/utils.js")
 const fs = require('fs');
-const { Protobuffctl, set: setParam } = require("./protobuffctl")
+const { Protobuffctl } = require("./protobuffctl");
+const { getElementsRecoursive, getProtoContent } = require('./protoUtils.js');
 const protobuffctl = new Protobuffctl()
-function init() {
-    protobuffctl.watcherManager.init();
-} function save() {
-    protobuffctl.watcherManager.save();
-}
-function addWatcher() {
-    protobuffctl.watcherManager.addWatcher(filePath);
-}
-function removeWatcher(filePath) {
-    protobuffctl.watcherManager.removeWatcher(filePath);
-}
-function stopAll() {
-    protobuffctl.watcherManager.stopAllWatchers();
-}
-function startAll() {
-    protobuffctl.watcherManager.startAllWatchers();
-}
-
-//const arch={
-//    endPoint,
-//    protofile,
-//    protobuffFile,
-//    serivce,
-//    method,
-//    type,
-//    field,
-//    enum
-//}
-function writeAndAddProto(abs_path, type, name, string) {
-    fs.readFile(abs_path, 'utf8', (err, data) => {
-        if (err) {
-            console.error('Fehler beim Lesen der .proto-Datei:', err);
-            return;
-        }
-        // Fügen Sie den neuen Inhalt am Ende der Datei hinzu
-        const updatedData = data + '\n' + string;
-        console.log(updatedData);
-        fs.writeFile(abs_path, updatedData, 'utf8', (err) => {
-            if (err) {
-                console.error('Fehler beim Speichern der .proto-Datei:', err);
-                return;
-            }
-            console.log('Die .proto-Datei wurde erfolgreich aktualisiert.');
-        });
-    });
-}
-function writeAndReplaceProto(abs_path,type,name,string){
-    fs.readFile(abs_path, 'utf8', (err, data) => {
-     if (err) {
-        console.error('Fehler beim Lesen der .proto-Datei:', err);
-        return;
-     }
-     const updatedData = data.replace(new RegExp(`${type} ${name}.*?\n\n`, 's'), string);     
-     console.log(updatedData)
-     fs.writeFile(abs_path, updatedData, 'utf8', (err) => {
-        if (err) {
-          console.error('Fehler beim Speichern der .proto-Datei:', err);
-          return;
-        }
-        console.log('Die .proto-Datei wurde erfolgreich aktualisiert.');
-     });
-    });
-}
-function generateProtoFromServices(services) {
-    let protoContent = '';
-    console.log(services)
-    services=services["services"];
-    console.log(services)
-    services.map(service => {
-        const serviceName = Object.keys(service)[0];
-        const methods = service[serviceName];
-        protoContent += `service ${serviceName} {\n`;
-        methods.forEach(method => {
-            const methodName = Object.keys(method)[0];
-            const methodDetails = method[methodName];
-            let methodSignature = ` rpc ${methodName} (`;
-            methodSignature += `${methodDetails.requestType}) returns (`;
-            if (methodDetails.responseStream) {
-                methodSignature += `stream ${methodDetails.responseType}) {}`;
-            } else {
-                methodSignature += `${methodDetails.responseType}) {}`;
-            }
-            protoContent += methodSignature + '\n';
-        });
-        protoContent += '}\n\n';
-    });
-    return protoContent;
-}
-/**
- * Sets or updates a component within the Protobuf project management system.
-´
- * @param {string} type - The type of component to be set or updated. This could be
- *                        'service', 'method', 'type', etc.
- * @param {string} name - The name of the specific component within the given type.
- * @param {string|Array|Object} values - The values to be assigned to the component.
- *                                     This can be a single value, an array of values, or an object.
- * @example
- * // Set a service named 'Greeter' with the method 'SayHello'
- * set('service', 'Greeter', 'SayHello');
- * @example
- * // Set a method named 'SayHello' with multiple types
- * set('method', 'SayHello', ['type1', 'type2']);
- * @returns {void}
- * @throws {Error} Will throw an error if the type is not recognized or if the component
- *                 cannot be found or updated.
- */
-function set(type, name, values) {
-    setParam(type, name, values)
-}
-function getElementsRecoursive(element,name,depth) {
-   console.log(element)
-    console.log("------------------------------")
-    if (Array.isArray(element) ) {
-        element.map((item,index) => {
-        if (typeof item === "object" && item !== null) {
-         console.log (  item.key)
-         console.log(item.value)
-         const type=protobuffctl.componentRegistry.hashlookupTable.get(item.key)
-         console.log(type)
-         if(childless.includes(type)){ 
-            console.log(item)
-            item = Object.values(item)[0];
-            const child=protobuffctl.componentRegistry[type].get(item.key)
-              console.log(child)
-              item= getElementsRecoursive(child)
-              element[index]=item
-              console.log(item)
-              console.log(element)
-              return item
-          }
-        }else{
-            const type=protobuffctl.componentRegistry.hashlookupTable.get(item)
-            const child=protobuffctl.componentRegistry[type].get(item)
-            console.log(child)
-            if(childless.includes(type)){
-                item=child
-                console.log(Object.values(item)[0])
-
-                element[index]=item
-                console.log(item)
-                console.log(element)
-            return     item
-            }
-            else{
-                item = getElementsRecoursive(child)
-                element[index]=item
-                console.log(item)
-                console.log(element)
-                return item
-            }
-        }
-        })
-        console.log("______________")
-        console.log(element)
-        return {[name]:element}
-    }
-    else if (typeof element === "object" && element !== null) {
-       console.log(element)
-       Object.entries(element).forEach(([key, value]) => {        
-        console.log(key)
-        if(typeof(value)=="string"){
-            return element[key]=value
-        }
-        else if (Array.isArray(value)){
-            
-            item= getElementsRecoursive(value,depth -1)
-            element[key]=item
-            return item
-        }
-        else{
-            const type=protobuffctl.componentRegistry.hashlookupTable.get(item.key)
-            console.log(type)
-            if(childless.includes(type)){ 
-               console.log(item)
-               item = Object.values(item)[0];
-               //const child=protobuffctl.componentRegistry[type].get(key)
-               element[key]=child
-               console.log(child)
-                 return item
-             }
-             else{
-                //item = Object.values(item)[0];
-                item= getElementsRecoursive({[key]:value})
-                element[key]=item
-                console.log(element)
-                console.log(child)
-                return item
-             }
-
-        }
-        
-    })
-    return element
-    }
-    else{
-        console.log(element)
-        return element
-    }
-}
-
+/*
+*-------------------------- get --------------------
+*/
 function get(type, name, depth) {
     type = addS(type)
-    console.log("get " + type +  " " + name   )
+    console.log("get " + type + " " + name)
     depth = Math.abs(depth)
     if (depth == "i") {
         depth = 99999
@@ -229,158 +20,223 @@ function get(type, name, depth) {
     else if (depth == undefined) {
         depth = 1
     }
-    let element = protobuffctl.componentRegistry[type].get(name)
-    console.log(element)
-    if(!childless.includes(type)){
-        const elementNew = {[type]:[getElementsRecoursive(element,name,depth)]}
-        console.log("____________________")
-        console.log(JSON.stringify(elementNew))
-        //const  string=generateProtoFromServices(elementNew)
-        //let namesplit=name.split("_")
-        //namesplit=namesplit[0]+"_"+namesplit[1]
-        //console.log(namesplit)
-        //const file = protobuffctl.componentRegistry.protoFiles.get(namesplit)
-        //console.log(file)
-        //writeAndReplaceProto(file.absolute_path,type,name,string)
-        return elementNew
+    try {
+        let element = protobuffctl.componentRegistry[type].get(name)
+        let clone = Object.assign(Object.create(Object.getPrototypeOf(element)), element)            
+
+     //   console.log(clone)
+        if (!childless.includes(type)) {
+            const elementNew = getElementsRecoursive(clone, name, depth)
+            console.log("____________________")
+            console.log(JSON.stringify(elementNew))
+            return elementNew
+        }
+        else {
+            console.log(clone)
+            return clone
+        }
     }
-    else{
-        console.log(element)
-        return element
+    catch (err) {
+        console.error("🤕 had err while getting object 🚑 🚨 " + err + " 🚨 🚑")
+        return ("🤕  had err while getting object 🚑 🚨 " + err + " 🚨 🚑")
     }
 }
-function getAll(type, depth) {
+function getAll(type, describe, jsonOut) {
     const protobuffctl = new Protobuffctl()
-    const elements = []
-    //   console.log(protobuffctl)
-    protobuffctl.componentRegistry[type].forEach((value, key) => {
-        console.log(key);
-        // Sie können hier auch auf 'value' zugreifen, wenn Sie es benötigen
-    });
-}
-function createProto(file, path) {
+    const keys = []
     try {
-        const proto = new ProtoFile(file, path)
-        console.log("created proto" + String(proto.id))
-     //   const protoObject= get("protoFile",proto.id,"i")
-        const str=(JSON.stringify(protoObject))  
-        console.log(str)
-        return
-        fs.writeFile(__dirname+"/test.json", str, (err) => {
-
-        
-        })
-        return
-        const  string=generateProtoFromServices(elementNew)
-        writeAndReplaceProto(file.absolute_path,type,name,string)
-        fs.copyFile(sourceFilePath, destinationFilePath, (err) => {
-        if (err) {
-            console.error('Fehler beim Kopieren der Datei:', err);
-            return;
-        }
-        console.log('copied your file');
-        });
-
-        fs.copyFile(sourceFilePath, destinationFilePath, (err) => {
-        if (err) {
-            console.error('Fehler beim Kopieren der Datei:', err);
-            return;
-        }
-        replaceMessageNamesInProtoFile(this.absolute_path,this.id+"_")
-        console.log('copied your file');
-        });
-        return (proto)
-    }
-    catch (err) {
-        console.log("had err while creating proto" + err)
-        return ("had err while creating proto" + err)
-    }
-}
-function getProto(id, file, path) {
-    let proto
-    try {
-        if (id != undefined) {
-            proto = protobuffctl.componentRegistry.get(id)
-        }
-        else {
-            proto = Array.from(protobuffctl.componentRegistry.protoFiles.values()).find(
-                protoFile => protoFile.file === file && protoFile.path === path
-            );
-        }
-        console.log("found proto" + String(proto.id))
-        return (proto)
-    }
-    catch (err) {
-        console.log("had err while getting proto" + err)
-        return ("had err while getting proto" + err)
-    }
-}
-function generateProtobuff(protoFile, lang, out) {
-    if (typeof (protoFile) == String) {
-        protoFile = protobuffctl.componentRegistry.protoFiles.get(protoFile)
-    }
-}
-function updateProtoFiles(protoFiles, rescan) {
-    for (file of protoFiles) {
-        const proto = protobuffctl.componentRegistry.protoFiles.get(file)
-        proto.services
-        if (this.protobuffFiles != []) {
-            for (buff of this.protobuffFiles) {
-                buff = protobuffctl.protobuffFiles.get(buff)
-                createBuff(buff.lang, buff.out, buff.file_name, buff.file_path,).then(() => {
-                })
+        const jsonObject = []
+        protobuffctl.componentRegistry[type].forEach((value, key) => {
+            keys.push(key)
+            describe == false && console.log(key);
+            if (describe=="true") {
+                obj = get(type, key, "i")
+                    jsonObject.push(obj)
             }
+        })
+        if (describe=="true") {
+            console.log(JSON.stringify(jsonObject))
+            if (jsonOut=undefined) {
+                //fs.writeFileSync(path.join(type, element + ".json"), jsonObject);
+            }
+            return obj
         }
         else {
-            console.warn("no protobuff-file objects! please create those before! flagg ignored ")
-            //const buff = new ProtobuffFile(__dirname, this, "ts")
+            console.log(keys)
+            return (keys)
         }
+    }
+    catch (err) {
+        console.error("🤕 had err while looking for object 🚑 🚨 " + err + " 🚨 🚑")
+        return ("🤕  had err while looking for object 🚑 🚨 " + err + " 🚨 🚑")
+    }
+
+}
+function toJson(out, id) {
+    if (id != "none") {
+        type = protobuffctl.componentRegistry.hashlookupTable(element)
+        element = protobuffctl.componentRegistry[type].get(id)
+        const elementNew = JSON.stringify(getElementsRecoursive(element, id, depth))
+        fs.writeFileSync(path.join(filepath, element + ".json"), obj);
+    }
+    else {
+        if(out=="./" ){out=path.join(__dirname,"protobuffctl.json")}
+        console.log("no elment specified, generating flatenned json")
+        protobuffctl.convertToJsonCompatible(out)
+        
     }
 }
 /*
+*--------------------- create/edit --------------------
+*/
+function protogenArr(protofiles) {
+    const proto = protobuffctl.componentRegistry.protoFiles.get(file)
+    for (buff of proto.protobuffFiles) {
+        buff = protobuffctl.protobuffFiles.get(buff)
+    }
+    createBuff(buff.lang, buff.out, buff.file_name, buff.file_path,).then(() => {
+    })
+}
+/**
+ * Initializes a new Proto-object or ProtobuffFile in the registry.
+ * @example * // Example for creating a ProtoFile
+ * create("proto", "example.proto", "/path/to/proto/files");
+ * @example * // Example for creating a ProtobuffFile
+ * create("protobuff", "example.id", "ts", "/path/to/output");
+ * @param {string} type - The type of object to create. Can be "proto" for ProtoFile or "protobuff" for ProtobuffFile.
+ * @param {string} arg1 - The first argument, which is the file name for "proto" type or the protoFile ID for "protobuff" type.
+ * @param {string} arg2 - The second argument, which is the file path for "proto" type or the language for "protobuff" type.
+ * @param {string} arg3 - The third argument, which is the output path for "protobuff" type.
+ * @param {string} arg4 - The fourth argument, which is not used in the current implementation.
+  */
+function create(type, arg1, arg2, arg3, arg4) {
+    switch (type) {
+        case ("proto"):
+            console.log(arg1)
+            try {
+                const file = arg1; const folder_path = arg2
+                console.log((file));
+                if (typeof (file) != "string" || typeof (folder_path) != "string") {
+                    return console.error("🤕 wrong arguments! arguments are\n arg1: <string> - file-name. \n arg2: <string> - folder_path")
+                }
+                                // Überprüfen, ob die Datei existiert
+                const abs=path.join(folder_path,file)
+                if (!fs.existsSync(abs)) {
+                    // Die Datei existiert nicht, also erstellen Sie sie mit baseProto
+                    const base= path.basename(file,".proto")
+                    const baseProto = `
+syntax="proto3";
+option java_multiple_files = true;
+option java_package = "./";
+option java_outer_classname = "${base}";
+option objc_class_prefix = "HLW";
+option go_package = "./";
 
-function setService(type, name, values, protoFiles, createProtobuff) {
-    console.log("SSSSSSSSSSSSSSSSS")
-    createProtobuff = createProtobuff === undefined ? false : createProtobuff;
-    let element = protobuffctl.componentRegistry[type].set(values)
-    if (element != undefined) {
-    }
-    else {
-        protobuffctl.componentRegistry[type].set(service_name, [])
-        element = protobuffctl.componentRegistry.services.get(service_name)
-        for (file of protoFiles) {
-            protobuffctl.protoFiles.get(file).set("services", service_name)
-        }
-    }
-    for (item of component_names_and_values) {
-        const name = item[0]
-        const values = item[1]
-        protobuffctl.componentRegistry.services.set("methods", { [name]: values });
-        element.push(name)
-        for (file of protoFiles) {
-            const proto = protobuffctl.componentRegistry.protoFiles.get(file)
-            proto.set("methods", name)
-        }
-    }
-    protobuffctl.save()
-    protobuffctl.convertToJsonCompatible(__dirname + "/protobuffctl.json")
+package ${base};`;
+                    fs.writeFileSync(abs, baseProto);
+                    console.log("empty proto file was created: " + abs);
+                } else {
+                    console.log("using existing protoFile: " + abs);
+                }
+                const proto = new ProtoFile(file, folder_path)
+                return proto
+            }
+            catch (err) {
+                console.error("🤕 had err while creating proto: 🚑 🚨 " + err + " 🚨 🚑")
+                return err
+            }
+        case ("protobuff"): {
+            let protoFile = arg1; let lang = arg2; let out = arg3
+            if (typeof (protoFile) != "string" || typeof (lang) != "string" || typeof (out) != "string") {
+                return console.warn("🤕 wrong arguments! arguments are\n arg1: <string> - proto-id. \n arg2: <string> - language,\n arg3: <string> - output_folder_path")
+            }
+            try {
+                if(out=="./" ){out=path.join(__dirname)}
+                
+                console.log(protobuffctl.componentRegistry.protoFiles)
+                type = protobuffctl.componentRegistry.hashlookupTable.get(protoFile)
+                console.log(type)
+                protoObj = protobuffctl.componentRegistry[type].get(protoFile)
 
-    if (createProtobuff) {
-        updateProtoFiles(protoFiles, false)
+                console.log(protoObj)
+                console.log(out)
+                //getProtoContent(protoObj, true)
+                const buff = new ProtobuffFile(out, protoObj, lang)
+                console.log("successuflly created protobuff file 🤑🤑🤑 ")
+                return buff
+            } catch (err) {
+                console.error("🤕 we had an err:  🚑 🚨 " + err + " 🚨 🚑"); return err
+            }
+        }
     }
 }
+function createFromConfig(protoFiles) {
+
+}
+
+function remove(type, name, values, pull) {
+
+}
+function add(type, name, values, pull) {
+
+}
+//update the protofiles and protobuffs
+function pull(protoFiles, remove_missing) {
+
+}//update the registry if protos have changed
+function push(protoFiles, remove_missing) {
+    for (file of protoFiles) {
+
+    }
+}
+/*
+*------------------------ watchers --------------------
 */
-
-
-
-const dir = String(__dirname) + "/helloworld.proto"
-//getProto(dir)
+function addWatcher() {
+    protobuffctl.watcherManager.addWatcher(filePath);
+}
+function removeWatcher(filePath) {
+    protobuffctl.watcherManager.removeWatcher(filePath);
+}
+function stopAllWatchers() {
+    protobuffctl.watcherManager.stopAllWatchers();
+}
+function startAllWatchers() {
+    protobuffctl.watcherManager.startAllWatchers();
+}
+/*
+*------------------------ exports --------------------
+*/
 module.exports = {
-    protobuffctl, init, save, getAll, get, set, generateProtobuff, createProto, getProto, addWatcher, removeWatcher, stopAll, startAll,writeAndAddProto,writeAndReplaceProto,   generateProtoFromServices
+    getAll, remove, add, protogenArr, pull, push, createFromConfig, get, toJson, create, addWatcher, removeWatcher, stopAll: stopAllWatchers, startAll: startAllWatchers,
 };
+/*_______________________________________________________________
+*                           E N D 
+_______________________________________________________________*/
 
+/*
+       fs.writeFile(__dirname+"/test.json", str, (err) => {
 
+       
+       })
+       return
+       const  string=generateProtoFromServices(elementNew)
+       writeAndReplaceProto(file.absolute_path,type,name,string)
+       fs.copyFile(sourceFilePath, destinationFilePath, (err) => {
+       if (err) {
+           console.error('Fehler beim Kopieren der Datei:', err);
+           return;
+       }
+       console.log('copied your file');
+       });
 
-//const extractor = new ProtoFileExtractor(componentMap);
-//const protoFileElements = extractor.extractProtoFileElements();
-//console.log(protoFileElements);
+       fs.copyFile(sourceFilePath, destinationFilePath, (err) => {
+       if (err) {
+           console.error('Fehler beim Kopieren der Datei:', err);
+           return;
+       }
+       replaceMessageNamesInProtoFile(this.absolute_path,this.id+"_")
+       console.log('copied your file');
+       });
+       return (proto)
+       */

@@ -1,5 +1,4 @@
-syntax = "proto3";
-
+syntax="proto3";
 option java_multiple_files = true;
 option java_package = "./";
 option java_outer_classname = "HelloWorldProto";
@@ -8,21 +7,22 @@ option go_package = "./";
 
 package helloworld;
 
-// The greeting service definition.
-service Greeter2{
-  // Sends a greeting
-  rpc SayHello (HelloRequest2) returns (HelloReply) {}
-
-  rpc SayHelloStreamReply (HelloRequest2) returns (stream HelloReply) {}
+service Greeter6 {
+ rpc SayHello (HelloRequest) returns (HelloReply) {}
+ rpc SayHelloStreamReply (HelloRequest) returns (stream HelloReply) {}
+}
+service Greeter6 {
+ rpc SayHello (HelloRequest) returns (HelloReply) {}
+ rpc SayHelloStreamReply (HelloRequest) returns (stream HelloReply) {}
 }
 
-// The request message containing the user's name.
-message HelloRequest2 {
-  string name = 1;
-float id1 =2;
+
+message HelloRequest {
+ string name = 1;
+ float id1 = 2;
 }
 
-// The response message containing the greetings
 message HelloReply {
-  string message = 1;
+ string message = 1;
 }
+

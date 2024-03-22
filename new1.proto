@@ -1,0 +1,10 @@
+syntax="proto3";
+option java_multiple_files = true;
+option java_package = "./";
+option java_outer_classname = "new1";
+option objc_class_prefix = "HLW";
+option go_package = "./";
+
+package new1;
+
+

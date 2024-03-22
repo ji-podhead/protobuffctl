@@ -1,112 +1,258 @@
 {
     "endPoints": {
-        "ts_src__1": {
+        "go_src__1": {
             "path": "/run/media/ji/myStuff/git/protobuffctl/src",
-            "lang": "ts",
-            "id": "ts_src__1",
+            "lang": "go",
+            "id": "go_src__1",
             "protobuffFiles": {
-                "0": "helloworld_1.ts__1"
+                "0": "test.pb.go__1"
             },
             "protoUsers": {
                 "0": {}
             },
             "protoFiles": {
-                "0": "helloworld_1"
+                "0": "test"
             }
         }
     },
     "fields": {
-        "helloworld_1_name": {
-            "name": {
+        "val1": {
+            "val1": {
                 "type": "string",
                 "id": 1
             }
         },
-        "helloworld_1_id1": {
-            "id1": {
-                "type": "float",
+        "val2": {
+            "val2": {
+                "type": "string",
                 "id": 2
             }
         },
-        "helloworld_1_message": {
-            "message": {
+        "val3": {
+            "val3": {
                 "type": "string",
-                "id": 1
+                "id": 3
             }
         }
     },
     "services": {
-        "helloworld_1_Greeter2": {
-            "0": "helloworld_1_SayHello",
-            "1": "helloworld_1_SayHelloStreamReply"
+        "Greeter2": {
+            "0": {
+                "testReqM": {
+                    "requestType": "testReq",
+                    "responseType": "testRep"
+                }
+            },
+            "1": {
+                "testRepM": {
+                    "requestType": "testReq",
+                    "responseType": "testRep",
+                    "responseStream": true
+                }
+            }
+        },
+        "testS": {
+            "0": {
+                "testReqM": {
+                    "requestType": "testReq",
+                    "responseType": "testRep"
+                }
+            },
+            "1": {
+                "testRepM": {
+                    "requestType": "testReq",
+                    "responseType": "testRep",
+                    "responseStream": true
+                }
+            }
         }
     },
     "methods": {
-        "helloworld_1_SayHello": {
-            "SayHello": {
-                "requestType": "helloworld_1_HelloRequest2",
-                "responseType": "helloworld_1_HelloReply"
+        "testReqM": {
+            "testReqM": {
+                "requestType": "testReq",
+                "responseType": "testRep"
             }
         },
-        "helloworld_1_SayHelloStreamReply": {
-            "SayHelloStreamReply": {
-                "requestType": "helloworld_1_HelloRequest2",
-                "responseType": "helloworld_1_HelloReply",
+        "testRepM": {
+            "testRepM": {
+                "requestType": "testReq",
+                "responseType": "testRep",
                 "responseStream": true
             }
         }
     },
     "types": {
-        "helloworld_1_HelloRequest2": {
-            "0": "helloworld_1_name",
-            "1": "helloworld_1_id1"
+        "testReq": {
+            "0": {
+                "val1": {
+                    "type": "string",
+                    "id": 1
+                }
+            },
+            "1": {
+                "val2": {
+                    "type": "string",
+                    "id": 2
+                }
+            }
         },
-        "helloworld_1_HelloReply": {
-            "0": "helloworld_1_message"
+        "testRep": {
+            "0": {
+                "val1": {
+                    "type": "string",
+                    "id": 1
+                }
+            },
+            "1": {
+                "val2": {
+                    "type": "string",
+                    "id": 2
+                }
+            },
+            "2": {
+                "val3": {
+                    "type": "string",
+                    "id": 3
+                }
+            }
         }
     },
     "enums": {},
     "enumValues": {},
     "protoFiles": {
-        "helloworld_1": {
+        "test": {
             "services": {
-                "0": "helloworld_1_Greeter2"
+                "0": {
+                    "Greeter2": {
+                        "0": {
+                            "testReqM": {
+                                "requestType": "testReq",
+                                "responseType": "testRep"
+                            }
+                        },
+                        "1": {
+                            "testRepM": {
+                                "requestType": "testReq",
+                                "responseType": "testRep",
+                                "responseStream": true
+                            }
+                        }
+                    }
+                }
             },
             "methods": {
-                "0": "helloworld_1_SayHello",
-                "1": "helloworld_1_SayHelloStreamReply"
+                "0": {
+                    "testReqM": {
+                        "requestType": "testReq",
+                        "responseType": "testRep"
+                    }
+                },
+                "1": {
+                    "testRepM": {
+                        "requestType": "testReq",
+                        "responseType": "testRep",
+                        "responseStream": true
+                    }
+                }
             },
             "types": {
-                "0": "helloworld_1_HelloRequest2",
-                "1": "helloworld_1_HelloReply"
+                "0": {
+                    "testReq": {
+                        "0": {
+                            "val1": {
+                                "type": "string",
+                                "id": 1
+                            }
+                        },
+                        "1": {
+                            "val2": {
+                                "type": "string",
+                                "id": 2
+                            }
+                        }
+                    }
+                },
+                "1": {
+                    "testRep": {
+                        "0": {
+                            "val1": {
+                                "type": "string",
+                                "id": 1
+                            }
+                        },
+                        "1": {
+                            "val2": {
+                                "type": "string",
+                                "id": 2
+                            }
+                        },
+                        "2": {
+                            "val3": {
+                                "type": "string",
+                                "id": 3
+                            }
+                        }
+                    }
+                }
             },
             "enums": {},
+            "fields": {
+                "0": {
+                    "val1": {
+                        "type": "string",
+                        "id": 1
+                    }
+                },
+                "1": {
+                    "val2": {
+                        "type": "string",
+                        "id": 2
+                    }
+                },
+                "2": {
+                    "val1": {
+                        "type": "string",
+                        "id": 1
+                    }
+                },
+                "3": {
+                    "val2": {
+                        "type": "string",
+                        "id": 2
+                    }
+                },
+                "4": {
+                    "val3": {
+                        "type": "string",
+                        "id": 3
+                    }
+                }
+            },
             "protobuffFiles": {},
             "protobuffComponents": {},
             "protoUserComponent": {},
-            "id": "helloworld_1",
-            "fields": {
-                "0": "helloworld_1_name",
-                "1": "helloworld_1_id1",
-                "2": "helloworld_1_message"
-            },
-            "absolute_path": "/run/media/ji/myStuff/git/protobuffctl/helloworld_1.proto",
-            "file_name": "helloworld_1.proto",
-            "file_path": "/run/media/ji/myStuff/git/protobuffctl"
+            "id": "test",
+            "options": "test_op",
+            "absolute_path": "/run/media/ji/myStuff/git/protobuffctl/test.proto",
+            "file_name": "test.proto",
+            "file_path": "/run/media/ji/myStuff/git/protobuffctl",
+            "syntax": "syntax=\"proto3\";",
+            "proto_package": "package test;"
         }
     },
     "protobuffComponents": {},
     "protobuffFiles": {
-        "helloworld_1.ts__1": {
+        "test.pb.go__1": {
             "out": "/run/media/ji/myStuff/git/protobuffctl/src",
-            "protoFile": "helloworld_1",
-            "lang": "ts",
+            "protoFile": "test",
+            "lang": "go",
             "protoUsers": {},
             "protobuffComponents": {},
-            "file_name": "helloworld_1.ts",
-            "absolute_path": "/run/media/ji/myStuff/git/protobuffctl/src/helloworld_1.ts",
-            "id": "helloworld_1.ts__1",
-            "endPoint": "ts_src__1"
+            "file_name": "test.pb.go",
+            "absolute_path": "/run/media/ji/myStuff/git/protobuffctl/src/test.pb.go",
+            "id": "test.pb.go__1",
+            "endPoint": "go_src__1"
         }
     },
     "clients": {},
@@ -116,20 +262,34 @@
     "protoUserFiles": {},
     "protoUsers": {},
     "protoFilePaths": {
-        "helloworld_1": "/run/media/ji/myStuff/git/protobuffctl/helloworld_1.proto"
+        "test": "/run/media/ji/myStuff/git/protobuffctl/test.proto"
     },
     "protobuffFilePaths": {
-        "helloworld_1.ts__1": "/run/media/ji/myStuff/git/protobuffctl/src/helloworld_1.ts"
+        "test.pb.go__1": "/run/media/ji/myStuff/git/protobuffctl/src/test.pb.go"
     },
     "protoComponentAppearances": {},
+    "options": {
+        "test_op": {
+            "0": "option java_multiple_files = true;",
+            "1": "option java_package = \"./\";",
+            "2": "option java_outer_classname = \"HelloWorldProto\";",
+            "3": "option objc_class_prefix = \"HLW\";",
+            "4": "option go_package = \"./\";"
+        }
+    },
     "hashlookupTable": {
-        "helloworld_1_SayHello": "methods",
-        "helloworld_1_SayHelloStreamReply": "methods",
-        "helloworld_1_Greeter2": "services",
-        "helloworld_1_name": "fields",
-        "helloworld_1_id1": "fields",
-        "helloworld_1_HelloRequest2": "types",
-        "helloworld_1_message": "fields",
-        "helloworld_1_HelloReply": "types"
+        "test_op": "options",
+        "testReqM": "methods",
+        "testRepM": "methods",
+        "Greeter2": "services",
+        "val1": "fields",
+        "val2": "fields",
+        "testReq": "types",
+        "val3": "fields",
+        "testRep": "types",
+        "test": "protoFiles",
+        "testS": "services",
+        "test.pb.go__1": "protobuffFiles",
+        "go_src__1": "endPoint"
     }
 }

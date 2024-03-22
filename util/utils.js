@@ -97,7 +97,7 @@ const languageFileExtensions = {
     }
 };
 const childless=[
-    "fields","methods","enumValues","protobuffComponents","clients","Streams","callbacks","absolute_path","file_name","file_path"
+    "options","fields","methods","enumValues","protobuffComponents","clients","Streams","callbacks","absolute_path","file_name","file_path"
 ]
 /**           
  * @description returns: 0 (a>b) | 1 (b>a) | 2  no related
@@ -121,13 +121,16 @@ function isSubdirectory(path_a, path_b) {
         return 2; // not_related
     }
 }
-function mergeFields(target, source, fields) {
+function mergeFields(target, source, fields,keep_old=false) {
     fields.forEach(field => {
+        console.log(field)
         if (Array.isArray(target[field]) && Array.isArray(source[field])) {
             // Konkatenation für Array-Typen, aber vermeiden Sie Duplikate
+            if(keep_old){
             target[field] = source[field].concat(target[field]).filter((item, index, self) => {
                 return self.indexOf(item) === index;
             });
+            }
         } else if (typeof target[field] !== 'undefined' && typeof source[field] !== 'undefined') {
             // Überschreiben für nicht-Array-Typen
             target[field] = source[field];
