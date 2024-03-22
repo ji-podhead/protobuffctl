@@ -1,5 +1,5 @@
 const { Command } = require('commander');
-const {getAll,get,create,toJson,addWatcher,removeWatcher, stopAll,startAll} =require("../src/shared");
+const {getAll,get,create,toJson,addWatcher,removeWatcher, stopAll,startAll, findAllUsages, del} =require("../src/shared");
 const { set } = require('../src/protoUtils');
 
     
@@ -22,19 +22,16 @@ cli
     .description('Stop all watchers')
     .action(() => { stopAll() });
     cli
-    .command('create <type> <arg1> <arg2> <arg3> <arg4>')
+    .command('create <type> <arg1> <arg2> <arg3...>')
     .description('Initializes a new Proto-object or ProtobuffFile in the registry.\n Example for creating a ProtoFile \ncreate("proto", "example.proto", "/path/to/proto/files");\nExample for creating a ProtobuffFile\n"protobuff", "example.id", "ts", "/path/to/output"')
-    .action((type, arg1, arg2, arg3, arg4) => { 
-   //     if(type=="proto"){
-   //     const parts = arg1.split('/');
-   //      const path  = parts.slice(0, -1).join('/');
-   //     const file = parts[parts.length - 1];
-   //     create(type,file,path, arg2, arg3, arg4)     
-   // }
-   // else{
-   //     
-   // }
-    create(type, arg1, arg2, arg3, arg4) 
+    .action((type, arg1, arg2, arg3) => { 
+    create(type, arg1, arg2, arg3) 
+    })
+    cli
+    .command('del <type> <id>')
+    .description('Initializes a new Proto-object or ProtobuffFile in the registry.\n Example for creating a ProtoFile \ncreate("proto", "example.proto", "/path/to/proto/files");\nExample for creating a ProtobuffFile\n"protobuff", "example.id", "ts", "/path/to/output"')
+    .action((type, id) => { 
+    del(type, id) 
     })
 cli
     .command('getAll  <type> <describe> <jsonOut>')
@@ -52,6 +49,11 @@ cli
     .command('get <type> <name> <depth>')
     .description('save to your protobuffctl.json')
     .action((type,name,depth) => {get(type,name,depth) });
+
+    cli
+    .command('findAllUsages <type> <name>')
+    .description('save to your protobuffctl.json')
+    .action((type,name) => {findAllUsages(type,name) });
 cli
     .command('generateProtobuff <proto_file> <language> <outputPath>')
     .description('generate a protobuff file. many languages supported')
