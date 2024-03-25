@@ -23,6 +23,7 @@ Retrieves all elements of a specified type from the registry.
 - `type`: The type of elements to retrieve (e.g., "protoFiles", "services", "methods", etc.).
 - `describe`: A boolean indicating whether to describe the elements in detail.
 - `jsonOut`: A boolean indicating whether to output the results in JSON format.
+  
 **get**
 ```javascript
 get("<type>", "<name>", <depth>);
@@ -31,6 +32,7 @@ Retrieves a specific component from the registry.
 - `type`: The type of the component to retrieve.
 - `name`: The name of the component to retrieve.
 - `depth`: The depth of recursion for retrieving related components.
+  
 **toJson**
 ```javascript
 toJson("<out>", "<id>");
@@ -38,6 +40,7 @@ toJson("<out>", "<id>");
 Converts the registry to a JSON file.
 - `out`: The output path for the JSON file.
 - `id`: The ID of the component to include in the JSON file.
+
 **remove**
 ```javascript
 remove("<type>", "<name>", <values>, <pull>);
@@ -47,6 +50,7 @@ Removes a component from another component.
 - `name`: The name of the component to remove.
 - `values`: The values associated with the component to remove.
 - `pull`: A boolean indicating whether to pull the changes to the registry.
+
 **findAllUsages**
 ```javascript
 findAllUsages("<type>", "<name>");
@@ -55,6 +59,7 @@ Finds all usages of a specified component in the registry.
 
 - `type`: The type of the component to find usages for.
 - `name`: The name of the component to find usages for.
+
 **add**
 ```javascript
 add("<type>", "<source>", "<target>", <pull>);
@@ -72,6 +77,7 @@ Deletes a component from the registry.
 - `type`: The type of the component to delete.
 - `id`: The ID of the component to delete.
 - `remove_from_components`: A boolean indicating whether to remove the component from other components.
+
 **protogenArr**
 ```javascript
 protogenArr(<protofiles>);
@@ -83,6 +89,7 @@ Generates Protobuff files for an array of proto files.
 pull(<protoFiles>, <remove_missing>);
 ```
 Updates the registry with changes from the specified proto files.
+
 **push**
 - `protoFiles`: An array of proto file names or IDs.
 - `remove_missing`: A boolean indicating whether to remove missing components from the registry.
@@ -92,6 +99,7 @@ push(<protoFiles>, <remove_missing>);
 Updates the proto files with changes from the registry.
 - `protoFiles`: An array of proto file names or IDs.
 - `remove_missing`: A boolean indicating whether to remove missing components from the proto files.
+
 **createFromConfig**
 ```javascript
 createFromConfig(<protoFiles>);
@@ -99,6 +107,7 @@ createFromConfig(<protoFiles>);
 Creates components from a configuration file.
 
 - `protoFiles`: An array of proto file names or IDs.
+
 **create**
 ```javascript
 create("<type>", "<arg1>", "<arg2>", "<arg3>");
