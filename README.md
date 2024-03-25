@@ -1,17 +1,12 @@
 # protobuffctl
-`protobuffctl` offers an  [API](https://ji-podhead.github.io/protobuffctl/) that enables you to automate all protobuf functions. 
-> **Component Creation**:
-  > Quickly create new types, fields, and services, message types, service methods and enums.<br>
-> **Automatic Protobuf Generation**:
-  > `protobuffctl` automatically generates the corresponding protobuf files when making changes to the protofiles.<br>
-> **Registry Management**:
-  > Export your configs to roll back all your Protofiles saved in the .config.<br>
-> **File Watching**:
-  > Monitor your proto files for any changes. Update the Componentregistry and rescan Protofile when user modifies them.<br>
-> **User Interface (UI)**:
-  > Create your own ui and to manage `Protocollbuffers` using the api.<br>
-> **VC CODE EXTENSION**:
-  >`COMMING UP` Get complete visual feedback for all related methods, components, and files directly in your IDE. This feature is currently under development but will enhance your development experience by providing real-time updates and insights into your protobuf project.
+`protobuffctl` offers an  [API](https://ji-podhead.github.io/protobuffctl/) that enables you to automate all protobuf functions. it stores all Components in the **Componentregistry**. <br>
+> Quickly create new types, fields, and services, message types, service methods and enums.<br>
+> `protobuffctl` automatically generates the corresponding protobuf files when making changes to the protofiles.<br>
+> Roll back to old protofile, or to an historical registry state using historical `.config` file just like with **version control**.<br>
+> **Preview** the Protofile-Code before actually building it.
+> Set up **File Watcher** to monitor your proto files for any changes. Update the Componentregistry and rescan Protofile when user modifies them.<br>
+> Create your own **User Interface** and manage `Protocollbuffers` using the api and input events.<br>
+>`COMMING UP` Get complete visual feedback for all related methods, components, and files directly with our **VC CODE EXTENSION**.<br> 
 
 ## Getting Started
 > commng up/
