@@ -3,14 +3,17 @@
 [![npm version](https://badge.fury.io/js/protobuffctl.svg)](https://badge.fury.io/js/protobuffctl)
 ![NPM Downloads](https://img.shields.io/npm/dw/protobuffctl)
 
-`protobuffctl` offers an  [API](https://ji-podhead.github.io/protobuffctl/) that enables you to automate all protobuf functions.<br>it stores all Components in the **Componentregistry**. <br> 
 
+
+---
+- `protobuffctl` offers an  [API](https://ji-podhead.github.io/protobuffctl/) that enables you to automate all protobuf functions.
+- It stores all Components in the **Componentregistry**. <br> 
 - Quickly create new types, fields, and services, message types, service methods and enums using the [API](https://ji-podhead.github.io/protobuffctl/) and **cli commands**.<br>
 - `Protobuffctl` automatically generates the corresponding protobuf files when making changes to the protofiles.<br>
 - Roll back to old protofile, or to an historical registry state using historical `.config` file just like with **version control**.<br>
 - **Preview** the Protofile-Code before actually building it.<br>
 - Create your own **User Interface** and manage `Protocollbuffers` using the [API](https://ji-podhead.github.io/protobuffctl/) and input events.<br>
-
+---
 # Getting Started
 **pls see** [API-Docs](https://ji-podhead.github.io/protobuffctl/) 
 ## Install
