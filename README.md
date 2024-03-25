@@ -10,6 +10,159 @@
 - **Visual Feedback**: Provides complete visual feedback for all related methods, components, and files directly in your IDE. `todo`
 - **UI/VS Code Extension**: Browse, manage, edit, and create your files, components, and implementations via UI or VS Code extension. `todo`
 
+# Protobuffctl CLI Documentation
+Protobuffctl has a command-line interface (CLI) tool designed to manage components and watchers for a project,   possibly related to Protocol Buffers (protobuf). This documentation provides an overview of the available commands and their usage. `The the export module functions do exactly the same`
+## Commands
+Certainly! Here's the API documentation with Markdown formatting and the argument names highlighted in the examples:
+
+---
+
+## API Documentation
+
+### `getAll(type, describe, jsonOut)`
+Retrieves all elements of a specified type from the registry.
+
+- `type`: The type of elements to retrieve (e.g., "protoFiles", "services", "methods", etc.).
+- `describe`: A boolean indicating whether to describe the elements in detail.
+- `jsonOut`: A boolean indicating whether to output the results in JSON format.
+
+**Example:**
+```javascript
+getAll("<type>", <describe>, <jsonOut>);
+```
+
+### `remove(type, name, values, pull)`
+Removes a component from another component.
+
+- `type`: The type of the component to remove.
+- `name`: The name of the component to remove.
+- `values`: The values associated with the component to remove.
+- `pull`: A boolean indicating whether to pull the changes to the registry.
+
+**Example:**
+```javascript
+remove("<type>", "<name>", <values>, <pull>);
+```
+
+### `findAllUsages(type, name)`
+Finds all usages of a specified component in the registry.
+
+- `type`: The type of the component to find usages for.
+- `name`: The name of the component to find usages for.
+
+**Example:**
+```javascript
+findAllUsages("<type>", "<name>");
+```
+
+### `add(type, source, target, pull)`
+Adds a component to another component.
+
+- `type`: The type of the component to add.
+- `source`: The name of the source component.
+- `target`: The name of the target component.
+- `pull`: A boolean indicating whether to pull the changes to the registry.
+
+**Example:**
+```javascript
+add("<type>", "<source>", "<target>", <pull>);
+```
+
+### `del(type, id, remove_from_components = true)`
+Deletes a component from the registry.
+
+- `type`: The type of the component to delete.
+- `id`: The ID of the component to delete.
+- `remove_from_components`: A boolean indicating whether to remove the component from other components.
+
+**Example:**
+```javascript
+del("<type>", "<id>", <remove_from_components>);
+```
+
+### `protogenArr(protofiles)`
+Generates Protobuff files for an array of proto files.
+
+- `protofiles`: An array of proto file names or IDs.
+
+**Example:**
+```javascript
+protogenArr(<protofiles>);
+```
+
+### `pull(protoFiles, remove_missing = false)`
+Updates the registry with changes from the specified proto files.
+
+- `protoFiles`: An array of proto file names or IDs.
+- `remove_missing`: A boolean indicating whether to remove missing components from the registry.
+
+**Example:**
+```javascript
+pull(<protoFiles>, <remove_missing>);
+```
+
+### `push(protoFiles, remove_missing)`
+Updates the proto files with changes from the registry.
+
+- `protoFiles`: An array of proto file names or IDs.
+- `remove_missing`: A boolean indicating whether to remove missing components from the proto files.
+
+**Example:**
+```javascript
+push(<protoFiles>, <remove_missing>);
+```
+
+### `createFromConfig(protoFiles)`
+Creates components from a configuration file.
+
+- `protoFiles`: An array of proto file names or IDs.
+
+**Example:**
+```javascript
+createFromConfig(<protoFiles>);
+```
+
+### `get(type, name, depth)`
+Retrieves a specific component from the registry.
+
+- `type`: The type of the component to retrieve.
+- `name`: The name of the component to retrieve.
+- `depth`: The depth of recursion for retrieving related components.
+
+**Example:**
+```javascript
+get("<type>", "<name>", <depth>);
+```
+
+### `toJson(out, id)`
+Converts the registry to a JSON file.
+
+- `out`: The output path for the JSON file.
+- `id`: The ID of the component to include in the JSON file.
+
+**Example:**
+```javascript
+toJson("<out>", "<id>");
+```
+
+### `create(type, arg1, arg2, arg3)`
+Initializes a new Proto-object or ProtobuffFile in the registry.
+
+- `type`: The type of object to create (e.g., "proto", "protobuff").
+- `arg1`: The first argument, which is the file name for "proto" type or the protoFile ID for "protobuff" type.
+- `arg2`: The second argument, which is the file path for "proto" type or the language for "protobuff" type.
+- `arg3`: The third argument, which is the output path for "protobuff" type.
+- `arg4`: The fourth argument, which is not used in the current implementation.
+
+**Example:**
+```javascript
+create("<type>", "<arg1>", "<arg2>", "<arg3>");
+```
+
+---
+
+This formatted documentation can be included in your Git README file to provide users with a clear understanding of how to interact with the API.
+
 ```mermaid
 graph TD;
     CLI["💻 Command Line Interface"]-->Api;
@@ -60,63 +213,4 @@ CLI["💻 Command Line Interface"]-->Daemon;
 - **Health Check**: Add a health check to ensure the integrity of the objects.
 - ~~**Merge Function**: Add a merge function for the user to copy fields back over to a healthy file if there were misconfigurations.~~
 
-# Protobuffctl CLI Documentation
-Protobuffctl has a command-line interface (CLI) tool designed to manage components and watchers for a project,   possibly related to Protocol Buffers (protobuf). This documentation provides an overview of the available commands and their usage. `The the export module functions do exactly the same`
-## Commands
-### add 
-> **Description:** Adds a watcher for the specified file path.
 
-**Parameters:**
-- `filePath`: The path to the file you want to watch.
-```javascript
- node main.js add /path/to/your/file
- ````
----
-### remove 
-> **Description:** Removes the watcher for the specified file path.
-
-**Parameters:**
-- `filePath`: The path to the file you want to stop watching.
-```javascript
- node main.js remove /path/to/your/file
- ````
----
-### startAll
-> **Description:** Starts all watchers.
-```javascript
- node main.js startAll
- ````
----
-### stopAll
-> **Description:** Stops all watchers.
-```javascript
- node main.js stopAll
- ````
----
-### init
-> **Description:** Initializes the tool using your protobuffctl.json configuration file.
-```javascript
- node main.js init
- ````
----
-### generateProtobuff 
-> **Description:** Generates a protobuf file in the specified language.
-
-**Parameters:**
-- `language`: The language for which the protobuf file should be generated.
-- `proto_path`: The path to the directory containing the protobuf files.
-- `proto_file`: The path to the specific protobuf file to generate.
-- `outputPath`: The path to the directory where the generated file should be saved.
-```javascript
- node main.js generateProtobuff java /path/to/proto/files /path/to/proto/file.proto /path/to/output
- ````
----
-### createComponent
-**Description:** Creates a component with the specified type and arguments.
-
-**Parameters:**
-- `type`: The type of the component to create.
-- `args...`: A variable number of arguments to pass to the component creation function. Arguments should be comma-separated.
-```javascript
- node main.js createComponent yourComponentType arg1,arg2,arg3
- ````
