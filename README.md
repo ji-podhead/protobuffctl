@@ -1,5 +1,5 @@
 # protobuffctl
-`protobuffctl` is a comprehensive tool designed to automate and streamline the management of Protocol Buffers (protobuf) in your development projects. It provides a robust API and a user-friendly UI that allows you to perform all protobuf-related tasks without the need for extensive command-line interactions or frequent context switching.
+`protobuffctl` is an api to automate protobuff workflows.
 ## Key Features
 - **API-Driven Development**: `protobuffctl` offers a powerful API that enables you to automate all protobuf functions
 - **Automatic Protobuf Generation**: Whenever you make changes to your protobuf definitions, `protobuffctl` can automatically generate the corresponding protobuf files. 
@@ -15,6 +15,7 @@
 # Protobuffctl CLI Documentation
 Protobuffctl has a command-line interface (CLI) tool designed to manage components and watchers for a project,   possibly related to Protocol Buffers (protobuf). This documentation provides an overview of the available commands and their usage. `The the export module functions do exactly the same`
 ## API Documentation
+
 **getAll**
 ```javascript
 getAll("<type>", <describe>, <jsonOut>);
@@ -69,6 +70,7 @@ Adds a component to another component.
 - `source`: The name of the source component.
 - `target`: The name of the target component.
 - `pull`: A boolean indicating whether to pull the changes to the registry.
+
 **del**
 ```javascript
 del("<type>", "<id>", <remove_from_components>);
@@ -84,6 +86,7 @@ protogenArr(<protofiles>);
 ```
 Generates Protobuff files for an array of proto files.
 - `protofiles`: An array of proto file names or IDs.
+  
 **pull**
 ```javascript
 pull(<protoFiles>, <remove_missing>);
@@ -105,7 +108,6 @@ Updates the proto files with changes from the registry.
 createFromConfig(<protoFiles>);
 ```
 Creates components from a configuration file.
-
 - `protoFiles`: An array of proto file names or IDs.
 
 **create**
