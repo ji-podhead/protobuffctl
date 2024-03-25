@@ -7,23 +7,22 @@ option go_package = "./";
 
 package helloworld;
 
-service Greeter6 {
- rpc SayHello (HelloRequest) returns (HelloReply) {}
- rpc SayHelloStreamReply (HelloRequest) returns (stream HelloReply) {}
+service Greeter {
+ rpc test (HelloRequest) returns (HelloRequest) {}
 }
 
-service Greeter7 {
- rpc SayHello (HelloRequest) returns (HelloReply) {}
- rpc SayHelloStreamReply (HelloRequest) returns (stream HelloReply) {}
+service testService {
+ rpc test (HelloRequest) returns (HelloRequest) {}
 }
 
+
+enum EnumTest {
+A = 0;
+B = 1;
+}
 
 message HelloRequest {
  string name = 1;
- float id1 = 2;
-}
-
-message HelloReply {
- string message = 1;
+ EnumTest e1 = 2;
 }
 

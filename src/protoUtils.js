@@ -20,6 +20,7 @@ function removeOld(newElement,oldElement) {
                 
                 if(!value.includes(str)){
                     try{
+
                        const type= protobuffctl.componentRegistry.hashlookupTable.get(str)
                        console.log(type) 
                        protobuffctl.componentRegistry[key].delete(str)
@@ -30,8 +31,10 @@ function removeOld(newElement,oldElement) {
     }
         else{
             try{
-                const type= protobuffctl.componentRegistry.hashlookupTable.get()
-                 protobuffctl.componentRegistry[type].remove(str)
+                console.log(value)
+                console.log(protobuffctl.componentRegistry.hashlookupTable)
+                const type= protobuffctl.componentRegistry.hashlookupTable.get(value)
+                 protobuffctl.componentRegistry[type].delete(key)
          }catch(err){console.warn("couldnt remove element " + err)}
      }      
     });
@@ -111,10 +114,11 @@ function set(type, name, values) {
 *-------------------------------getProtoContent---------------------------
 */
 function getProtoContent(protoFile, write, v = false) {
-    const elementNew = getElementsRecoursive(protoFile, protoFile.id, "i")
+    const elementNew = getElementsRecoursive(JSON.parse(JSON.stringify(protoFile)), protoFile.id, "i")
     console.log(elementNew)
     const services = elementNew["services"]
     const types = elementNew["types"]
+    const enums = elementNew["enums"]
     const options = elementNew["options"]
     console.log(options)
     const syntax = protoFile.syntax
@@ -146,14 +150,36 @@ function getProtoContent(protoFile, write, v = false) {
         protoContent += '}\n\n';
     });
     protoContent += `\n`
+    
+    enums.forEach(type => {
+        const enumName = Object.values(type)[0]["type"];
+        console.log(enumName)
+        console.log(protobuffctl.componentRegistry.enums)
+        const values =(Object.values(protobuffctl.componentRegistry.enums.get(enumName))[0]);
+        protoContent += `enum ${enumName} {\n`;
+        console.log(values)
+
+        Object.entries(values).forEach((item) => {
+            const key= item[0]
+            const val= item[1]
+            console.log(key)
+            console.log(val)
+            protoContent += `${key} = ${val};\n`;
+            console.log(protoContent)
+        });
+        protoContent += '}\n\n';
+
+    });
     types.forEach(type => {
         const typeName = Object.keys(type)[0];
         const fields = type[typeName];
         protoContent += `message ${typeName} {\n`;
         fields.forEach(field => {
+            console.log(field)
             const fieldName = Object.keys(field)[0];
             const fieldDetails = field[fieldName];
             protoContent += ` ${fieldDetails.type} ${fieldName} = ${fieldDetails.id};\n`;
+
         });
         protoContent += '}\n\n';
     });

@@ -58,12 +58,14 @@ class ProtoFile {
 
             }
             
-            let clone = Object.assign(Object.create(Object.getPrototypeOf(this)), this)            
+            let clone =JSON.parse(JSON.stringify(this))// Object.assign(Object.create(Object.getPrototypeOf(this)), this)            
             console.log(clone)
-            getProtoContent(clone, true)
-            protobuffctl.convertToJsonCompatible(__dirname + ("/out.json"))
             protobuffctl.save()
-            //const buff = new ProtobuffFile(__dirname, this, "ts")
+            getProtoContent(clone, true)
+          //  protobuffctl.convertToJsonCompatible(__dirname + ("/out.json"))
+            
+        
+          //const buff = new ProtobuffFile(__dirname, this, "ts")
         })
     }
     async getroot(protoFilePath, v = false) {
@@ -77,7 +79,6 @@ class ProtoFile {
         fileContent = fileContent.replace(/package\s*;/, `package ${this.id};`);
         console.log(fileContent)
         this.syntax = "syntax" + (fileContent.split('syntax')[1].split("\n")[0])
-        let packageLineMatch = 
         this.proto_package = (fileContent.match(/^package\s+\w+\s*(?!=\s*".*";)(?!options\s*=.*);/m)[0])
         //let packageLine = packageLineMatch ? packageLineMatch[0] : "package \"./\";"; 
 
@@ -128,8 +129,24 @@ class ProtoFile {
                     v && console.log("________TYPE________");
                     const fields = [];
                     Object.entries(jsonObj["fields"]).map(([key, val]) => {
-                        const id = key// this.id+"_"+key;
+                        let id = key// this.id+"_"+key;
+                        console.log(id)
+                        console.log(val)
+                        if((prototypes.includes(val["type"]))){
                         set("fields", id, { [key]: val })
+                    }else{
+                        if(protobuffctl.componentRegistry.hashlookupTable.get(key)!="enum"){
+                            const enumName=val["type"]
+                            const fieldObject={[id]:{type:enumName,id:val["id"]}}
+                            set("fields", enumName, fieldObject)
+                            console.log(fieldObject)
+                            id=enumName
+                        }
+                        else{
+                            console.warn(key + " is neither an enum, or a nested type. please create such first")
+                        }
+                    }
+                        
                         fields.push(id);
                     });
                     set("types", componentID, fields)
@@ -157,13 +174,8 @@ class ProtoFile {
                     break;
                 case current instanceof protobuf.Enum:
                     v && console.log("________Enum________");
-                    const values = [];
-                    Object.entries(jsonObj["values"]).map(([key, val]) => {
-                        const id = key// this.id+"_"+key;
-                        set("enumvalues", id, val)
-                        values.push(componentID);
-                    });
-                    set("enums", componentID, values)
+                    console.log(jsonObj)
+                    set("enums", componentID, {[componentID]:jsonObj["values"]})
                     this.enums.push(componentID);
                     fn(current, 'Enum');
                     break;
@@ -209,10 +221,11 @@ class ProtobuffFile {
         this.protobuffComponents = []; // { name, client, method, args, returns, line, protoBuffFile, ProtoFile }
         this.file_name = protoFile.id + languageFileExtensions[lang]["fileExtension"]
         this.absolute_path = path.join(out, this.file_name)
-        const existingProtobuffFile = Array.from(protobuffctl.componentRegistry.protobuffFiles.values()).find(
-            protobuffFile => protobuffFile.file_name === this.file_name && protobuffFile.absolute_path === this.absolute_path
-        );
-        this.id = existingProtobuffFile ? existingProtobuffFile.id : getUniqueName(protobuffctl.componentRegistry.hashlookupTable, this.file_name + "_");
+        //const existingProtobuffFile = Array.from(protobuffctl.componentRegistry.protobuffFiles.values()).find(
+        //    protobuffFile => protobuffFile.file_name === this.file_name && protobuffFile.absolute_path === this.absolute_path
+        //);
+        this.id = getUniqueName(protobuffctl.componentRegistry.protobuffFiles, this.protoFile.id+"_"+lang)  //existingProtobuffFile ? existingProtobuffFile.id : getUniqueName(protobuffctl.componentRegistry.hashlookupTable, this.file_name + "_");
+        protoFile.protobuffFiles.push(this.id)
         protobuffctl.componentRegistry.protobuffFiles.set(this.id, this);
         protobuffctl.componentRegistry.hashlookupTable.set(this.id, "protobuffFiles")
         protobuffctl.componentRegistry.protobuffFilePaths.set(this.id, this.absolute_path);
@@ -227,7 +240,12 @@ class ProtobuffFile {
             return err;
         }
     }
-
+    generateProtobuff(){
+        createBuff(this.lang, this.out, protoFile.file_name, protoFile.file_path,).then(() => {
+            protobuffctl.save()
+            // protobuffctl.convertToJsonCompatible(__dirname+"/protobuffctl.json")
+        })
+    }
     generateProtobuffComponent(protobuffFile, protoFile, service, method) {
         const protobufComponent = new ProtobuffComponent();
         // protobuffctl.save()
@@ -327,6 +345,7 @@ module.exports = {
     ProtoUser,
     ProtoUserComponent,
     Endpoint,
+    createBuff,
     protobuffctl,
     languageFileExtensions
 };

@@ -97,7 +97,7 @@ const languageFileExtensions = {
     }
 };
 const childless=[
-    "options","fields","methods","enumValues","protobuffComponents","clients","Streams","callbacks","absolute_path","file_name","file_path"
+    "options","fields","methods","enums","protobuffComponents","clients","Streams","callbacks","absolute_path","file_name","file_path"
 ]
 /**           
  * @description returns: 0 (a>b) | 1 (b>a) | 2  no related
