@@ -1,6 +1,5 @@
 # protobuffctl
-`protobuffctl` is an [api](https://ji-podhead.github.io/protobuffctl/) to automate protobuff workflows.
-`protobuffctl` offers an  API that enables you to automate all protobuf functions. 
+`protobuffctl` offers an  [API](https://ji-podhead.github.io/protobuffctl/) that enables you to automate all protobuf functions. 
 > **Component Creation**:
   > Quickly create new types, fields, and services. Whether you need to define a new message type, add a service method, or create an enum.<br>
 > **Automatic Protobuf Generation**:
