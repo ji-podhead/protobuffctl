@@ -8,13 +8,17 @@
 - **Preview** the Protofile-Code before actually building it.<br>
 - Create your own **User Interface** and manage `Protocollbuffers` using the [API](https://ji-podhead.github.io/protobuffctl/) and input events.<br>
 
-## Getting Started
-**Install**
+# Getting Started
+## Install
 > comming up
 <br>
 
-**How to**
-***APIDocs are [here](https://ji-podhead.github.io/protobuffctl/)***
+## How to
+<br>
+
+**pls see** [API-Docs](https://ji-podhead.github.io/protobuffctl/) 
+
+<br>
 Protobuffctl has a command-line interface (CLI) tool designed to manage components and watchers for a project,   possibly related to Protocol Buffers (protobuf). This documentation provides an overview of the available commands and their usage. <br>`The the export module functions do exactly the same`
   
 
