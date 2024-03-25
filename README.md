@@ -10,7 +10,7 @@
 - It stores all Components in the **Componentregistry**. <br> 
 - Quickly create new message types, fields, services,  methods and enums using the [API](https://ji-podhead.github.io/protobuffctl/) and **cli commands**.<br>
 - Automatically generates the corresponding protobuf files when making changes to the protofiles.<br>
-- Roll back to old protofile, or to an historical registry state using historical `.config` file just like with **version control**.<br>
+- Roll back to old protofile, or to an registry state using historical `.config` file just like with **version control**.<br>
 - **Preview** the Protofile-Code before actually building it.<br>
 - Create your own **User Interface** and manage `Protocollbuffers` using the [API](https://ji-podhead.github.io/protobuffctl/) and input events.<br>
 ---
