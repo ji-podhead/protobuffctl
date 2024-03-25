@@ -4,23 +4,26 @@
 
  ***Docs are [here](https://ji-podhead.github.io/protobuffctl/)***
 <br>
-> Quickly create new types, fields, and services, message types, service methods and enums using the [API](https://ji-podhead.github.io/protobuffctl/) and **cli commands**.<br>
-> `protobuffctl` automatically generates the corresponding protobuf files when making changes to the protofiles.<br>
-> Roll back to old protofile, or to an historical registry state using historical `.config` file just like with **version control**.<br>
-> **Preview** the Protofile-Code before actually building it.<br>
-> Create your own **User Interface** and manage `Protocollbuffers` using the [API](https://ji-podhead.github.io/protobuffctl/) and input events.<br>
-> 🚧 Set up **File Watcher** to monitor your proto files for any changes. => Rescan and update the Componentregistry.<br>
-> 🚧 Get complete visual feedback for all related methods, components, and files directly with our **VC CODE EXTENSION**.<br> 
+- Quickly create new types, fields, and services, message types, service methods and enums using the [API](https://ji-podhead.github.io/protobuffctl/) and **cli commands**.<br>
+- `protobuffctl` automatically generates the corresponding protobuf files when making changes to the protofiles.<br>
+- Roll back to old protofile, or to an historical registry state using historical `.config` file just like with **version control**.<br>
+- **Preview** the Protofile-Code before actually building it.<br>
+- Create your own **User Interface** and manage `Protocollbuffers` using the [API](https://ji-podhead.github.io/protobuffctl/) and input events.<br>
 
 ## Getting Started
-
+**Install**
 > commng up/
-
-
-  
+**How to**
 Protobuffctl has a command-line interface (CLI) tool designed to manage components and watchers for a project,   possibly related to Protocol Buffers (protobuf). This documentation provides an overview of the available commands and their usage. <br>`The the export module functions do exactly the same`
+  
+
 
 ---
+
+## Comming up
+- 🚧 Set up **File Watcher** to monitor your proto files for any changes. => Rescan and update the Componentregistry.<br>
+- 🚧 Get complete visual feedback for all related methods, components, and files directly with our **VC CODE EXTENSION**.<br> 
+
 
 # Flowchart
 
