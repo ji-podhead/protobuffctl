@@ -7,7 +7,6 @@
 
 ## Documentation
 Protobuffctl has a command-line interface (CLI) tool designed to manage components and watchers for a project,   possibly related to Protocol Buffers (protobuf). This documentation provides an overview of the available commands and their usage. `The the export module functions do exactly the same`
-## API Documentation
 
 **getAll**
 ```javascript
