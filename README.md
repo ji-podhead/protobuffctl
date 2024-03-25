@@ -4,8 +4,6 @@
 ![NPM Downloads](https://img.shields.io/npm/dw/protobuffctl)
 
 
-
----
 - `protobuffctl` offers an  [API](https://ji-podhead.github.io/protobuffctl/) that enables you to automate all protobuf functions.
 - It stores all Components in the **Componentregistry**. <br> 
 - Quickly create new message types, fields, services,  methods and enums using the [API](https://ji-podhead.github.io/protobuffctl/) and **cli commands**.<br>
