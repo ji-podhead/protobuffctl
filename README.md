@@ -14,26 +14,20 @@
 
 # Protobuffctl CLI Documentation
 Protobuffctl has a command-line interface (CLI) tool designed to manage components and watchers for a project,   possibly related to Protocol Buffers (protobuf). This documentation provides an overview of the available commands and their usage. `The the export module functions do exactly the same`
-## Commands
-Certainly! Here's the API documentation with Markdown formatting and the argument names highlighted in the examples:
-
----
-
 ## API Documentation
 
-### `getAll(type, describe, jsonOut)`
+```javascript
+getAll("<type>", <describe>, <jsonOut>);
+```
 Retrieves all elements of a specified type from the registry.
 
 - `type`: The type of elements to retrieve (e.g., "protoFiles", "services", "methods", etc.).
 - `describe`: A boolean indicating whether to describe the elements in detail.
 - `jsonOut`: A boolean indicating whether to output the results in JSON format.
 
-**Example:**
 ```javascript
-getAll("<type>", <describe>, <jsonOut>);
+remove("<type>", "<name>", <values>, <pull>);
 ```
-
-### `remove(type, name, values, pull)`
 Removes a component from another component.
 
 - `type`: The type of the component to remove.
@@ -41,88 +35,66 @@ Removes a component from another component.
 - `values`: The values associated with the component to remove.
 - `pull`: A boolean indicating whether to pull the changes to the registry.
 
-**Example:**
 ```javascript
-remove("<type>", "<name>", <values>, <pull>);
+findAllUsages("<type>", "<name>");
 ```
-
-### `findAllUsages(type, name)`
 Finds all usages of a specified component in the registry.
 
 - `type`: The type of the component to find usages for.
 - `name`: The name of the component to find usages for.
 
-**Example:**
-```javascript
-findAllUsages("<type>", "<name>");
-```
 
-### `add(type, source, target, pull)`
+```javascript
+add("<type>", "<source>", "<target>", <pull>);
+```
 Adds a component to another component.
 
 - `type`: The type of the component to add.
 - `source`: The name of the source component.
 - `target`: The name of the target component.
 - `pull`: A boolean indicating whether to pull the changes to the registry.
-
-**Example:**
 ```javascript
-add("<type>", "<source>", "<target>", <pull>);
+del("<type>", "<id>", <remove_from_components>);
 ```
-
-### `del(type, id, remove_from_components = true)`
 Deletes a component from the registry.
 
 - `type`: The type of the component to delete.
 - `id`: The ID of the component to delete.
 - `remove_from_components`: A boolean indicating whether to remove the component from other components.
 
-**Example:**
 ```javascript
-del("<type>", "<id>", <remove_from_components>);
+protogenArr(<protofiles>);
 ```
-
-### `protogenArr(protofiles)`
 Generates Protobuff files for an array of proto files.
 
 - `protofiles`: An array of proto file names or IDs.
 
-**Example:**
-```javascript
-protogenArr(<protofiles>);
-```
 
-### `pull(protoFiles, remove_missing = false)`
+
+```javascript
+pull(<protoFiles>, <remove_missing>);
+```
 Updates the registry with changes from the specified proto files.
 
 - `protoFiles`: An array of proto file names or IDs.
 - `remove_missing`: A boolean indicating whether to remove missing components from the registry.
 
-**Example:**
 ```javascript
-pull(<protoFiles>, <remove_missing>);
+push(<protoFiles>, <remove_missing>);
 ```
-
-### `push(protoFiles, remove_missing)`
 Updates the proto files with changes from the registry.
 
 - `protoFiles`: An array of proto file names or IDs.
 - `remove_missing`: A boolean indicating whether to remove missing components from the proto files.
 
-**Example:**
-```javascript
-push(<protoFiles>, <remove_missing>);
-```
 
-### `createFromConfig(protoFiles)`
+```javascript
+createFromConfig(<protoFiles>);
+```
 Creates components from a configuration file.
 
 - `protoFiles`: An array of proto file names or IDs.
 
-**Example:**
-```javascript
-createFromConfig(<protoFiles>);
-```
 
 ### `get(type, name, depth)`
 Retrieves a specific component from the registry.
