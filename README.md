@@ -1,14 +1,16 @@
 # protobuffctl
+`protobuffctl` is a comprehensive tool designed to automate and streamline the management of Protocol Buffers (protobuf) in your development projects. It provides a robust API and a user-friendly UI that allows you to perform all protobuf-related tasks without the need for extensive command-line interactions or frequent context switching.
+## Key Features
+- **API-Driven Development**: `protobuffctl` offers a powerful API that enables you to automate all protobuf functions
+- **Automatic Protobuf Generation**: Whenever you make changes to your protobuf definitions, `protobuffctl` can automatically generate the corresponding protobuf files. 
+- **User Interface (UI)**: Create your own ui and to manage `Protocollbuffers` using the api. 
+- **Registry Management**: Export your configs to roll back all your Protofiles saved in the .config
+- **File Watching**: Monitor your proto files for any changes. With `protobuffctl`, you can set up watchers to automatically detect modifications, ensuring that your project stays up-to-date with the latest protobuf definitions.
+- **Component Creation**: Quickly create new types, fields, and services. Whether you need to define a new message type, add a service method, or create an enum, `
+- **VC CODE EXTENSION**: Get complete visual feedback for all related methods, components, and files directly in your IDE. This feature is currently under development but will enhance your development experience by providing real-time updates and insights into your protobuf project.
 
-`protobuffctl` is a tool designed to manage components and watchers for a project related to Protocol Buffers (protobuf). It provides a comprehensive set of features to streamline the development process:
-
-- **Registry Management**: Registers all your proto-files, proto-Users, callbacks, components (fields, services, enums, etc.). [See example JSON](https://github.com/ji-podhead/protobuffctl/blob/main/protobuffctl.json).
-- **File Watching**: Watches for file changes in your proto files.
-- **Component Creation**: Create new types, fields, and services from presets, or a copy from the registry.
-- **Protobuf Generation**: Automatically generates protobuf files for all your backends and languages using the [protoc-helper repo](https://github.com/ji-podhead/protoc-helper).
-- **Procedural Code Generation**: Generates procedural code in protoUserFiles using the given clients, methods, etc. `todo`
-- **Visual Feedback**: Provides complete visual feedback for all related methods, components, and files directly in your IDE. `todo`
-- **UI/VS Code Extension**: Browse, manage, edit, and create your files, components, and implementations via UI or VS Code extension. `todo`
+## Getting Started
+> commng up/
 
 # Protobuffctl CLI Documentation
 Protobuffctl has a command-line interface (CLI) tool designed to manage components and watchers for a project,   possibly related to Protocol Buffers (protobuf). This documentation provides an overview of the available commands and their usage. `The the export module functions do exactly the same`
