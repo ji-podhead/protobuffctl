@@ -1,18 +1,17 @@
 {
-    "name": "ji-ui",
+    "name": "protobuffctl",
     "version": "1.0.0",
-    "description": "a grpc based ui framework",
+    "description": "js api for automating protobuff workflow",
     "main": "main.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/ji-podhead/ji_ui"
+        "url": "https://github.com/ji-podhead/protobuffctl"
     },
     "keywords": [
-        "ui",
-        "crossplattform"
+        "grpc-manager","VS Code Extension","grpc-java","node","filewatcher","grpc-web","grpc-java","grpc-go","protobuff","grpc-python","grpc-node", "grpc-kotlin","protobuff-generator "
     ],
     "author": "ji-podhead",
     "license": "GPL-3.0-or-later",
