@@ -29,15 +29,7 @@ npm i protobuffctl
 > Protobuffctl has a command-line interface (CLI) tool designed to manage components and watchers for a project,   possibly related to Protocol Buffers (protobuf). This documentation provides an overview of the available commands and their usage. <br>
 > `The the export module functions do exactly the same`
   
-
-
 ---
-
-## Comming up
-- 🚧 Set up **File Watcher** to monitor your proto files for any changes. => Rescan and update the Componentregistry.<br>
-- 🚧 Get complete visual feedback for all related methods, components, and files directly with our **VC CODE EXTENSION**.<br> 
-
-
 # Flowchart
 
 ```mermaid
@@ -75,6 +67,15 @@ CLI["💻 Command Line Interface"]-->Daemon;
     style Daemon fill:#f9d71c,stroke:#333,stroke-width:2px
 
 ```
+
+---
+
+## Comming up
+- 🚧 Set up **File Watcher** to monitor your proto files for any changes. => Rescan and update the Componentregistry.<br>
+- 🚧 Get complete visual feedback for all related methods, components, and files directly with our **VC CODE EXTENSION**.<br> 
+
+
+
 
 ### Update
 - **Fast Saving and Loading**: Added a daemon to keep the main object alive, including the registry.
