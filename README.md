@@ -1,17 +1,17 @@
 # protobuffctl
 `protobuffctl` is an [api](https://ji-podhead.github.io/protobuffctl/) to automate protobuff workflows.
 `protobuffctl` offers an  API that enables you to automate all protobuf functions. 
-- **Automatic Protobuf Generation**:
-  > Whenever you make changes to your protobuf definitions, `protobuffctl` can automatically generate the corresponding protobuf files.
-- **Registry Management**:
-  > Export your configs to roll back all your Protofiles saved in the .config
-- **File Watching**:
-  > Monitor your proto files for any changes. With `protobuffctl`, you can set up watchers to automatically detect modifications, ensuring that your project stays up-to-date with the latest protobuf definitions.
-- **Component Creation**:
-  > Quickly create new types, fields, and services. Whether you need to define a new message type, add a service method, or create an enum,
-- **User Interface (UI)**:
-  > Create your own ui and to manage `Protocollbuffers` using the api.
-- **VC CODE EXTENSION**:
+> **Automatic Protobuf Generation**:
+  > Whenever you make changes to your protobuf definitions, `protobuffctl` can automatically generate the corresponding protobuf files.<br>
+> **Registry Management**:
+  > Export your configs to roll back all your Protofiles saved in the .config.<br>
+> **File Watching**:
+  > Monitor your proto files for any changes. With `protobuffctl`, you can set up watchers to automatically detect modifications, ensuring that your project stays up-to-date with the latest protobuf definitions.<br>
+> **Component Creation**:
+  > Quickly create new types, fields, and services. Whether you need to define a new message type, add a service method, or create an enum.<br>
+> **User Interface (UI)**:
+  > Create your own ui and to manage `Protocollbuffers` using the api.<br>
+> **VC CODE EXTENSION**:
   >`COMMING UP` Get complete visual feedback for all related methods, components, and files directly in your IDE. This feature is currently under development but will enhance your development experience by providing real-time updates and insights into your protobuf project.
 
 ## Getting Started
