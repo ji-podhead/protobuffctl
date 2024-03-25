@@ -1,13 +1,13 @@
 # protobuffctl
 `protobuffctl` offers an  [API](https://ji-podhead.github.io/protobuffctl/) that enables you to automate all protobuf functions. 
 > **Component Creation**:
-  > Quickly create new types, fields, and services. Whether you need to define a new message type, add a service method, or create an enum.<br>
+  > Quickly create new types, fields, and services, message types, service methods and enums.<br>
 > **Automatic Protobuf Generation**:
-  > Whenever you make changes to your protobuf definitions, `protobuffctl` can automatically generate the corresponding protobuf files.<br>
+  > `protobuffctl` automatically generates the corresponding protobuf files when making changes to the protofiles.<br>
 > **Registry Management**:
   > Export your configs to roll back all your Protofiles saved in the .config.<br>
 > **File Watching**:
-  > Monitor your proto files for any changes. With `protobuffctl`, you can set up watchers to automatically detect modifications.<br>
+  > Monitor your proto files for any changes. Update the Componentregistry and rescan Protofile when user modifies them.<br>
 > **User Interface (UI)**:
   > Create your own ui and to manage `Protocollbuffers` using the api.<br>
 > **VC CODE EXTENSION**:
