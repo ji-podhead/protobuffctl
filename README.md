@@ -1,6 +1,6 @@
 # protobuffctl
 
-`protobuffctl` offers an  [API](https://ji-podhead.github.io/protobuffctl/) that enables you to automate all protobuf functions. it stores all Components in the **Componentregistry**. <br> 
+`protobuffctl` offers an  [API](https://ji-podhead.github.io/protobuffctl/) that enables you to automate all protobuf functions.<br>it stores all Components in the **Componentregistry**. <br> 
 
 - Quickly create new types, fields, and services, message types, service methods and enums using the [API](https://ji-podhead.github.io/protobuffctl/) and **cli commands**.<br>
 - `Protobuffctl` automatically generates the corresponding protobuf files when making changes to the protofiles.<br>
