@@ -23,19 +23,19 @@ cli
     .action(() => { stopAll() });
     cli
     .command('create <type> <arg1> [arg2] [arg3]>')
-    .description('Initializes a new Proto-object or ProtobuffFile in the registry.\n Example for creating a ProtoFile \ncreate("proto", "example.proto", "/path/to/proto/files");\nExample for creating a ProtobuffFile\n"protobuff", "example.id", "ts", "/path/to/output"')
+    .description('Initializes a new Proto-object,enum,type,service or ProtobuffFile in the registry')
     .action((type, arg1, arg2, arg3) => { 
     create(type, arg1, arg2, arg3) 
     })
     cli
     .command('del <type> <id>')
-    .description('Initializes a new Proto-object or ProtobuffFile in the registry.\n Example for creating a ProtoFile \ncreate("proto", "example.proto", "/path/to/proto/files");\nExample for creating a ProtobuffFile\n"protobuff", "example.id", "ts", "/path/to/output"')
+    .description('Deletes a component, you need to Pull afterwards')
     .action((type, id) => { 
     del(type, id) 
     })
 cli
     .command('getAll  [type] [describe] [jsonOut]')
-    .description('save to your protobuffctl.json')
+    .description('retrieves all Objects of acertain type from registry')
     .action((type,describe,jsonOut) => { getAll(type,describe,jsonOut) });
    cli
     .command('toJson  <out> [id]')
@@ -43,20 +43,20 @@ cli
     .action((out,id) => { toJson(out,id) });
     cli
     .command('set <type> <element_name> <values>')
-    .description('save to your protobuffctl.json')
+    .description('sets/creates and object')
     .action((type,element_name, values) => {set(type,element_name, values) });
 cli
     .command('get <type> <name> [depth]')
-    .description('save to your protobuffctl.json')
+    .description('describes a certain object and gets all its childObjects')
     .action((type,name,depth) => {get(type,name,depth) });
 cli
     .command('add <type> <source> <target> [pull]')
-    .description('save to your protobuffctl.json')
+    .description('add a childObject to another object')
     .action((type,source,target,pull) => {add(type,source,target,pull) });
 
 cli
     .command('findAllUsages <type> <name>')
-    .description('save to your protobuffctl.json')
+    .description('finds the objects that uses another object')
     .action((type,name) => {findAllUsages(type,name) });
 cli
     .command('generateProtobuff <proto_file> <language> <outputPath>')
@@ -64,14 +64,14 @@ cli
     .action((proto_file, language,outputPath) => { generateProtobuff(proto_file, language,outputPath )});
 cli
     .command('pull <protoFiles>')
-    .description('Create a ProtoComponent with the specified type and arguments')
+    .description('creates/edits the protobuff-files and protoFiles')
     .action((protoFiles) => {
         // Convert args from an array to a list of arguments
         pull(protoFiles);
     });
     cli
     .command('push <protoFiles>')
-    .description('Create a ProtoComponent with the specified type and arguments')
+    .description('scanns the protoFiles and updates the registry')
     .action((protoFiles) => {
         // Convert args from an array to a list of arguments
         push(protoFiles);
