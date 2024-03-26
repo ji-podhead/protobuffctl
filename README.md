@@ -18,14 +18,31 @@
 
  **Install:**
  
-```
+```JavaScript
 npm i protobuffctl
-``` 
-
+```
 ---
-## How to
-> Protobuffctl has a command-line interface (CLI) tool designed to manage components and watchers for a project,   possibly related to Protocol Buffers (protobuf). This documentation provides an overview of the available commands and their usage. <br>
-> `The the export module functions do exactly the same`
+## CLI Guide
+- install globaly
+```JavaScript
+npm i -g protobuffctl
+``` 
+- create a base proto file
+```JavaScript
+protobuffctl create proto test.proto ./
+```
+this will create a `test.proto` in your current directory and output:
+```
+----------- created proto content -----------
+syntax="proto3";
+option java_multiple_files = true;
+option java_package = "./";
+option java_outer_classname = "test";
+option objc_class_prefix = "HLW";
+option go_package = "./";
+
+package test;
+``` 
   
 ---
 # Flowchart
