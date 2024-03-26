@@ -579,7 +579,7 @@ function startAllWatchers() {
 *------------------------ exports --------------------
 */
 module.exports = {
-    getAll, remove, findAllUsages, add, del, protogenArr, pull, push, createFromConfig, get, toJson, create, addWatcher, removeWatcher, stopAll: stopAllWatchers, startAll: startAllWatchers,
+    getAll, remove, findAllUsages, add, del, protogenArr, pull, push, createFromConfig, get, toJson, create, addWatcher, removeWatcher,  stopAllWatchers,  startAllWatchers,
 };
 /*_______________________________________________________________
 *                           E N D 
