@@ -293,6 +293,9 @@ package ${base};`;
         //----------------------- >> T Y P E << ---------------------------------------
         case ("type"): {
             let fields = ((arg2.split(","))); const name = arg1;
+            if(fields==undefined){
+                fields=[]
+            }
             let status = protobuffctl.componentRegistry.hashlookupTable.get(name)
             if (status != "type" && status != undefined) {
                 (console.error("type " + name + "cant get created because of component id allready in use as: " + JSON.stringify(status)))

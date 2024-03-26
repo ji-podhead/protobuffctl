@@ -1,25 +1,43 @@
 {
     "name": "protobuffctl",
-    "version": "1.0.0",
+    "version": "1.0.8",
+    "type": "module",
     "description": "js api for automating protobuff workflow",
     "main": "main.js",
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "build": "browserify --node --ignore-missing main.js | terser > bundle.js"
     },
     "repository": {
         "type": "git",
         "url": "https://github.com/ji-podhead/protobuffctl"
     },
+
+    "bin": {
+        "protobuffctl": "./main.js"
+    },
     "keywords": [
-        "grpc-manager","VS Code Extension","grpc-java","node","filewatcher","grpc-web","grpc-java","grpc-go","protobuff","grpc-python","grpc-node", "grpc-kotlin","protobuff-generator "
+        "grpc-manager",
+        "VS Code Extension",
+        "grpc-java",
+        "node",
+        "filewatcher",
+        "grpc-web",
+        "grpc-java",
+        "grpc-go",
+        "protobuff",
+        "grpc-python",
+        "grpc-node",
+        "grpc-kotlin",
+        "protobuff-generator "
     ],
     "author": "ji-podhead",
     "license": "GPL-3.0-or-later",
     "dependencies": {
         "chokidar": "^3.6.0",
         "commander": "^12.0.0",
+        "esbuild-loader": "^4.1.0",
         "protobufjs": "^7.2.6",
-        "protoc": "^1.1.3",
         "protoc-helper": "^1.0.19",
         "serialize-javascript": "^6.0.2",
         "uuid": "^9.0.1"
