@@ -17,25 +17,23 @@ function deepClone(obj) {
 }
 const parents = {
     services: ["protoFiles"],
-    methods: ["services"],
-    types: ["methods"],
-    fields: ["types", ],
-    enums: ["fields"]
+    methods: ["services", "protoFiles"],
+    types: ["protoFiles", "methods","services"],
+    fields: ["types", "protoFiles"],
+    enums: ["protoFiles", "fields", "types"]
 }
 const childRelations={
+    protoFiles:["methods","services","fields","types"],
     services:["methods"],
     methods:["types"],
-    types:["fields"],
-    fields:["enums"],
-    enums: [ ]
+    types:["fields","enums"]
 }
 const usagesRelations={
-    protoFiles:[],
     services: ["protoFiles"],
-    methods: ["services"],
-    types: ["methods"],
-    fields: ["types"],
-    enums: [ "fields"]
+    methods: ["services", "protoFiles"],
+    types: ["protoFiles", "methods","services"],
+    fields: ["types", "protoFiles"],
+    enums: ["protoFiles", "fields"]
 }      
 function extractStringsFromArrayString(arrayString) {
     if (arrayString.startsWith('[') && arrayString.endsWith(']')) {
@@ -253,7 +251,6 @@ module.exports={
     addS,
     prototypes,
     childRelations,
-    usagesRelations,
     languageFileExtensions,
      childless,
     extractStringsFromArrayString,

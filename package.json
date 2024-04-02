@@ -14,7 +14,19 @@
         "url": "https://github.com/ji-podhead/protobuffctl"
     },
     "keywords": [
-        "grpc-manager","VS Code Extension","grpc-java","node","filewatcher","grpc-web","grpc-java","grpc-go","protobuff","grpc-python","grpc-node", "grpc-kotlin","protobuff-generator "
+        "grpc-manager",
+        "VS Code Extension",
+        "grpc-java",
+        "node",
+        "filewatcher",
+        "grpc-web",
+        "grpc-java",
+        "grpc-go",
+        "protobuff",
+        "grpc-python",
+        "grpc-node",
+        "grpc-kotlin",
+        "protobuff-generator "
     ],
     "author": "ji-podhead",
     "license": "GPL-3.0-or-later",
@@ -22,7 +34,6 @@
         "chokidar": "^3.6.0",
         "commander": "^12.0.0",
         "protobufjs": "^7.2.6",
-        
         "protoc-helper": "^1.0.19",
         "serialize-javascript": "^6.0.2",
         "uuid": "^9.0.1"

@@ -114,6 +114,13 @@ class WatcherManager {
  * @param {Map} params.fields - ${componentRegistryDocs.params.fields}  * @param {Map} params.services - ${componentRegistryDocs.params.services}  * @param {Map} params.methods - ${componentRegistryDocs.params.methods}  * @param {Map} params.types - ${componentRegistryDocs.params.types} * @param {Map} params.content - ${componentRegistryDocs.params.content} * @param {Map} params.message - ${componentRegistryDocs.params.message} * @param {Map} params.Enum - ${componentRegistryDocs.params.Enum} * @param {Map} params.EnumValues - ${componentRegistryDocs.params.EnumValues} * @param {Map} params.ProtoFilePaths - ${componentRegistryDocs.params.ProtoFilePaths} * @param {Map} params.Client - ${componentRegistryDocs.params.Client} * @param {Map} params.Request - ${componentRegistryDocs.params.Request} * @param {Map} params.Callback - ${componentRegistryDocs.params.Callback} * @param {Map} params.Stream - ${componentRegistryDocs.params.Stream} * @param {Map} params.ProtobuffFilePaths - ${componentRegistryDocs.params.ProtobuffFilePaths} * @param {Map} params.ProtobuffFile - ${componentRegistryDocs.params.ProtobuffFile} * @param {Map} params.ProtobuffUserPaths - ${componentRegistryDocs.params.ProtobuffUserPaths} * @param {Map} params.ProtobuffUser - ${componentRegistryDocs.params.ProtobuffUser} * @param {Map} params.ProtobuffUserComponentPreset - ${componentRegistryDocs.params.ProtobuffUserComponentPreset} * @param {Map} params.ProtobuffUserComponent - ${componentRegistryDocs.params.ProtobuffUserComponent} * @param {Map} params.EndpointPaths - ${componentRegistryDocs.params.EndpointPaths} * @param {Map} params.Endpoint - ${componentRegistryDocs.params.Endpoint} * @param {Map} params.MainEndpoint - ${componentRegistryDocs.params.MainEndpoint} */
 class ComponentRegistry {
     constructor() {
+        this. relations = {
+            services:new Map(),
+            methods:new Map(),
+            types:new Map(),
+            fields:new Map(),
+            enums:new Map()
+        };
         this.endPoints = new Map()
         // ProtoRegistry 
         this.fields = new Map();

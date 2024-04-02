@@ -1,18 +1,9 @@
 const { Command } = require('commander');
-const {getAll,get,create,toJson,addWatcher,removeWatcher, stopAll,startAll, findAllUsages, del, pull, add, push} =require("../src/shared");
+const {getAll,get,create,toJson,addWatcher,removeWatcher, stopAll,startAll, findAllUsages, del, pull, add, push, remove} =require("../src/shared");
 const { set } = require('../src/protoUtils');
 
-    
-const cli = new Command();
-//cli
-//    // Ensure WatcherManager is instantiated before use
-//    .command('add <filePath>')
-//    .description('Add a watcher for the specified file path')
-//    .action(async (filePath) => { addWatcher(filePath); });
-//cli
-//    .command('remove <filePath>')
-//    .description('Remove the watcher for the specified file path')
-//    .action((filePath) => { removeWatcher(filePath) });
+
+    const cli = new Command();
 cli
     .command('startAll')
     .description('Start all watchers')
@@ -21,27 +12,27 @@ cli
     .command('stopAll')
     .description('Stop all watchers')
     .action(() => { stopAll() });
-    cli
+cli
     .command('create <type> <arg1> [arg2] [arg3]>')
     .description('Initializes a new Proto-object,enum,type,service or ProtobuffFile in the registry')
     .action((type, arg1, arg2, arg3) => { 
     create(type, arg1, arg2, arg3) 
     })
-    cli
-    .command('del <type> <id>')
+cli
+    .command('del <type> <id> [remove]')
     .description('Deletes a component, you need to Pull afterwards')
-    .action((type, id) => { 
-    del(type, id) 
+    .action((type, id,remove) => { 
+    del(type, id,remove) 
     })
 cli
     .command('getAll  [type] [describe] [jsonOut]')
     .description('retrieves all Objects of acertain type from registry')
     .action((type,describe,jsonOut) => { getAll(type,describe,jsonOut) });
-   cli
+cli
     .command('toJson  <out> [id]')
     .description('save to your protobuffctl.json')
     .action((out,id) => { toJson(out,id) });
-    cli
+cli
     .command('set <type> <element_name> <values>')
     .description('sets/creates and object')
     .action((type,element_name, values) => {set(type,element_name, values) });
@@ -69,13 +60,18 @@ cli
         // Convert args from an array to a list of arguments
         pull(protoFiles);
     });
-    cli
+cli
     .command('push <protoFiles>')
     .description('scanns the protoFiles and updates the registry')
     .action((protoFiles) => {
         // Convert args from an array to a list of arguments
         push(protoFiles);
     });
-       
-cli.parse(process.argv);
-module.exports = {  cli }
+cli
+    .command('remove <source> <target> [recoursive] [pull]')
+    .description('removes a childObject from another object. set recoursive to remove its childComponents from the protoFiles as well')
+    .action((source,target,pull) => {
+        remove(source,target,pull) }
+        );     
+    cli.parse(process.argv);
+    module.exports = {  cli }

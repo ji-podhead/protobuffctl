@@ -5,7 +5,7 @@ const path = require('path');
 const { addS, childless, deepClone, relations } = require("../util/utils.js")
 const fs = require('fs');
 const { Protobuffctl } = require("./protobuffctl");
-const { getElementsRecoursive, getProtoContent, set, findAllU, getAllChildren, getChildrenRec } = require('./protoUtils.js');
+const { getElementsRecoursive, getProtoContent, set, findAllU, getAllChildren } = require('./protoUtils.js');
 const protobuffctl = new Protobuffctl()
 /**
  * Retrieves a specific component from the registry.
@@ -360,6 +360,7 @@ function add(type, source, target, pull) {
     }
     try {
         const children = []
+
         getChildrenRec(type, source, children)
         console.log(children)
         function addChildrenToProto(protoFile) {
@@ -495,8 +496,7 @@ function del(type, id, recoursive, remove_from_components=false,deleteChildren =
     try {
         const children = []
         const avoid=["fields"]
-        
-        avoid.includes(type) == false && getChildrenRec(type, id, children)
+        avoid.includes(type) == false && getAllChildren(type, id, children)
         let deleteStatus = children.reduce((acc, child) => {
             acc[child.id] = false;
             return acc;
@@ -536,7 +536,7 @@ function del(type, id, recoursive, remove_from_components=false,deleteChildren =
                 deleteStatus[id] = true
             }
         }
-        if(deleteStatus[source]==true){
+        
         Object.entries(deleteStatus).map(([e, s]) => {
             const t = protobuffctl.componentRegistry.hashlookupTable.get(e)
             if (t && s && !(!deleteChildren && source != e)) {
@@ -557,7 +557,6 @@ function del(type, id, recoursive, remove_from_components=false,deleteChildren =
                 //console.log(protobuffctl.componentRegistry.hashlookupTable)
             }
         })
-    }
         protobuffctl.save()
         return
     }
@@ -565,7 +564,6 @@ function del(type, id, recoursive, remove_from_components=false,deleteChildren =
         return (console.log("couldnt delete element " + err))
     }
 }
-
 /**
  * Removes a component from another component.
  * @example
@@ -578,9 +576,9 @@ function del(type, id, recoursive, remove_from_components=false,deleteChildren =
  * @param {boolean} pull - A boolean indicating whether to pull the changes to the registry.
  */
 function remove(source, target, recoursive,remove_from_components, deleteStatus, pull = false) {
-    recoursive = recoursive== "false"?false:recoursive==undefined?false:recoursive
+    recoursive = recoursive== "false"?false:recoursive==undefined?true:recoursive
     remove_from_components = remove_from_components== "false"?false:remove_from_components==undefined?true:remove_from_components
-    deleteStatus=deleteStatus==undefined?deleteStatus={}:deleteStatus
+    
     const sourceType = protobuffctl.componentRegistry.hashlookupTable.get(source)
     const targetType = protobuffctl.componentRegistry.hashlookupTable.get(target)
     const targetObject = protobuffctl.componentRegistry[targetType].get(target)

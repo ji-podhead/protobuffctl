@@ -12,10 +12,15 @@ service testS {
  rpc testRepM (testReq) returns (stream testRep) {}
 }
 
+Enum enumTest{
+A=1;
+B=2;
+}
 
 message testReq {
  string val1 = 1;
- string val2 = 2;
+ string val3 = 2;
+ enumTest  e1=3;
 }
 
 message testRep {

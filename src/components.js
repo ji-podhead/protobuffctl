@@ -8,10 +8,11 @@ const path = require('path');
 const { ProtobuffGenerator } = require("protoc-helper")
 const { classDescriptions } = require("../descriptions/classdescriptions")
 const { Protobuffctl, } = require("./protobuffctl")
-const { getUniqueName, isSubdirectory, prototypes, childless, languageFileExtensions, mergeFields, initObject } = require("../util/utils")
+const { getUniqueName, isSubdirectory, prototypes, childless, languageFileExtensions, mergeFields, initObject, usagesRelations, childRelations } = require("../util/utils")
 const protobuf = require('protobufjs');
-const { set, writeAndReplaceProto, generateProtoFromServices, getElementsRecoursive, getProtoContent, removeOld } = require('./protoUtils');
+const { set, writeAndReplaceProto, generateProtoFromServices, getElementsRecoursive, getProtoContent, removeOld, getAllChildren, getChildrenRec, getParentsRec } = require('./protoUtils');
 const { stringify } = require('querystring');
+const { type } = require('os');
 const protobuffctl = new Protobuffctl()
 generator = new ProtobuffGenerator()
 
@@ -47,7 +48,6 @@ class ProtoFile {
             if (existingProtoFile != undefined) {
                 removeOld(this, existingProtoFile)//  ["services", "methods", "types", "fields", "enums", "protobuffFiles", "protobuffComponents", "protoUserComponent"])
                 this.id = existingProtoFile.id
-
             }
             else {
                 // const sourceFilePath = path.join(file_path, file_name);
@@ -55,9 +55,42 @@ class ProtoFile {
                 protobuffctl.componentRegistry.protoFilePaths.set(this.id, this.absolute_path);
                 protobuffctl.componentRegistry.protoFiles.set(this.id, this)
                 protobuffctl.componentRegistry.hashlookupTable.set(this.id, "protoFiles")
-
             }
+            const temp={
+                children:[],
+                parents:[]
+            }
+            const relations=protobuffctl.componentRegistry.relations
             
+            Object.entries(childRelations).map(([key, children]) => {
+                this[key].map((item)=>{
+                    const clone=JSON.parse(JSON.stringify(temp))
+                    key!="enums"&&getAllChildren(key,item,clone["children"],false)
+                   // console.log(clone)
+                    relations[key].set(item,clone)
+                    
+                })
+            });
+            
+            Object.entries(relations).map(([key,val])=>{
+                const childType=childRelations[key]
+                val.forEach((val2,key2)=>{
+                    val2["children"].map((child)=>{
+                        const childObject=relations[childType].get(child)
+                        childObject["parents"].push(key2)
+                        relations[childType].set(child,childObject)
+                        
+                    })
+                })
+            })
+
+            //console.log((relations["types"]))
+            //const allChilds=[]
+            //relations["enums"].forEach((val,key)=>{
+            //    getParentsRec("enums",key,allChilds)
+            //})
+            //console.log(allChilds)
+
             let clone =JSON.parse(JSON.stringify(this))// Object.assign(Object.create(Object.getPrototypeOf(this)), this)            
             console.log(clone)
             protobuffctl.save()
@@ -112,7 +145,7 @@ class ProtoFile {
             getroot(protoFilePath).then((root) => {
                 this.traverseProtoElements(root, function (obj, type) {
                 }, this).then(() => {
-                    protobuffctl.save()
+                   
                     resolve();
                 }).catch(reject);
             }).catch(reject);
@@ -136,12 +169,13 @@ class ProtoFile {
                         set("fields", id, { [key]: val })
                     }else{
                         if(protobuffctl.componentRegistry.hashlookupTable.get(key)!="enum"){
-                            const enumName=val["type"]
-                            const fieldObject={[id]:{type:enumName,id:val["id"]}}
+                            const enumName=key
+                            const fieldObject={[id]:{type:val["type"],id:val["id"]}}
                             set("fields", enumName, fieldObject)
                             console.log(fieldObject)
                             id=enumName
                         }
+
                         else{
                             console.warn(key + " is neither an enum, or a nested type. please create such first")
                         }

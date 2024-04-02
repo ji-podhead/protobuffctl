@@ -1,32 +1,31 @@
 syntax="proto3";
 option java_multiple_files = true;
 option java_package = "./";
-option java_outer_classname = "test";
+option java_outer_classname = "new_Proto";
 option objc_class_prefix = "HLW";
 option go_package = "./";
 
-package test;
+package new_Proto;
 
 service testS {
  rpc testReqM (testReq) returns (testRep) {}
- rpc testRep2M (testReq) returns (stream testRep) {}
+ rpc testRepM (testReq) returns (stream testRep) {}
 }
 
-
-enum enumTest {
-A = 1;
-B = 2;
-}
-
-message testRep {
- string val1 = 2;
- string val2 = 2;
- string val3 = 3;
+enum enumTest{
+A=1;
+B=2;
 }
 
 message testReq {
- enumTest e1 = 1;
- string val1 = 2;
- string val5 = 3;
+ string val1 = 1;
+ string val2 = 2;
+ enumTest e1 =3;
+}
+
+message testRep {
+ string val1 = 1;
+ string val2 = 2;
+ string val3 = 3;
 }
 

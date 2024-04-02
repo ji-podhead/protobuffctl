@@ -3,24 +3,21 @@ const chokidar = require('chokidar');
 const { Console } = require('console');
 const path = require('path');
 const serialize = require('serialize-javascript');
-const { addS, childless, deepClone, relations, childRelations, usagesRelations } = require("../util/utils.js")
+const { addS, childless, deepClone, relations, childRelations } = require("../util/utils.js")
 const fs = require('fs');
 const { Protobuffctl } = require("./protobuffctl");
 const protobuffctl = new Protobuffctl()
 
-function findAllU(type, name, v = false) {
+function findAllU(type, name,v=false) {
     type = addS(type)
-    
     const appearances = []
-  //  getParentsRec(type,name,appearances)
-  //  return appearances
     relations[type].map((relation) => {
 
         protobuffctl.componentRegistry[relation].forEach((val, key) => {
-            //  console.log(key)
+          //  console.log(key)
             //console.log(val)
             if (Array.isArray(val[type])) {
-                const arr = val[type]
+               const arr= val[type]
                 arr.map((element) => {
                     if (element == name) {
                         appearances.push({ id: key, type: relation })
@@ -35,21 +32,21 @@ function findAllU(type, name, v = false) {
                 appearances.push({ id: key, type: relation })
 
             }
-            if (relation == "methods") {
-                const req = Object.values(val)[0]["requestType"]
-                const resp = Object.values(val)[0]["responseType"]
-                const use = req == name ? "requestType" : resp == name ? "responseType" : ""
-                if (use != "") {
-                    appearances.push({ id: key, type: relation, use: use })
+            if(relation=="methods"){
+                const req=Object.values(val)[0]["requestType"]
+                const resp= Object.values(val)[0]["responseType"]
+                const use =req==name?"requestType":resp==name?"responseType":""
+                if(use!=""){
+                appearances.push({ id: key, type: relation,use:use })
                 }
             }
 
         })
     })
-    if (v == true) {
-        console.log("found " + String(Math.abs(appearances.length)) + " usages:")
-        console.log(appearances)
-    }
+  if(v==true){
+    console.log("found " + String(Math.abs(appearances.length)) + " usages:")
+    console.log(appearances)
+}
     return appearances
 }
 function removeOld(newElement, oldElement) {
@@ -203,7 +200,7 @@ function getProtoContent(protoFile, write, v = false) {
         const values = Object.entries(Object.values(type)[0]);
         protoContent += `enum ${enumName} {\n`;
         console.log(values)
-        values.map(([key, val]) => {
+        values.map(([key,val]) => {
             console.log(key)
             console.log(val)
             protoContent += `${key} = ${val};\n`;
@@ -232,117 +229,68 @@ function getProtoContent(protoFile, write, v = false) {
 
     return protoContent;
 }
-function checkIfEnum(field) {
-    const fieldObject = protobuffctl.componentRegistry["fields"].get(field)
-    const val = Object.values(fieldObject)[0]["type"]
-    const lookup = protobuffctl.componentRegistry.hashlookupTable.get(val)
-    if (lookup && lookup == "enums") {
-        return val
-    }
-    else {
-        return false
+function checkIfEnum(field){
+const fieldObject=protobuffctl.componentRegistry["fields"].get(field)
+const val=Object.values(fieldObject)[0]["type"]
+const lookup=protobuffctl.componentRegistry.hashlookupTable.get(val)
+if(lookup&&lookup=="enums"){
+    return val
+}
+else{
+    return false
 
-    }
+}
 }
 function objectExistsInArray(array, object) {
     return array.some(item => JSON.stringify(item) === JSON.stringify(object));
 }
-function getChildrenRec(type, source, children) {
-    const childType = type
-    const relations = protobuffctl.componentRegistry.relations
-    rec(source, childType)
-    function rec(newSource, newType) {
-        const rel = relations[newType]
-        const parent = rel.get(newSource)
-        //console.log(parent)
-        parent["children"].forEach((child, key) => {
-            children.push({ type: newType, id: child })
-            const typeType = childRelations[newType][0]
-            if (typeType != "enums") {
-               // console.log(children)
-                rec(child, typeType)
+function getAllChildren(type,source,children){
+    const relation=childRelations[type]!=undefined?childRelations[type][0]:false
+    const sourceObject=protobuffctl.componentRegistry[type].get(source)
+   if(type=="protoFiles"){
+    Object.entries(sourceObject).map(([key,val])=>{
+        try{
+        val.map((id)=>{
+            if(protobuffctl.componentRegistry.hashlookupTable.get(id)){
+                children.push({type:key,id})
             }
         })
-        protobuffctl.componentRegistry.relations = relations
-    }
-}
-function getParentsRec(type, source, parents) {
-    const parentType = type
-    const relations = protobuffctl.componentRegistry.relations
-    rec(source, parentType)
-    function rec(newSource, newType) {
-        const rel = relations[newType]
-        const parent = rel.get(newSource)
-       // console.log(parent)
-        parent["parents"].forEach((parent, key) => {
-            parents.push({ type: newType, id: parent })
-            const typeType = usagesRelations[newType][0]
-            if (typeType != "protoFiles") {
-               // console.log(parents)
-                rec(parent, typeType)
-            }
-        })
-        protobuffctl.componentRegistry.relations = relations
-    }
-}
+    }catch{}
+    })
+   }
+    else if(type=="methods"){
+        const val= Object.values(sourceObject)[0]
+        const req=val["requestType"]
+        const resp=val["responseType"]
+        const item1={type:"type",id:req}
+        const item2={type:"type",id:resp}
 
-//only for init -- to complex
-function getAllChildren(type, source, children, recoursive = true) {
-    const relation = childRelations[type] != undefined ? childRelations[type][0] : false
-    const sourceObject = protobuffctl.componentRegistry[type].get(source)
-    if (type == "protoFiles") {
-        Object.entries(sourceObject).map(([key, val]) => {
-            try {
-                val.map((id) => {
-                    if (protobuffctl.componentRegistry.hashlookupTable.get(id)) {
-                        recoursive && children.push({ type: key, id })
-                        !recoursive && children.push(id)
-                    }
-                })
-            } catch { }
-        })
+        objectExistsInArray(children,item1)==false&&children.push(item1)
+        objectExistsInArray(children,item2)==false&&children.push(item2)
+        getAllChildren("types",req,children)
+        getAllChildren("types",resp,children)
     }
-    else if (type == "methods") {
-        const val = Object.values(sourceObject)[0]
-        const req = val["requestType"]
-        const resp = val["responseType"]
-        const item1 = recoursive == true ? { type: "type", id: req } : req
-        const item2 = recoursive == true ? { type: "type", id: resp } : resp
-
-        objectExistsInArray(children, item1) == false && children.push(item1)
-        objectExistsInArray(children, item2) == false && children.push(item2)
-        recoursive && getAllChildren("types", req, children)
-        recoursive && getAllChildren("types", resp, children)
-    }
-    else if (type == "fields") {
-        //const typename=Object.values(sourceObject)["type"]
-        const en = checkIfEnum(source)
-        if (en != false) {
-            const item = recoursive == true ? { "type": "enums", id: en } : en
-            objectExistsInArray(children, item) == false && children.push(item)
+    else{
+        if(sourceObject==undefined){
+            return console.warn("cant get  " +type + " " + source+"!!!" + " PLEASE CREATE IT FIRST!!!")
         }
-    }
-    else {
-        if (sourceObject == undefined) {
-            return console.warn("cant get  " + type + " " + source + "!!!" + " PLEASE CREATE IT FIRST!!!")
-        }
-        sourceObject.map((el) => {
-            if (type == "types") {
-                const item = recoursive == true ? { "type": "types", id: el } : el
-                objectExistsInArray(children, item) == false && children.push(item)
+        sourceObject.map((el)=>{
+            if(type=="types"){
+                const en = checkIfEnum(el)
+                if(en !=false){
+                    const item={"type":"enums",id:en}
+               objectExistsInArray(children,item)==false&&children.push(item)
             }
-
-            const item = recoursive == true ? { "type": relation, id: el } : el
-            objectExistsInArray(children, item) == false && children.push(item)
-            const childRel = childRelations[relation] != undefined ? childRelations[relation][0] : false
-            if (childRel != false) {
-                recoursive && getAllChildren(relation, el, children)
+        }
+        const item={"type":relation,id:el}
+        objectExistsInArray(children,item)==false&&children.push(item)
+            const childRel=childRelations[relation]!=undefined?childRelations[relation][0]:false
+            if(childRel!=false){
+                getAllChildren(relation,el,children)
             }
         })
     }
 }
-
-
 
 /*
 *-------------------------------getElementsRecoursive---------------------------
@@ -456,7 +404,7 @@ function getElementsRecoursive(element, name, depth, v = true) {
     }
 }
 module.exports = {
-    set, getAllChildren, getParentsRec, getChildrenRec, getElementsRecoursive, findAllU, getProtoContent, removeOld
+    set, getAllChildren,getElementsRecoursive,findAllU,getProtoContent, removeOld
 }
 /*
 _______________________________________________________________
