@@ -11,6 +11,8 @@
 - **Roll back** to old protofile, or to an registry state using historical `.config` file just like with **version control**.<br>
 - **Preview** the Protofile-Code before actually building it.<br>
 - Create your own **User Interface** and manage `Protocollbuffers` using the [API](https://ji-podhead.github.io/protobuffctl/) and input events.<br>
+- Avoids recoursion when creating components *see ER Model below.
+- **Export any Component to JSON**, or sync with **other registries** like gitey, or PostgreSQL
 ---
 # Getting Started
 
