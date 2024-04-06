@@ -225,29 +225,24 @@ export namespace test { }
 graph TD;
     CLI["💻 Command Line Interface"]-->Api;
 CLI["💻 Command Line Interface"]-->Daemon;
-    Api-->WatcherManager;
     Api-->ComponentRegistry;
-    WatcherManager-->FileWatcher;
     FileWatcher-->Api;
     Api-->ProtobuffFile;
-    Api-->ProtoUser;
     Api-->ProtoFile;
     ProtoFile-->ProtobuffFile;
     ProtoFile-->ComponentRegistry;
-    ProtobuffFile-->ProtoUser;
+  
     ProtobuffFile-->ComponentRegistry;
-    ProtoUser-->ComponentRegistry;
+
   Daemon-->Api;
     subgraph protobuffctl [🏢 protobuffctl]
         Api;
-        WatcherManager;
         FileWatcher;
         ComponentRegistry;
     end
     subgraph components [🔧 Components]
         ProtoFile;
         ProtobuffFile;
-        ProtoUser;
     end
     style components fill:#f9d71c,stroke:#333,stroke-width:2px
     style ComponentRegistry fill:#f9d71c,stroke:#333,stroke-width:2px
