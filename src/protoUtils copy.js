@@ -10,12 +10,12 @@ const protobuffctl = new Protobuffctl()
 
 function findAllU(type, name, v = false) {
     type = addS(type)
-
+    
     const appearances = []
-    getParentsRec(type, name, appearances)
+    getParentsRec(type,name,appearances)
     return appearances
-    //  getParentsRec(type,name,appearances)
-    //  return appearances
+  //  getParentsRec(type,name,appearances)
+  //  return appearances
     relations[type].map((relation) => {
 
         protobuffctl.componentRegistry[relation].forEach((val, key) => {
@@ -112,12 +112,8 @@ function removeOld(newElement, oldElement) {
  * @throws {Error} Will throw an error if the type is not recognized or if the component
  *                 cannot be found or updated.
  */
-function set(type, name, values, v = false) {
-    //hier fehl eigentlich nur noch den parents die children zu setzen bei services
-    //das heißt bei services musst du alle children finden und diese dann zu allen protos hinzufügen
-    //das schließt auch enums und nested als child von fields mit ein
+function set(type, name, values) {
     if (type) {
-        const childType = childRelations[type][0]
         const protobuffctl = new Protobuffctl();
         let element;
         type = addS(type)
@@ -126,122 +122,29 @@ function set(type, name, values, v = false) {
             const fieldNames = Object.keys(protobuffctl.componentRegistry[type]);
             console.log(fieldNames);
         } else {
-            let relP = protobuffctl.componentRegistry.relations[type].get(name)
-            if (relP == undefined) {
-                const temp = {
-                    children: [],
-                    parents: []
-                }
-                relP = temp
-                v && console.log(`--------------- >> set relation ${name} <<`)
-
-            }
             values = typeof (values) == "string" ? extractStringsFromArrayString(values) : values
+            console.log(values)
             element = protobuffctl.componentRegistry[type].get(name);
             if (element && !typeof (values) == "object") {
-                // was das?
                 console.log(` adding to ${name}`)
                 if (!Array.isArray(values)) {
                     values = [values]
                 }
-                v && console.log(element)
-                v && console.log(values)
+                console.log(element)
+                console.log(values)
                 element = element.concat(values)
                 protobuffctl.componentRegistry[type].set(name, element)
                 protobuffctl.componentRegistry.hashlookupTable.set(name, type)
             }
-            else { // types,services, oder 
+            else {
                 if (Array.isArray(values) || typeof values === "string") {
                     console.log("creating" + " " + name);
                     element = Array.isArray(values) ? values : [values];
-                    values.map((val) => {
-                        const p = { "type": childType, id: val }
-                        objectExistsInArray(relP["children"], p) == false && relP["children"].push(p)
-                        let rel = protobuffctl.componentRegistry.relations[childType].get(val)
-                        if (rel == undefined) {
-                            const temp = {
-                                children: [],
-                                parents: []
-                            }
-                            rel = temp
-                        }
-                        v && console.log(`--------------- >> set relation ${val} <<`)
-                        const c = { type: type, id: name }
-                        objectExistsInArray(rel["parents"], c) == false && rel["parents"].push(c)
-                        v && console.log(rel)
-                        v && console.log("---------------")
-                        protobuffctl.componentRegistry.relations[childType].set(val, rel)
-
-                    })
                     protobuffctl.componentRegistry[type].set(name, element);
                     protobuffctl.componentRegistry.hashlookupTable.set(name, type)
                 } else {
                     if (childless.includes(type)) {
                         protobuffctl.componentRegistry[type].set(name, values);
-                        if (type == "methods") {
-                            let protos = protobuffctl.componentRegistry.relations["methods"].get(name)
-                            if(protos!=undefined){
-                                protos=protos["parents"].filter((e) => e["type"] == "protoFiles")
-                            }else{protos=[]}
-                            Object.entries(Object.values(values)[0]).map(([t, val]) => {
-                                if (val != "responseStream" && val != true) {
-                                    const p = { type: childType, id: val }
-                                    // hier alle children (wenn types, enums oder nested zu protos hinzufügen)
-                                    const vChilds = []
-                                    getChildrenRec("types", val,vChilds)
-                                    vChilds.map((t2) => {
-                                        if ((t2["type"] == "types"||t2["type"]=="enums")) {
-                                            const t2O = protobuffctl.componentRegistry.relations[t2["type"]].get(t2["id"])
-                                           protos!=undefined&&protos.map((proto1) => {
-                                                const o1 = { type: "protoFiles", id: proto1["id"] }
-                                                objectExistsInArray(t2O["parents"], o1) == false && t2O["parents"].push(o1)
-                                                protobuffctl.componentRegistry.relations[t2["type"]].set(t2["id"], t2O)
-                                            })
-                                        }
-                                    })
-                                    objectExistsInArray(relP["children"], p) == false && relP["children"].push(p)
-                                    v && console.log(val)
-                                    let rel = protobuffctl.componentRegistry.relations[childType].get(val)
-                                    if (rel == undefined) {
-                                        const temp = {
-                                            children: [],
-                                            parents: []
-                                        }
-                                        rel = temp
-                                    }
-                                    const c = { type: type, id: name }
-                                    objectExistsInArray(rel["parents"], c) == false && rel["parents"].push(c)
-                                    v && console.log(`--------------- >> set relation ${val} <<`)
-                                    v && console.log(rel)
-                                    v && console.log("---------------")
-                                    protobuffctl.componentRegistry.relations[childType].set(val, rel)
-
-                                }
-                            })
-                            protobuffctl.componentRegistry.relations["methods"].set(name, relP)
-                        }
-                        else if (type == "fields") {
-                            v && console.log(name)
-                            const en = checkIfEnum(name)
-                            if (en != false) {
-                                const c = { "type": "enums", id: en }
-                                objectExistsInArray(relP["children"], c) == false && relP["children"].push(c)
-                                let rel = protobuffctl.componentRegistry.relations["enums"].get(en)
-                                if (rel == undefined) {
-                                    const temp = {
-                                        children: [],
-                                        parents: []
-                                    }
-                                    rel = temp
-                                }
-                                const p = { "type": "fields", id: name }
-                                objectExistsInArray(rel["parents"], p) == false && rel["parents"].push(p)
-                                v && console.log(`--------------- >> set relation ${en} <<`)
-                                v && console.log(rel)
-                                v && console.log("---------------")
-                                protobuffctl.componentRegistry.relations[childType].set(en, rel)
-                            }
-                        }
                         protobuffctl.componentRegistry.hashlookupTable.set(name, type)
                     } else {
                         console.log("please pass either an array of values, a string, or an object");
@@ -249,7 +152,6 @@ function set(type, name, values, v = false) {
                     }
                 }
             }
-            protobuffctl.componentRegistry.relations[type].set(name, relP)
             protobuffctl.save();
             console.log(`successfully set ${type} ${name}\n ${JSON.stringify(protobuffctl.componentRegistry[type].get(name))}`);
         }
@@ -259,8 +161,7 @@ function set(type, name, values, v = false) {
 *-------------------------------getProtoContent---------------------------
 */
 function getProtoContent(protoFile, write, v = false) {
-
-    const elementNew = getRecFill("protoFile", protoFile.id)// getElementsRecoursive(JSON.parse(JSON.stringify(protoFile)), protoFile.id, "i")
+    const elementNew = getElementsRecoursive(JSON.parse(JSON.stringify(protoFile)), protoFile.id, "i")
     console.log(elementNew)
     const services = elementNew["services"]
     const types = elementNew["types"]
@@ -277,8 +178,7 @@ function getProtoContent(protoFile, write, v = false) {
     });
     protoContent += `\n${proto_package}\n`
     protoContent += `\n`
-    console.log(services)
-    services.map((service) => {
+    services.forEach(service => {
         const serviceName = Object.keys(service)[0];
         const methods = service[serviceName];
         protoContent += `service ${serviceName} {\n`;
@@ -302,8 +202,7 @@ function getProtoContent(protoFile, write, v = false) {
         const enumName = Object.keys(type)[0];
         console.log(enumName)
         console.log(protobuffctl.componentRegistry.enums)
-        const values = Object.entries(Object.values(Object.values(type)[0])[0])//.values.values//Object.values(Object.entries(Object.values(type)[0]))[0];
-        console.log(values)
+        const values = Object.entries(Object.values(type)[0]);
         protoContent += `enum ${enumName} {\n`;
         console.log(values)
         values.map(([key, val]) => {
@@ -319,13 +218,11 @@ function getProtoContent(protoFile, write, v = false) {
         const typeName = Object.keys(type)[0];
         const fields = type[typeName];
         protoContent += `message ${typeName} {\n`;
-        let idCounter = 0
         fields.forEach(field => {
             console.log(field)
             const fieldName = Object.keys(field)[0];
             const fieldDetails = field[fieldName];
-            protoContent += ` ${fieldDetails.type} ${fieldName} = ${idCounter};\n`;
-            idCounter += 1
+            protoContent += ` ${fieldDetails.type} ${fieldName} = ${fieldDetails.id};\n`;
 
         });
         protoContent += '}\n\n';
@@ -352,74 +249,66 @@ function checkIfEnum(field) {
 function objectExistsInArray(array, object) {
     return array.some(item => JSON.stringify(item) === JSON.stringify(object));
 }
-function getChildrenRec(type, source, children, v = false) {
-
-    const childType = type
+function getChildrenRec(type, source, children, v=false) {
+    
+    const childType =  type
     const relations = protobuffctl.componentRegistry.relations
-
-    rec(source)
-
-    function rec(newSource) {
-
-        const newType = protobuffctl.componentRegistry.hashlookupTable.get(newSource)
-        if (newType == "enums") {
-            return
+    
+    rec(source, childType)
+   
+    function rec(newSource, newType) {
+      console.log(newSource)
+        if(protobuffctl.componentRegistry.hashlookupTable.get(newSource)=="enums"){
+            newType="enums"
         }
-        v && console.log(newType)
+        v&&console.log(newType)
         const rel = relations[newType]
         const parent = rel.get(newSource)
-        v && console.log(parent)
+        v&&console.log(parent)
         parent["children"].forEach((child, key) => {
-            const childObj = { type: child["type"], id: child["id"] }
-            objectExistsInArray(children, childObj) == false && children.push(childObj)
-            rec(child["id"])
-
+            const childObj={ type: childRelations[child["type"]][0], id: child["id"] }
+            objectExistsInArray(children,childObj)==false&&children.push(childObj)
+            const typeType = childRelations[newType]
+           v&&console.log(typeType)
+            if (typeType != "enums") {
+               // console.log(children)
+                rec(child["id"], typeType)
+            }
+            else{
+               // rec(child["id"], "enums")
+                
+            }
         })
         //protobuffctl.componentRegistry.relations = relations
     }
     console.log(`----------------\n >> allChildren of ${source} <<`)
-    console.log(children)
+                console.log(children)
     console.log("-----------------")
 }
-function getParentsRec(type, source, parents, v = false) {
+function getParentsRec(type, source, parents) {
     const parentType = type
     const relations = protobuffctl.componentRegistry.relations
     rec(source, parentType)
     function rec(newSource, newType) {
-        console.log(newSource)
-        if (protobuffctl.componentRegistry.hashlookupTable.get(newSource) == "enums") {
-            newType = "enums"
-        }
-        v && console.log(newType)
         const rel = relations[newType]
         const parent = rel.get(newSource)
-        v && console.log(parent)
-
+        console.log(parent)
         parent["parents"].forEach((parent, key) => {
-            const parentObject = { type: parent["type"], id: parent["id"] }
-            objectExistsInArray(parents, parentObject) == false && parents.push(parentObject)
+            parents.push({ type: newType, id: parent })
             const typeType = usagesRelations[newType][0]
-            v && console.log(typeType)
-            if (parent["type"] != "protoFiles") {
-                // console.log(children)
-                rec(parent["id"], typeType)
-
-            }
-            else {
-                // rec(child["id"], "enums")
-
+            if (typeType != "protoFiles") {
+               // console.log(parents)
+                rec(parent, typeType)
             }
         })
-        //protobuffctl.componentRegistry.relations = relations
+        protobuffctl.componentRegistry.relations = relations
     }
-    console.log(`----------------\n >> allParents of ${source} <<`)
-    console.log(parents)
-    console.log("-----------------")
 }
+
 //only for init -- to complex
 function getAllChildren(type, source, children, recoursive = true) {
-    //  getChildrenRec(type,source,children)
-    //  return children
+    getChildrenRec(type,source,children)
+    return children
     const relation = childRelations[type] != undefined ? childRelations[type][0] : false
     const sourceObject = protobuffctl.componentRegistry[type].get(source)
     if (type == "protoFiles") {
@@ -474,103 +363,12 @@ function getAllChildren(type, source, children, recoursive = true) {
     }
 }
 
-function getRecFill(type, id) {
-    type = addS(type)
-    const children = []
-    const childObjects = { //order is important to avoid recoursion
-        "fields": new Map(),
-        "enums": new Map(),
-        "nested": new Map(),
-        "types": new Map(),
-        "methods": new Map(),
-        "services": new Map(),
-        "protoFiles": new Map(),
-    }
-    const childRelations = { //order is important to avoid recoursion
-        "fields": [],
-        "enums": [],
-        "nested": [],
-        "types": [],
-        "methods": [],
-        "services": [],
-        "protoFiles": [],
-    }
-    getChildrenRec(type, id, children, true)
-    children.map((child) => { //SETTING childObjects
-        childObjects[child["type"]].set(child["id"], protobuffctl.componentRegistry[child["type"]].get(child["id"]))
-        childRelations[child["type"]].push(child)
-    })
 
-    childObjects[type].set(id, protobuffctl.componentRegistry[type].get(id))
-    const proto = type == "protoFiles" ? childObjects["protoFiles"].get(id) : undefined
-    
-    
-    Object.entries(childRelations).map(([key,cat]) => {  //replace parents
-        cat.map((item)=>{
-          
-        const obj = childObjects[item["type"]].get(item["id"])
-        const childtype = item["type"]
-        const childId = item["id"]
-        const rel = protobuffctl.componentRegistry.relations[childtype].get(childId)
-        function replaceinArr(parent) {
-            let parObj = childObjects[parent["type"]].get(parent["id"])
-            console.log(parObj)
-            parObj = parObj.filter((e) => e != item["id"])
-            parObj.push(obj)
-            childObjects[parent["type"]].set(parent["id"], parObj)
-        }
-        function setinObj() {
-            const parentId=proto.id
-            let parObj = childObjects["protoFiles"].get(parentId)
-            parObj[item["type"]]=parObj[item["type"]].filter((x)=>x!=childId)
-            console.log(parObj)
-            parObj[item["type"]].push({[childId]:obj})
-            console.log(parObj)
-            childObjects["protoFiles"].set(parentId, parObj)
-        }
-        switch (addS(item["type"])) {
-            case ("services"): {  //            >> is In Proto <<
-                proto != undefined && setinObj()
-                break;
-            }
-            case ("types"): { //            >> is In Proto <<
-                proto != undefined && setinObj()
-                
-                break;
-            }
-            case ("enums"): {  //            >> is In Proto <<
-                proto != undefined && setinObj()
-                break;
-            }
-            case ("methods"): {
-                rel["parents"].map((parent) => {
-                    parent["type"] == "services" && replaceinArr(parent)
-                })
-                break;
-            }
-            case ("fields"): {
-                rel["parents"].map((parent) => {
-                    parent["type"] == "types" && replaceinArr(parent)
-                })
-                break;
-            }
-        }
-    })
-})
-    const r = childObjects[type].get(id)
-    if(type=="protoFiles"){
-        r["options"]=protobuffctl.componentRegistry["options"].get(proto["options"])
-        r["syntax"]=proto["syntax"]
-    }
-    console.log(r)
-    return r
-}
 
 /*
 *-------------------------------getElementsRecoursive---------------------------
 */
-function getElementsRecoursive(element, name, depth, v = false) {
-
+function getElementsRecoursive(element, name, depth, v = true) {
     v && console.log("------------------------------START getElementsRecoursive---------------")
     const parentType = protobuffctl.componentRegistry.hashlookupTable.get(name)
     if (Array.isArray(element)) {

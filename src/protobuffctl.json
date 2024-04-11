@@ -3,53 +3,107 @@
         "services": {
             "testS": {
                 "children": {
-                    "0": "testReqM",
-                    "1": "testRep2M"
+                    "0": {
+                        "type": "methods",
+                        "id": "testReqM"
+                    },
+                    "1": {
+                        "type": "methods",
+                        "id": "testRep2M"
+                    }
                 },
-                "parents": {}
+                "parents": {
+                    "0": {
+                        "type": "protoFiles",
+                        "id": "test"
+                    }
+                }
             }
         },
         "methods": {
             "testReqM": {
-                "children": {
-                    "0": "testReq",
-                    "1": "testRep"
-                },
+                "children": {},
                 "parents": {
-                    "0": "testS"
+                    "0": {
+                        "type": "services",
+                        "id": "testS"
+                    },
+                    "1": {
+                        "type": "protoFiles",
+                        "id": "test"
+                    }
                 }
             },
             "testRep2M": {
-                "children": {
-                    "0": "testReq",
-                    "1": "testRep"
-                },
+                "children": {},
                 "parents": {
-                    "0": "testS"
+                    "0": {
+                        "type": "services",
+                        "id": "testS"
+                    }
                 }
             }
         },
         "types": {
-            "testRep": {
-                "children": {
-                    "0": "val1",
-                    "1": "val2",
-                    "2": "val3"
-                },
-                "parents": {
-                    "0": "testReqM",
-                    "1": "testRep2M"
-                }
-            },
             "testReq": {
                 "children": {
-                    "0": "e1",
-                    "1": "val1",
-                    "2": "val5"
+                    "0": {
+                        "type": "fields",
+                        "id": "e1"
+                    },
+                    "1": {
+                        "type": "fields",
+                        "id": "val1"
+                    },
+                    "2": {
+                        "type": "fields",
+                        "id": "val5"
+                    }
                 },
                 "parents": {
-                    "0": "testReqM",
-                    "1": "testRep2M"
+                    "0": {
+                        "type": "methods",
+                        "id": "testRep2M"
+                    }
+                }
+            },
+            "testRep": {
+                "children": {
+                    "0": {
+                        "type": "fields",
+                        "id": "val1"
+                    },
+                    "1": {
+                        "type": "fields",
+                        "id": "val2"
+                    },
+                    "2": {
+                        "type": "fields",
+                        "id": "val3"
+                    }
+                },
+                "parents": {
+                    "0": {
+                        "type": "methods",
+                        "id": "testReqM"
+                    },
+                    "1": {
+                        "type": "methods",
+                        "id": "testRep2M"
+                    },
+                    "2": {
+                        "type": "protoFiles",
+                        "id": "test"
+                    }
+                }
+            },
+            "true": {
+                "children": {},
+                "parents": {
+                    "0": {
+                        "type": "methods",
+                        "id": "testRep2M"
+                    }
                 }
             }
         },
@@ -57,34 +111,59 @@
             "val1": {
                 "children": {},
                 "parents": {
-                    "0": "testRep",
-                    "1": "testReq"
+                    "0": {
+                        "type": "types",
+                        "id": "testRep"
+                    },
+                    "1": {
+                        "type": "types",
+                        "id": "testReq"
+                    },
+                    "2": {
+                        "type": "protoFiles",
+                        "id": "test"
+                    }
                 }
             },
             "val2": {
                 "children": {},
                 "parents": {
-                    "0": "testRep"
+                    "0": {
+                        "type": "types",
+                        "id": "testRep"
+                    }
                 }
             },
             "val3": {
                 "children": {},
                 "parents": {
-                    "0": "testRep"
+                    "0": {
+                        "type": "types",
+                        "id": "testRep"
+                    }
                 }
             },
             "e1": {
                 "children": {
-                    "0": "enumTest"
+                    "0": {
+                        "type": "enums",
+                        "id": "enumTest"
+                    }
                 },
                 "parents": {
-                    "0": "testReq"
+                    "0": {
+                        "type": "types",
+                        "id": "testReq"
+                    }
                 }
             },
             "val5": {
                 "children": {},
                 "parents": {
-                    "0": "testReq"
+                    "0": {
+                        "type": "types",
+                        "id": "testReq"
+                    }
                 }
             }
         },
@@ -92,19 +171,21 @@
             "enumTest": {
                 "children": {},
                 "parents": {
-                    "0": "e1"
+                    "0": {
+                        "type": "fields",
+                        "id": "e1"
+                    },
+                    "1": {
+                        "type": "protoFiles",
+                        "id": "test"
+                    }
                 }
             }
-        }
+        },
+        "protoFiles": {}
     },
     "endPoints": {},
     "fields": {
-        "val1": {
-            "val1": {
-                "type": "string",
-                "id": 2
-            }
-        },
         "val2": {
             "val2": {
                 "type": "string",
@@ -113,18 +194,6 @@
         },
         "val3": {
             "val3": {
-                "type": "string",
-                "id": 3
-            }
-        },
-        "e1": {
-            "e1": {
-                "type": "enumTest",
-                "id": 1
-            }
-        },
-        "val5": {
-            "val5": {
                 "type": "string",
                 "id": 3
             }
@@ -152,20 +221,13 @@
         }
     },
     "types": {
-        "testRep": {},
-        "testReq": {
-            "0": "e1",
-            "1": "val5"
+        "testRep": {
+            "0": "val1",
+            "1": "val2",
+            "2": "val3"
         }
     },
-    "enums": {
-        "enumTest": {
-            "enumTest": {
-                "A": 1,
-                "B": 2
-            }
-        }
-    },
+    "enums": {},
     "enumValues": {},
     "protoFiles": {
         "test": {
@@ -180,16 +242,12 @@
                 "0": "testRep",
                 "1": "testReq"
             },
-            "enums": {
-                "0": "enumTest"
-            },
+            "enums": {},
             "fields": {
-                "0": "val1",
-                "1": "val2",
-                "2": "val3",
-                "3": "e1",
-                "4": "val1",
-                "5": "val5"
+                "0": "val2",
+                "1": "val3",
+                "2": "e1",
+                "3": "val5"
             },
             "protobuffFiles": {},
             "protobuffComponents": {},
@@ -230,14 +288,9 @@
         "testReqM": "methods",
         "testRep2M": "methods",
         "testS": "services",
-        "enumTest": "enums",
-        "val1": "fields",
         "val2": "fields",
         "val3": "fields",
         "testRep": "types",
-        "e1": "fields",
-        "val5": "fields",
-        "testReq": "types",
         "test": "protoFiles"
     }
 }

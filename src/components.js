@@ -15,7 +15,14 @@ const { stringify } = require('querystring');
 const { type } = require('os');
 const protobuffctl = new Protobuffctl()
 generator = new ProtobuffGenerator()
-
+class ProtoFileMaster {
+    constructor(file_name, file_path, services, methods, types, enums, fields, protobuffFiles, options, syntax, proto_package, id) {
+    
+    }
+}
+function objectExistsInArray(array, object) {
+    return array.some(item => JSON.stringify(item) === JSON.stringify(object));
+}
 async function createBuff(lang, out, file_name, file_path) {
     return new Promise((resolve, reject) => {
 
@@ -35,14 +42,16 @@ class ProtoFile {
         console.log("___________________  ")
         console.log(this.id)
         console.log("creating " + this.absolute_path)
-
+        
         const existingProtoFile = Array.from(protobuffctl.componentRegistry.protoFiles.values()).find(
             protoFile => protoFile.absolute_path === this.absolute_path
         );
         this.file_name = this.id + ".proto"
         this.file_path = file_path
         this.absolute_path = path.join(file_path, file_name)
-
+        if(protobuffctl.componentRegistry.relations["protoFiles"].get(this.id)==undefined){
+            protobuffctl.componentRegistry.relations["protoFiles"].set(this.id,{children:[],parents:[]})
+        }
         this.extractTypesFromProtoFile(this.absolute_path).then(() => {
             //console.log(protobuffctl.componentRegistry)
             if (existingProtoFile != undefined) {
@@ -61,38 +70,41 @@ class ProtoFile {
                 parents:[]
             }
             const relations=protobuffctl.componentRegistry.relations
+            protobuffctl.componentRegistry.relations["protoFiles"]==undefined?protobuffctl.componentRegistry.relations["protoFiles"]=new Map():protobuffctl.componentRegistry.relations["protoFiles"]
+            let relP=protobuffctl.componentRegistry.relations["protoFiles"].get(this.id)
+            if(relP==undefined){
+                const temp={
+                    children:[],
+                    parents:[]
+                }
+                relP=temp
+            }
+            const c={type:"protoFiles",id:this.id}
+            Object.entries(this).map(([key,val])=>{
+            if(["types","enums","services"].includes(key)){
+                const childName=val[0]
+            let rel=protobuffctl.componentRegistry.relations[key].get(childName)
+            if(rel==undefined){
+                const temp={
+                    children:[],
+                    parents:[]
+                }
+                rel=temp
+            }
+          
+            objectExistsInArray(rel["parents"],c)==false&&rel["parents"].push(c)
+            protobuffctl.componentRegistry.relations[key].set(childName,rel)
             
-            Object.entries(childRelations).map(([key, children]) => {
-                this[key].map((item)=>{
-                    const clone=JSON.parse(JSON.stringify(temp))
-                    key!="enums"&&getAllChildren(key,item,clone["children"],false)
-                   // console.log(clone)
-                    relations[key].set(item,clone)
-                    
-                })
-            });
-            
-            Object.entries(relations).map(([key,val])=>{
-                const childType=childRelations[key]
-                val.forEach((val2,key2)=>{
-                    val2["children"].map((child)=>{
-                        const childObject=relations[childType].get(child)
-                        childObject["parents"].push(key2)
-                        relations[childType].set(child,childObject)
-                        
-                    })
-                })
+            const c2={type:key,id: childName}
+            objectExistsInArray(relP["children"],c2)==false&&relP["children"].push(c2)
+            console.log(`--------------- >> set relation ${childName} <<`)
+            console.log(rel)
+            console.log("---------------")
+        }
             })
-
-            //console.log((relations["types"]))
-            //const allChilds=[]
-            //relations["enums"].forEach((val,key)=>{
-            //    getParentsRec("enums",key,allChilds)
-            //})
-            //console.log(allChilds)
+            protobuffctl.componentRegistry.relations["protoFiles"].set(this.id,relP)
 
             let clone =JSON.parse(JSON.stringify(this))// Object.assign(Object.create(Object.getPrototypeOf(this)), this)            
-            console.log(clone)
             protobuffctl.save()
             getProtoContent(clone, true)
           //  protobuffctl.convertToJsonCompatible(__dirname + ("/out.json"))
@@ -151,12 +163,21 @@ class ProtoFile {
             }).catch(reject);
         });
     }
+    addProtoRelation(type,id,protoRel){
+        const rel=protobuffctl.componentRegistry.relations[type].get(id)
+        rel["parents"].push({type:"protoFiles",id:this.id})
+        protobuffctl.componentRegistry.relations["types"].set(id,rel)
+        const o1={"type":type,"id":id}
+        objectExistsInArray(protoRel["children"],o1)==false&&protoRel["children"].push({"type":type,"id":id})
+}
     traverseProtoElements(current, fn, v = false) {
         return new Promise((resolve, reject) => {
             const jsonObj = current.toJSON();
             var name = current.name;
             const componentID = name//this.id+"_"+name
             console.log(name);
+            const protoRel=protobuffctl.componentRegistry.relations["protoFiles"].get(this.id)
+            let rel
             switch (true) {
                 case current instanceof protobuf.Type:
                     v && console.log("________TYPE________");
@@ -167,13 +188,14 @@ class ProtoFile {
                         console.log(val)
                         if((prototypes.includes(val["type"]))){
                         set("fields", id, { [key]: val })
+                        
                     }else{
                         if(protobuffctl.componentRegistry.hashlookupTable.get(key)!="enum"){
-                            const enumName=key
+                            const fieldName=key
                             const fieldObject={[id]:{type:val["type"],id:val["id"]}}
-                            set("fields", enumName, fieldObject)
+                            set("fields", fieldName, fieldObject)
                             console.log(fieldObject)
-                            id=enumName
+                            id=fieldName
                         }
 
                         else{
@@ -184,6 +206,7 @@ class ProtoFile {
                         fields.push(id);
                     });
                     set("types", componentID, fields)
+                    this.addProtoRelation("types",componentID,protoRel)
                     this.fields = this.fields.concat(fields)
                     this.types.push(componentID);
                     fn(current, 'Type');
@@ -202,6 +225,7 @@ class ProtoFile {
                         methods.push(id);
                     });
                     set("services", componentID, methods)
+                    this.addProtoRelation("services",componentID,protoRel)
                     this.methods = this.methods.concat(methods)
                     this.services.push(componentID);
                     fn(current, 'Service');
@@ -210,6 +234,7 @@ class ProtoFile {
                     v && console.log("________Enum________");
                     console.log(jsonObj)
                     set("enums", componentID, {[componentID]:jsonObj["values"]})
+                    this.addProtoRelation("enums",componentID,protoRel)
                     this.enums.push(componentID);
                     fn(current, 'Enum');
                     break;
@@ -220,6 +245,8 @@ class ProtoFile {
                 default:
                     console.log('Unbekannter Typ:', current);
             }
+            protobuffctl.componentRegistry.relations["protoFiles"].set(this.id,protoRel)
+
             // Rekursive Iteration über die nestedArray, falls vorhanden
             if (current.nestedArray) {
                 Promise.all(current.nestedArray.map(nested => {

@@ -115,11 +115,13 @@ class WatcherManager {
 class ComponentRegistry {
     constructor() {
         this. relations = {
+            protoFiles:new Map(),
             services:new Map(),
             methods:new Map(),
             types:new Map(),
             fields:new Map(),
-            enums:new Map()
+            enums:new Map(),
+
         };
         this.endPoints = new Map()
         // ProtoRegistry 
