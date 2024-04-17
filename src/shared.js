@@ -5,7 +5,7 @@ const path = require('path');
 const { addS, childless, deepClone, relations } = require("../util/utils.js")
 const fs = require('fs');
 const { Protobuffctl } = require("./protobuffctl");
-const { getElementsRecoursive, getProtoContent, set, findAllU, getAllChildren, getChildrenRec, getParentsRec } = require('./protoUtils.js');
+const { getElementsRecoursive, getProtoContent, set, findAllU,getChildrenRec, getParentsRec, addMissingtype } = require('./protoUtils.js');
 const protobuffctl = new Protobuffctl()
 /**
  * Retrieves a specific component from the registry.
@@ -430,33 +430,55 @@ function checkIfStillNeeded(sourceType, source, target, usages, remove_from_comp
     const relation = rel[sourceType]
     usages.map((y) => {
         if (y["id"] != target) {
-            let targetObject = protobuffctl.componentRegistry[y["type"]].get(y["id"])
+            let targetObject
+           
             if (y["type"] == "methods" || y["type"] == "services") {
+                targetObject = Object.values(protobuffctl.componentRegistry[y["type"]].get(y["id"]))[0]
+
                 if (remove_from_components == true) {
                     if (y["type"] == "methods" && sourceType == "types") {
                         console.log("----------------\n>>:" + sourceType + " " + source + " still needed! Gonna edit " + relation + " " + y["id"] + " <<") 
                         console.log(" setting values to NONETYPE"+"\n------------------")
-                        if (targetObject["requestType"] == source) {
+                        const requestType=targetObject["requestType"]
+                        const responseType=targetObject["responseType"]
+                        if (requestType == source||responseType==source) {
+                            const rel =protobuffctl.componentRegistry.relations["methods"].get(y["id"])
+                        if (requestType == source) {
                             targetObject["requestType"] = "NONETYPE"
-                        } else if (targetObject["responseType"] == source) {
+                            rel["children"]=rel["children"].filter((c)=>c["id"]!=targetObject["requestType"])
+
+                      
+                        }  if (responseType == source) {
                             targetObject["responseType"] = "NONETYPE"
+                            rel["children"]=rel["children"].filter((c)=>c["id"]!=targetObject["responseType"])
+
+                        }
+                       
+                        protobuffctl.componentRegistry[y["type"]].set(y["id"], {[y["id"]]:targetObject})
+
+                        addMissingtype("NONETYPE",y["id"])
+
+                    }
+                        else{
+                            console.log(source + " not in Method "+responseType + "," +requestType)
                         }
                         return
                     }
                     else {
                         console.log("remove_from_components: method " + source + " from  service " + y["id"])
                         targetObject = targetObject.filter((z) => z !== source)
+                        protobuffctl.componentRegistry[y["type"]].set(y["id"], {[y["id"]]:targetObject})
+
                     }
-                   protobuffctl.componentRegistry[y["type"]].set(y["id"], targetObject)
                 } else {
                     stillNeeded = true
-                    console.log("----------------\n>> cant remove " + sourceType + " " + source + " because its still required by " + relation + " " + y["id"] + " <<\npls set remove_from_components to true if you want to autoremove\n----------------")   
+                    console.log("----------------\n>> " + sourceType + " " + source + " still required by " + relation + " " + y["id"] + " <<\n----------------")   
                     return true
                 }
             }
         else if (y["type"] == "types") {
             if (remove_from_components == false) {
-            console.log("----------------\n>> cant remove " + sourceType + " " + source + " because its still required by " + relation + " " + y["id"] + " <<\npls set remove_from_components to true if you want to autoremove\n----------------")
+            console.log("----------------\n>> " + sourceType + " " + source + " still required by " + relation + " " + y["id"] + " <<\n----------------")
             stillNeeded = true
             return true
             }
@@ -482,9 +504,9 @@ function checkIfStillNeeded(sourceType, source, target, usages, remove_from_comp
  * @param {boolean} [remove_from_components=true] - A boolean indicating whether to remove the component from other components.
  */
 
-function del(type, id, recoursive, remove_from_components=true,deleteChildren = false) {
+function del(type, id, recoursive, remove_from_components=true,deleteChildren = true) {
     
-    recoursive = recoursive== "false"?false:recoursive==undefined?true:recoursive
+    recoursive = recoursive== "false"?false:recoursive==undefined?false:recoursive
     remove_from_components = remove_from_components== "false"?false:remove_from_components==undefined?true:remove_from_components
     console.log("childless " + type + "  " + JSON.stringify(childless.includes(type)))
     type = addS(type)
@@ -492,10 +514,10 @@ function del(type, id, recoursive, remove_from_components=true,deleteChildren = 
         const avoid=["fields"]
         avoid.includes(type) == false && getChildrenRec(type, id, children)
         let deleteStatus = children.reduce((acc, child) => {
-            acc[child.id] = false;
+            acc[child.id] = [];
             return acc;
         }, {})
-        deleteStatus[id] = false
+        
         const protoUsages=[]
         const enumUsages=[]
         if (type == "protoFiles") {
@@ -507,45 +529,34 @@ function del(type, id, recoursive, remove_from_components=true,deleteChildren = 
             })
         }
         else {
+           
             const usages = protobuffctl.componentRegistry.relations[type].get(id)["parents"]// findAllUsages(type, id)
-            
             if (usages.length > 0) {
                 usages.reverse().forEach((usage, index) => {
                     if (usage["type"] == "enums") {
                     enumUsages.push(usage)
                     }
-                    else if (usage["type"] != "protoFiles") {
+                    else if (usage["type"]) {
                         remove(id, usage["id"], recoursive, remove_from_components, deleteStatus);
                         usages.splice(usages.length - index, 1);
-                    }else{
-                        protoUsages.push(usage)
                     }
                 });
             } 
-             if (children.length > 0) {
-                deleteStatus[id] = true
-                children.map((child) => {
-                    remove(child["id"], id, recoursive,remove_from_components, deleteStatus)
-                }
-                )
-            } else {
-                deleteStatus[id] = true
-            }
+           //  if (children.length > 0) {
+           //     
+           //     children.map((child) => {
+           //         remove(child["id"], id, false,false, deleteStatus)
+           //     }
+           //     )
+           // } 
         }
         //if(deleteStatus[source]==true){
         Object.entries(deleteStatus).map(([e, s]) => {
+            const c=s.filter((e)=>e==false)
+            s = c.length>0?true:false
             const t = protobuffctl.componentRegistry.hashlookupTable.get(e)
-            if (t && s && !(!deleteChildren && source != e)) {
-                if(protoUsages.length>0){
-                    protoUsages.map((element)=>{
-                    const proto=protobuffctl.componentRegistry["protoFiles"].get(element["id"])
-                    proto[t]=proto[t].filter((x)=>x!=e)
-                    protobuffctl.componentRegistry["protoFiles"].set(element["id"],proto)
-                    enumUsages.map((enm)=>{
-                        console.log(enm)
-                    })
-                })
-                }
+            if (t && s )//&& !(!deleteChildren && id != e)) 
+            { //source != e)) {
                 protobuffctl.componentRegistry[t].delete(e)
                 protobuffctl.componentRegistry.hashlookupTable.delete(e)
                 protobuffctl.componentRegistry.relations[t].delete(e)
@@ -558,20 +569,25 @@ function del(type, id, recoursive, remove_from_components=true,deleteChildren = 
         return
     
 }
-function removeRelation(child,childType,parent,parentType){
+
+function removeChildRelation(child,childType,parent,parentType){
     try{
   const childRel= protobuffctl.componentRegistry.relations[childType].get(child)
-  childRel["parents"].filter((e)=> e!={type:parentType,id:parent})
+  const temp={type:parentType,id:parent}  
+  childRel["parents"]=childRel["parents"].filter((e) =>  e.id != temp.id);
   protobuffctl.componentRegistry.relations[childType].set(child,childRel)
     }catch(err){
-        return console.error("cant set childrel " + err)
+        return console.error("cant set childrelationship ")
     }
+}
+function removeParentRelation(child,childType,parent,parentType){
 try{
   const parentRel= protobuffctl.componentRegistry.relations[parentType].get(parent)
-  parentRel["children"].filter((e)=> e!={type:childType,id:child})
-  protobuffctl.componentRegistry.relations[parentType].set(child,childRel)
+  const temp={type:childType,id:child}  
+  parentRel["children"] = parentRel["children"].filter((e) =>  e.id != temp.id);
+  protobuffctl.componentRegistry.relations[parentType].set(parent,parentRel)
 }catch(err){
-    return console.error("cant set parentrel " + err)
+    return console.error("cant set parentrelationship ")
 }
 }
 /**
@@ -588,76 +604,37 @@ try{
 function remove(source, target, recoursive,remove_from_components, deleteStatus, pull = false) {
     recoursive = recoursive== "false"?false:recoursive==undefined?false:recoursive
     remove_from_components = remove_from_components== "false"?false:remove_from_components==undefined?true:remove_from_components
-    deleteStatus=deleteStatus==undefined?deleteStatus={}:deleteStatus
+    //deleteStatus=deleteStatus==undefined?deleteStatus={}:deleteStatus
     const sourceType = protobuffctl.componentRegistry.hashlookupTable.get(source)
     const targetType = protobuffctl.componentRegistry.hashlookupTable.get(target)
     const targetObject = protobuffctl.componentRegistry[targetType].get(target)
-    let sourceObject = protobuffctl.componentRegistry[sourceType].get(source)
     const children = []
-    
-    childless.includes(sourceType) == false && getAllChildren(sourceType, source, children)
+   
    // const usages = findAllU(sourceType, source)
-    const usages = protobuffctl.componentRegistry.relations[sourceType].get(source)["parents"]// findAllUsages(type, id)
+    const parents = protobuffctl.componentRegistry.relations[sourceType].get(source)["parents"]// findAllUsages(type, id)
     const parentsRec=[]
     getParentsRec(sourceType,source,parentsRec)
-    const  stillNeeded=checkIfStillNeeded(sourceType, source, target, usages, remove_from_components)
-
-    if (targetType == "protoFiles") {
-        if( stillNeeded  == false) {
-            if (recoursive) {
-                usages.map((usage) => {
-                    usage["type"] != "protoFiles" && remove(source, usage["id"], recoursive,remove_from_components, deleteStatus)
-                })
-                children.map((child, index) => {
-                    remove(child["id"], source, recoursive,remove_from_components, deleteStatus)
-                })
-            }
+    const  stillNeeded=checkIfStillNeeded(sourceType, source, target, parents, remove_from_components)
+    deleteStatus[source]=deleteStatus[source]==undefined?[]:deleteStatus[source]
+    deleteStatus[source].push(stillNeeded)    
+    if ((stillNeeded == false || (stillNeeded&&remove_from_components))) {
             
-            deleteStatus[source] = true
-            const  newObject = targetObject
-            newObject[sourceType] = newObject[sourceType].filter((el) => el !== source)
-            
-
-            protobuffctl.componentRegistry["protoFiles"].set(target, newObject)
-        }
-    } else {
-        if ((stillNeeded == false)) {
-            deleteStatus[source] = true
-            const protos = usages.filter((x) => x["type"] == "protoFiles")
-            const enums = usages.filter((x) => x["type"] == "enums")
-             if(recoursive){
+             getChildrenRec(sourceType, source, children)
                 children.map((child, index) => {
+                    removeChildRelation(child["id"],child["type"],source,sourceType)
+                    if(recoursive){
                     if (child["type"] == "types" || child["type"] == "fields"||child["type"] == "enums") {
-                        sourceObject = sourceObject.filter((e) =>  e != child["id"] )
-                        removeRelation(child["type"],child["id"],sourceType,source)
-                        protobuffctl.componentRegistry[sourceType].set(source, sourceObject)
                         remove(child["id"], source, recoursive,remove_from_components, deleteStatus)
                     }
                     else if(child["type"]=="enums"){
 
                     }
-                })
                 }
-                if (protos.length > 0) {
-                    protos.map((proto, index) => {
-                    const protoObject=protobuffctl.componentRegistry["protoFiles"].get(proto["id"])
-                    const arr = protoObject[sourceType].filter((el) => el !== source)
-                    removeRelation(sourceType,source,"protoFile",proto["id"])
-
-                     protoObject[sourceType]=arr
-                    protobuffctl.componentRegistry["protoFiles"].set(proto["id"], protoObject)
-
-                    
-                    //remove(source, proto["id"], false, false,deleteStatus)
                 })
-            } 
-            if (targetType != "methods") {
-                console.log("removing " + source + " from " + target)
-                protobuffctl.componentRegistry[targetType].set(target, targetObject.filter((el) => el !== source))
-            }
-                   
-          
-        }
+                parents.map((parent)=>{
+                    removeParentRelation(source,sourceType,parent["id"],parent["type"],)
+
+                })
     }
     protobuffctl.save()
 }

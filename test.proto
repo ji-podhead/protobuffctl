@@ -9,12 +9,12 @@ package test;
 
 service testS {
  rpc testReqM (testReq) returns (testRep) {}
- rpc testRep2M (testReq) returns (stream testReq2) {}
+ rpc testRep2M (testReq) returns (stream testReq) {}
 }
 
 service testS3 {
  rpc testReqM (testReq) returns (testRep) {}
- rpc testRep2M (testReq) returns (stream testReq2) {}
+ rpc testRep2M (testReq) returns (stream testReq) {}
 }
 
 
@@ -23,21 +23,19 @@ A = 1;
 B = 2;
 }
 
-message testRep {
- string val1 = 0;
- string val2 = 1;
- string val3 = 2;
+message NONETYPE {
 }
 
-message testReq2 {
- string val1 = 0;
- enumTest e1 = 1;
- string val5 = 2;
+message testRep {
+ string val2 = 0;
+ string val5 = 1;
+ enumTest e1 = 2;
+ string val1 = 3;
 }
 
 message testReq {
- string val1 = 0;
- enumTest e1 = 1;
- string val5 = 2;
+ string val2 = 0;
+ string val5 = 1;
+ enumTest e1 = 2;
 }
 

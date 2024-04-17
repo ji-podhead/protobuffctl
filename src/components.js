@@ -10,7 +10,7 @@ const { classDescriptions } = require("../descriptions/classdescriptions")
 const { Protobuffctl, } = require("./protobuffctl")
 const { getUniqueName, isSubdirectory, prototypes, childless, languageFileExtensions, mergeFields, initObject, usagesRelations, childRelations } = require("../util/utils")
 const protobuf = require('protobufjs');
-const { set, writeAndReplaceProto, generateProtoFromServices, getElementsRecoursive, getProtoContent, removeOld, getAllChildren, getChildrenRec, getParentsRec } = require('./protoUtils');
+const { set, writeAndReplaceProto, generateProtoFromServices, getElementsRecoursive, getProtoContent, removeOld, getAllChildren, getChildrenRec, getParentsRec, addRelation } = require('./protoUtils');
 const { stringify } = require('querystring');
 const { type } = require('os');
 const protobuffctl = new Protobuffctl()
@@ -34,9 +34,10 @@ async function createBuff(lang, out, file_name, file_path) {
  * @description ${classDescriptions.ProtoFile.description}
  */
 class ProtoFile {
-    constructor(file_name, file_path, services, methods, types, enums, fields, protobuffFiles, protobuffComponents, protoUserComponent, options, syntax, proto_package, id,keep_old=false) {
-        this.services = services; this.methods = methods; this.types = types; this.enums = enums; this.fields = fields; this.protobuffFiles = protobuffFiles; this.protobuffComponents = protobuffComponents; this.protoUserComponent = protoUserComponent; this.id = id;
-        initObject(this, ["services", "methods", "types", "enums", "fields", "protobuffFiles", "protobuffComponents", "protoUserComponent", "options"])
+    constructor(file_name, file_path, protobuffFiles, protobuffComponents, protoUserComponent, options, syntax, proto_package, id,keep_old=false) {
+        
+        this.protobuffFiles = protobuffFiles; this.protobuffComponents = protobuffComponents; this.protoUserComponent = protoUserComponent; this.id = id;
+        initObject(this, [     "protobuffFiles", "protobuffComponents", "protoUserComponent", "options"])
         this.id = path.basename(file_name, ".proto")//getUniqueName(protobuffctl.componentRegistry.hashlookupTable, path.basename(file_name,".proto"));
         this.absolute_path = path.join(file_path, this.id + ".proto")
         console.log("___________________  ")
@@ -54,7 +55,19 @@ class ProtoFile {
         }
         this.extractTypesFromProtoFile(this.absolute_path).then(() => {
             //console.log(protobuffctl.componentRegistry)
+            protobuffctl.componentRegistry.methods.forEach((method)=>{
+                method=Object.values(method)[0]
+                const resp=protobuffctl.componentRegistry.hashlookupTable.get(method["responseType"])
+                const req=protobuffctl.componentRegistry.hashlookupTable.get(method["requestType"])
+                const reqHash=protobuffctl.componentRegistry.hashlookupTable.get(req)
+                const respHash=protobuffctl.componentRegistry.hashlookupTable.get(resp)
+                if(respHash==undefined){
+
+                }
+            })
+
             if (existingProtoFile != undefined) {
+
                 removeOld(this, existingProtoFile)//  ["services", "methods", "types", "fields", "enums", "protobuffFiles", "protobuffComponents", "protoUserComponent"])
                 this.id = existingProtoFile.id
             }
@@ -115,21 +128,50 @@ class ProtoFile {
     }
     async getroot(protoFilePath, v = false) {
         console.log(protoFilePath)
-        // Überprüfen, ob die Datei existiert
         if (!fs.existsSync(protoFilePath)) {
             throw new Error(`Datei existiert nicht: ${protoFilePath}`);
         }
         let fileContent = fs.readFileSync(protoFilePath, 'utf8');
         fileContent = fileContent.replace(/syntax\s*=\s*(?!="proto3";|="proto2";).*;/, 'syntax="proto3";');
         fileContent = fileContent.replace(/package\s*;/, `package ${this.id};`);
+        const serviceRegex = /service[\s\S]*?\n\s*}/g
+        const services = fileContent.match(serviceRegex);
+        fileContent = fileContent.replace(serviceRegex, '');
+        if (services) {
+            fileContent += '\n\n' + services.join('\n\n');
+        }
         console.log(fileContent)
         this.syntax = "syntax" + (fileContent.split('syntax')[1].split("\n")[0])
         this.proto_package = (fileContent.match(/^package\s+\w+\s*(?!=\s*".*";)(?!options\s*=.*);/m)[0])
-        //let packageLine = packageLineMatch ? packageLineMatch[0] : "package \"./\";"; 
-
+        // >> adding missing types before loading with protobuffjs to avoid errors!! <<
+        const rpcRegex = /rpc\s+\w+\s*\([^\)]+\)\s*returns\s*\([^\)]+\)\s*\{*\}/g;
+        const typeRegex = /\(([^)]+)\)\s*returns\s*\(([^)]+)\)/;
+        const rpcMatches = fileContent.match(rpcRegex);
+        const typeDefinitions = fileContent.split('\n').filter(line => line.includes('message') || line.includes('enum'));
+        if (rpcMatches) {
+            rpcMatches.forEach(rpc => {
+                const typeMatch = rpc.match(typeRegex);
+                if (typeMatch) {
+                    const e=typeMatch[1].trim()
+                    const e2=typeMatch[2].trim()
+                    const requestType = e.includes("stream")?e.split("stream ")[0]:e 
+                    const responseType = e2.includes("stream")?e2.split("stream ")[0]:e2
+                    const requestTypeExists = typeDefinitions.some(line => line.includes(requestType));
+                    const responseTypeExists = typeDefinitions.some(line => line.includes(responseType));
+                    if (!requestTypeExists) {
+                        fileContent+= `\nmessage ${requestType} { \n}`
+                        console.log(`ading missing Type: The requestType '${requestType}' is not defined.`);
+                    }
+                    if (!responseTypeExists) {
+                        fileContent+= `\nmessage ${responseType} { \n}`
+                        console.log(`add missing type: The responseType '${responseType}' is not defined.`);
+                    }
+                }
+            });
+        }
+        console.log(fileContent)
         fs.writeFileSync(protoFilePath, fileContent, 'utf8');
         console.log(this.syntax + " " +  this.proto_package);
-
         let root;
         try {
             
@@ -143,7 +185,7 @@ class ProtoFile {
         Object.entries(options).forEach(([key, value]) => {
             const valstr = typeof (value) == "string" ? `"${value}"` : String(value)
             const opstr = (`option ${key} = ${valstr};`);
-            v && console.log(opstr)
+            v ==true&& console.log(opstr)
             opArray.push(opstr)
         });
         protobuffctl.componentRegistry.options.set(this.id + "_op", opArray)
@@ -157,35 +199,29 @@ class ProtoFile {
             getroot(protoFilePath).then((root) => {
                 this.traverseProtoElements(root, function (obj, type) {
                 }, this).then(() => {
-                   
+                    
                     resolve();
                 }).catch(reject);
             }).catch(reject);
         });
     }
-    addProtoRelation(type,id,protoRel){
-        const rel=protobuffctl.componentRegistry.relations[type].get(id)
-        rel["parents"].push({type:"protoFiles",id:this.id})
-        protobuffctl.componentRegistry.relations["types"].set(id,rel)
-        const o1={"type":type,"id":id}
-        objectExistsInArray(protoRel["children"],o1)==false&&protoRel["children"].push({"type":type,"id":id})
-}
+
     traverseProtoElements(current, fn, v = false) {
         return new Promise((resolve, reject) => {
             const jsonObj = current.toJSON();
             var name = current.name;
             const componentID = name//this.id+"_"+name
-            console.log(name);
+            v==true&&console.log(name);
             const protoRel=protobuffctl.componentRegistry.relations["protoFiles"].get(this.id)
             let rel
             switch (true) {
                 case current instanceof protobuf.Type:
-                    v && console.log("________TYPE________");
+                    v ==true&& console.log("________TYPE________");
                     const fields = [];
+                    addRelation("protoFiles",this.id,"types",componentID,"children")
+                    addRelation("types",componentID,"protoFiles",this.id,"parents")
                     Object.entries(jsonObj["fields"]).map(([key, val]) => {
                         let id = key// this.id+"_"+key;
-                        console.log(id)
-                        console.log(val)
                         if((prototypes.includes(val["type"]))){
                         set("fields", id, { [key]: val })
                         
@@ -194,7 +230,6 @@ class ProtoFile {
                             const fieldName=key
                             const fieldObject={[id]:{type:val["type"],id:val["id"]}}
                             set("fields", fieldName, fieldObject)
-                            console.log(fieldObject)
                             id=fieldName
                         }
 
@@ -206,40 +241,36 @@ class ProtoFile {
                         fields.push(id);
                     });
                     set("types", componentID, fields)
-                    this.addProtoRelation("types",componentID,protoRel)
-                    this.fields = this.fields.concat(fields)
-                    this.types.push(componentID);
+                    //this.fields = this.fields.concat(fields)
+                    //this.types.push(componentID);
                     fn(current, 'Type');
                     break;
                 case current instanceof protobuf.Service:
-                    v && console.log("________SERVICE________");
+                    v ==true&& console.log("________SERVICE________");
                     const methods = [];
+                    addRelation("protoFiles",this.id,"services",componentID,"children")
+                    addRelation("services",componentID,"protoFiles",this.id,"parents")    
                     Object.entries(jsonObj["methods"]).map(([key, val]) => {
                         const id = key//this.id+"_"+key;
-                        console.log(val)
                         val["requestType"] = val["requestType"]// this.id + "_" + val["requestType"]
                         val["responseType"] = val["responseType"]// this.id + "_" + 
-                        console.log(val)
                         set("methods", id, { [key]: val })
-                        console.log(val)
                         methods.push(id);
                     });
                     set("services", componentID, methods)
-                    this.addProtoRelation("services",componentID,protoRel)
-                    this.methods = this.methods.concat(methods)
-                    this.services.push(componentID);
+                //this.methods = this.methods.concat(methods)
                     fn(current, 'Service');
                     break;
                 case current instanceof protobuf.Enum:
-                    v && console.log("________Enum________");
-                    console.log(jsonObj)
+                    v ==true&& console.log("________Enum________");
+                    addRelation("protoFiles",this.id,"enums",componentID,"children")
+                    addRelation("enums",componentID,"protoFiles",this.id,"parents")       
                     set("enums", componentID, {[componentID]:jsonObj["values"]})
-                    this.addProtoRelation("enums",componentID,protoRel)
-                    this.enums.push(componentID);
+                                 //this.enums.push(componentID);
                     fn(current, 'Enum');
                     break;
                 case current instanceof protobuf.Namespace:
-                    v && console.log("________Namespace________");
+                    v ==true&& console.log("________Namespace________");
                     fn(current, 'Namespace');
                     break;
                 default:

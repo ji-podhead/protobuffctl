@@ -369,53 +369,53 @@ function getAllChildren(type, source, children, recoursive = true) {
 *-------------------------------getElementsRecoursive---------------------------
 */
 function getElementsRecoursive(element, name, depth, v = true) {
-    v && console.log("------------------------------START getElementsRecoursive---------------")
+    v ==true&& console.log("------------------------------START getElementsRecoursive---------------")
     const parentType = protobuffctl.componentRegistry.hashlookupTable.get(name)
     if (Array.isArray(element)) {
-        v && console.log("------------START RECOURSIVE ARRAY MAP---------------")
-        v && console.log("name " + name + " type " + parentType)
+        v ==true&& console.log("------------START RECOURSIVE ARRAY MAP---------------")
+        v ==true&& console.log("name " + name + " type " + parentType)
         element.map((item, index) => {
             if (typeof item === "object" && item !== null) {
-                v && console.log(item.key)
-                v && console.log(item.value)
+                v ==true&& console.log(item.key)
+                v ==true&& console.log(item.value)
                 const type = protobuffctl.componentRegistry.hashlookupTable.get(item.key)
-                v && console.log(type)
+                v ==true&& console.log(type)
                 if (childless.includes(type)) {
-                    v && console.log(item)
+                    v ==true&& console.log(item)
                     item = Object.values(item)[0];
                     const child = protobuffctl.componentRegistry[type].get(item.key)
-                    v && console.log(child)
+                    v ==true&& console.log(child)
                     item = getElementsRecoursive(child, type, depth - 1)
                     element[index] = item
-                    v && console.log(item)
-                    v && console.log(element)
+                    v ==true&& console.log(item)
+                    v ==true&& console.log(element)
                     return item
                 }
             } else {
-                v && console.log("-------- hash in array ---------")
+                v ==true&& console.log("-------- hash in array ---------")
                 const type = protobuffctl.componentRegistry.hashlookupTable.get(item)
-                v && console.log(`type ${type} item ${item}`)
+                v ==true&& console.log(`type ${type} item ${item}`)
                 const child = protobuffctl.componentRegistry[type].get(item)
-                v && console.log(`item  ${child} `)
+                v ==true&& console.log(`item  ${child} `)
                 if (childless.includes(type)) {
                     item = child
-                    v && console.log(Object.values(item)[0])
+                    v ==true&& console.log(Object.values(item)[0])
                     element[index] = item
-                    v && console.log(item)
-                    v && console.log(element)
+                    v ==true&& console.log(item)
+                    v ==true&& console.log(element)
                     return item
                 }
                 else {
                     item = getElementsRecoursive(child, item, depth - 1)
                     element[index] = item
-                    v && console.log(item)
-                    v && console.log(element)
+                    v ==true&& console.log(item)
+                    v ==true&& console.log(element)
                     return item
                 }
             }
         })
-        v && console.log("______________ recoursive array map finished________________")
-        v && console.log(element)
+        v ==true&& console.log("______________ recoursive array map finished________________")
+        v ==true&& console.log(element)
         if (["endPoints", "protoFiles", "protobuffFiles", "protoUsers"]
             .includes(parentType)) {
             return { element }
@@ -424,15 +424,15 @@ function getElementsRecoursive(element, name, depth, v = true) {
         }
     }
     else if (typeof element === "object" && element !== null) {
-        v && console.log("----------- OBJECT -----------")
-        v && console.log(element)
-        v && console.log(name)
+        v ==true&& console.log("----------- OBJECT -----------")
+        v ==true&& console.log(element)
+        v ==true&& console.log(name)
         Object.entries(element).forEach(([key, value]) => {
-            v && console.log(key)
-            v && console.log(value)
+            v ==true&& console.log(key)
+            v ==true&& console.log(value)
             if (key == "options") {
                 const opt = protobuffctl.componentRegistry.options.get(value)
-                v && console.log(opt)
+                v ==true&& console.log(opt)
                 element[key] = opt
                 return opt
             } else if (typeof (value) == "string") {
@@ -450,21 +450,21 @@ function getElementsRecoursive(element, name, depth, v = true) {
             }
             else {
                 const type = protobuffctl.componentRegistry.hashlookupTable.get(item.key)
-                v && console.log(type)
+                v ==true&& console.log(type)
                 if (childless.includes(type)) {
-                    v && console.log(item)
+                    v ==true&& console.log(item)
                     item = Object.values(item)[0];
                     //const child=protobuffctl.componentRegistry[type].get(key)
                     element[key] = child
-                    v && console.log(child)
+                    v ==true&& console.log(child)
                     return item
                 }
                 else {
                     //item = Object.values(item)[0];
                     item = getElementsRecoursive({ [key]: value }, "tesat", -1)
                     element[key] = item
-                    v && console.log(element)
-                    v && console.log(child)
+                    v ==true&& console.log(element)
+                    v ==true&& console.log(child)
                     return item
                 }
             }
