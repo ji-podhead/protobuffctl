@@ -25,7 +25,8 @@ npm i protobuffctl
 **CLI Guide:** [see docs/cli-guide](https://github.com/ji-podhead/protobuffctl/blob/main/docs/CLI-guide.md) 
  
 ---
-# Flow Chart                              
+# Flow Chart 
+```
 Architecture:                                                                
                                 ┌──────────────────────┐                    
                   ┌───────────┐ │                      │                    
