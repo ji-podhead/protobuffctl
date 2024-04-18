@@ -91,7 +91,7 @@ npm i protobuffctl
 ###                      Update
 - serialize **Protobuff Registry** for local storage 
 - Exports to JSON 
-- **automated Proto-gen**:  Related protobuf files will automatically get compiled to their target folders using the [protoc-helper repo](https://github.com/ji-podhead/protoc-helper).
+- **automated Proto-gen**: using my [protoc-helper repo](https://github.com/ji-podhead/protoc-helper).
 - changed codeBase and **removed redundant recoursion**  using hashlookuptables and relations
 - creadted a  **CLI** using comannder
 - Fast Saving and Loading using **Service Worker as  Middleware** that keeps the process alive.
