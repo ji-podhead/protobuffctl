@@ -6,14 +6,14 @@
 
 - `Protobuffctl` offers an  [API](https://ji-podhead.github.io/protobuffctl/) that enables you to automate all protobuf functions.
 - Quickly create new `message types`, `fields`, `services`,  `methods` and `enums` by using **cli commands**.
-- Stores all Components in the **local Componentregistry**. <br> or push/pull from **external DB**.
+- Stores all Components in the **local Componentregistry**. <br>
+- Sync with **other registries** like gitey, or PostgreSQL.
 - **Roll back** to old protofile, or to an registry state using historical `.config` file, or using a external DB just like with **version control**.<br>
-- **Preview** the Protofile-Code before actually building it.
+- **Preview** the Protofile-Code before actually building it and export any Component to **JSON**.
 - Automatically generates the corresponding `protobuf files` when making changes to the protofiles.<br>
 - Comes with **Dashboard** for demo, debugging and **testing**.
 - The middleware will provide acid and **prevents race conditions**.
 - The implemented **Api-Server** lets you create your own **User Interface** to manage `Protocollbuffers` 
-- **Export any Component to JSON**, or sync with **other registries** like gitey, or PostgreSQL
 ---
 #                      Getting Started
 **Install:**
