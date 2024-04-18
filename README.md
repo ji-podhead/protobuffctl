@@ -89,19 +89,19 @@ npm i protobuffctl
 
 ---
 ###                      Update
-- serialize **Protobuff Registry** for local storage 
-- Exports to JSON 
-- **automated Proto-gen**: using my [protoc-helper repo](https://github.com/ji-podhead/protoc-helper).
-- changed codeBase and **removed redundant recoursion**  using hashlookuptables and relations
-- creadted a  **CLI** using comannder
-- Fast Saving and Loading using **Service Worker as  Middleware** that keeps the process alive.
-- added the **Api Server**
-- added a bun react **Dashboard**
+- serialize **Protobuff Registry** for local storage ✅
+- Exports to JSON ✅
+- **automated Proto-gen**: using my [protoc-helper repo](https://github.com/ji-podhead/protoc-helper) ✅
+- creadted a  **CLI** using commander ✅
+- changed codeBase and **removed redundant recoursion**  using hashlookuptables and relations ✅
+- Fast Saving and Loading using **Service Worker as  Middleware** that keeps the process alive ✅
+- added the **Api Server** ✅
+- added a bun react **Dashboard** ✅
   
 ##                      Comming up
-- 🚧 Set up **File Watcher** to monitor your proto files for any changes. => Rescan and update the Componentregistry.<br>
-- 🚧 Get complete visual feedback for all related methods, components, and files directly with our **VC CODE EXTENSION**.<br> 
-- sync with **external DB**
-- create demo **Dashboard**
-- add **tests** to Dashboard and a gRPC debug-Server
+- Set up **File Watcher** to monitor your proto files for any changes. => Rescan and update the Componentregistry 🚧 
+- Get complete visual feedback for all related methods, components, and files directly with our **VC CODE EXTENSION** 🚧  
+- sync with **external DB** 🚧 
+- create demo **Dashboard** 🚧 
+- add **tests** to Dashboard and a gRPC debug-Server 🚧 
 
