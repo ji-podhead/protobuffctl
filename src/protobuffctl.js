@@ -226,7 +226,6 @@ class Protobuffctl {
 
     init() {
         Protobuffctl.instance = this;
-        this.MainEndpoint = "";
         this.generator = new ProtobuffGenerator()
         this.componentRegistry = new ComponentRegistry()
         this.watchpaths = []
