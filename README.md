@@ -1,21 +1,30 @@
-
- ##  _Protobufctl_
 <table>
  <tr>
     <td>
       <table>
         <tr>
           <td>
+      <div align="center">
+       <p align="center">
+        _        Protobufctl            _
+       </p>
+      </div>
+    </td>
+          <td> 
+           <div align="center">
             <p align="right">
               <img src="https://github.com/ji-podhead/protobuffctl/blob/main/docs/protobuffctl.png?raw=true" width="100" />
             </p>
+           </div>
           </td>
         </tr>
       </table>
     </td>
-    <td>
-      <table>
-        <tr>
+ </tr>
+ <tr>
+  <td colspan="2">
+   <table>
+        <tr col>
           <td><a href="https://ji-podhead.github.io/protobuffctl/">About</a></td>
           <td><a href="https://ji-podhead.github.io/protobuffctl/API">API</a></td>
           <td><a href="https://ji-podhead.github.io/protobuffctl/guides">CLI Guide</a></td>
@@ -23,7 +32,7 @@
           <td><a href="https://github.com/ji-podhead/protobuffctl">Git-Repo</a></td>
         </tr>
       </table>
-    </td>
+  </td>
  </tr>
 </table>
 
