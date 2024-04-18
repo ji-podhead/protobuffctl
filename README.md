@@ -1,28 +1,31 @@
-# protobuffctl [![npm version](https://img.shields.io/badge/alpha-green)](https://www.npmjs.com/package/protobuffctl)
+# protobuffctl ![Static Badge](https://img.shields.io/badge/%F0%9F%9A%A7%20under%20construction%20%F0%9F%9A%A7)
+
 [![npm version](https://img.shields.io/badge/protoc_v26.0-binary-blue)](https://www.npmjs.com/package/protobuffctl)
 [![npm version](https://badge.fury.io/js/protobuffctl.svg)](https://badge.fury.io/js/protobuffctl)
 ![NPM Downloads](https://img.shields.io/npm/dw/protobuffctl)
 
 
 - `protobuffctl` offers an  [API](https://ji-podhead.github.io/protobuffctl/) that enables you to automate all protobuf functions.
-- It stores all Components in the **Componentregistry**. <br> 
 - Quickly create new message types, fields, services,  methods and enums using the [API](https://ji-podhead.github.io/protobuffctl/) and **cli commands**.<br>
 - Automatically generates the corresponding protobuf files when making changes to the protofiles.<br>
-- **Roll back** to old protofile, or to an registry state using historical `.config` file just like with **version control**.<br>
+- comes with Api-Server and Dashboard for demo- and debugging purposes.
+- Stores all Components in the local **Componentregistry**. <br> or push/pull from external DB.
+- The middleware will provide acid and prevents race conditions.
+- **Roll back** to old protofile, or to an registry state using historical `.config` file, or using a external DB just like with **version control**.<br>
 - **Preview** the Protofile-Code before actually building it.<br>
 - Create your own **User Interface** and manage `Protocollbuffers` using the [API](https://ji-podhead.github.io/protobuffctl/) and input events.<br>
 - Avoids recoursion when creating components *see ER Model below.
 - **Export any Component to JSON**, or sync with **other registries** like gitey, or PostgreSQL
 ---
 # Getting Started
-
-**Docs:**  [API](https://ji-podhead.github.io/protobuffctl/) 
-
- **Install:**
+**Install:**
  
 ```JavaScript
 npm i protobuffctl
 ```
+**Docs:**  [API](https://ji-podhead.github.io/protobuffctl/docs) <br>
+**CLI Guide:** [in docs folder](https://ji-podhead.github.io/protobuffctl/docs/CLI-guide.md) 
+ 
 ---
 ##           >> PROTOBUFFCTL ER MODEL <<       
 ```                                                                                          
@@ -83,169 +86,10 @@ npm i protobuffctl
           │                                     │                                           
           └─────────────────────────────────────┘
 ```
-## CLI Guide
-**install globally**
-```JavaScript
->> npm i -g protobuffctl
-``` 
-**Check out the commands and their args:**
-```
->> protobuffctl 
-```
-=>
-```
-...
-Usage: protobuffctl [options] [command]
-
-Options:
-  -h, --help                                              display help for command
-
-Commands:
-  startAll                                                Start all watchers
-  stopAll                                                 Stop all watchers
-  create <type> <arg1> [arg2] [arg3]]                     Initializes a new Proto-object,enum,type,service or ProtobuffFile in the registry
-  del <type> <id>                                         Deletes a component, you need to Pull afterwards
-
-...
-```
-**create a base proto file**
-```JavaScript
->> protobuffctl create proto test.proto ./
-```
-this will create a `test.proto` in your current directory and output:
-```
-...
------------ created proto content -----------
-syntax="proto3";
-option java_multiple_files = true;
-option java_package = "./";
-option java_outer_classname = "test";
-option objc_class_prefix = "HLW";
-option go_package = "./";
-
-package test;
-``` 
-**add a Type to your Proto:**
-```
->> protobuffctl create type HelloRequest
-```
-Since we did not pass any fields, the output will look like this:
-```
-...
-creating HelloRequest
-successfully set types HelloRequest
- []
-```
-**check if it was successfully created:**
-```
->> protobuffctl getAll types
-```
-without the describe flag at the end, it will output something like this:
-```
-...
-[ 'HelloRequest']
-
-```
-**create a field:**
-```
- >> protobuffctl create field message string 
-```
-=>
-
-```
-...
-successfully set fields message
-{ message: { type: 'string', id: -1 } }
-
-```
-**create another Type and add our Field to HelloRequest:**
-```
->> protobuffctl create type HelloReply message
-```
-=>
-```
-...
-fields
-[ 'message' ]
-creating HelloReply
-successfully set types HelloReply
-```
-...adding it to HelloRequest:
-``` 
->> protobuffctl add field message HelloRequest
-```
-**create a Method:**
-```
->> protobuffctl create method SayHello HelloRequest HelloReply 
-
-```
-=> 
-```
-... 
-{
-  SayHello: { requestType: 'HelloRequest', responseType: 'HelloReply' }
-}
-successfully set methods SayHello
- {"SayHello":{"requestType":"HelloRequest","responseType":"HelloReply"}}
-
-```
-**create  Service using our Method:**
-```
->> protobuffctl create service Greeter SayHello
-```
-=>
-```
-"methods"
-[ 'SayHello' ]
-creating Greeter
-successfully set services Greeter
- ["SayHello"]
-
-```
-**printing all components using GetAll:**
-```
->> protobuffctl getAll
-...
-Map(10) {
-  'test_op' => 'options',
-  'test' => 'protoFiles',
-  'HelloRequest' => 'types',
-  'string' => 'fields',
-  'message' => 'fields',
-  'HelloReply' => 'types',
-  'SayHello' => 'methods',
-  'Greeter' => 'services'
-}
-```
-**Creating a Protobuff File and Object:**
-```
->> protobuffctl create protobuff test ts /your/output_path
-```
-this should output something like this if it compiled successfully:
-```
-successuflly created protobuff file 🤑🤑🤑 
-__________
-finished command: ["ts","/your/output_path","test.proto","./",null]
-```
-if so you find a `test.ts` file in /your/output_path.
-however, since we did not pull changes to the protoFile, we need to update it first.
-and the output of the protoFile will look like this:
-```
-/**
- * Generated by the protoc-gen-ts.  DO NOT EDIT!
- * compiler version: 3.20.3
- * source: test.proto
- * git: https://github.com/thesayyn/protoc-gen-ts */
-export namespace test { }
-```
-**Pull to update the .proto File**
-```
-
-```
 
 
 
----
+
 
 ---
 
