@@ -1,25 +1,12 @@
-<table>
- <tr>
-  <td colspan="2">
-   <table>
-        <tr col>
-         <td> 
-           <div align="center">
-            <p align="center">
-              <img src="https://github.com/ji-podhead/protobuffctl/blob/main/docs/protobuffctl.png?raw=true" width="50" />
-            </p>
-           </div>
-          </td>
-          <td><a href="https://ji-podhead.github.io/protobuffctl/">About</a></td>
-          <td><a href="https://ji-podhead.github.io/protobuffctl/API">API</a></td>
-          <td><a href="https://ji-podhead.github.io/protobuffctl/guides">CLI Guide</a></td>
-          <td><a href="https://ji-podhead.github.io/protobuffctl/charts">FlowChart</a></td>
-          <td><a href="https://github.com/ji-podhead/protobuffctl">Git-Repo</a></td>
-        </tr>
-      </table>
-  </td>
- </tr>
-</table>
+## Protobufctl
+
+ | [About](https://ji-podhead.github.io/protobuffctl/) | [API](https://ji-podhead.github.io/protobuffctl/API) | [CLI Guide](https://ji-podhead.github.io/protobuffctl/guides) | [FlowChart](https://ji-podhead.github.io/protobuffctl/charts) | [Git-Repo](https://github.com/ji-podhead/protobuffctl) |
+ 
+ <br>
+<p align="left">
+  <img src="https://github.com/ji-podhead/protobuffctl/blob/main/docs/protobuffctl.png?raw=true" width="150"  />
+</p>
+
 
 [![npm version](https://img.shields.io/badge/🚧_under_construction_🚧-black)](https://www.npmjs.com/package/protobuffctl)
 [![npm version](https://img.shields.io/badge/protoc_v26.0-binary-blue)](https://www.npmjs.com/package/protobuffctl)
