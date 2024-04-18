@@ -8,7 +8,7 @@
 - Quickly create new message types, fields, services,  methods and enums using the [API](https://ji-podhead.github.io/protobuffctl/) and **cli commands**.<br>
 - Automatically generates the corresponding protobuf files when making changes to the protofiles.<br>
 - comes with Api-Server and Dashboard for demo- and debugging purposes.
-- Stores all Components in the local **Componentregistry**. <br> or push/pull from external DB.
+- Stores all Components in the local **Componentregistry**. <br> or push/pull from **external DB**.
 - The middleware will provide acid and prevents race conditions.
 - **Roll back** to old protofile, or to an registry state using historical `.config` file, or using a external DB just like with **version control**.<br>
 - **Preview** the Protofile-Code before actually building it.<br>
@@ -31,9 +31,7 @@ npm i protobuffctl
                                     ┌─────────────┐                          
                ┌──────────┐         │             │                          
    ┌───────────►ProtoFiles├─────────►             │                          
-   │           └─▲──▲─────┘         │             │                          
-   │             │  │               │             │                          
-   │             │  │               │             │                          
+   │           └─▲──▲─────┘         │             │                                                                   
    │             │  │  ┌────────┐   │             │                          
    │             │  └──┤Services├───►             │                          
    │             │     └───▲────┘   │             │       ┌─────────────────┐
@@ -53,8 +51,7 @@ npm i protobuffctl
    │   └──▲─▲─┘  │                  │             │                          
 ┌──┴──┐   │ │   ┌┴─────┐            │             │                          
 │Enums├───┘ └───┤Fields├────────────►             │                          
-└─┬───┘         └──────┘            │             │                          
-  │                                 │             │                          
+└─┬───┘         └──────┘            │             │                                                
   └─────────────────────────────────►             │                          
                                     └─────────────┘                          
 ```
@@ -65,7 +62,7 @@ npm i protobuffctl
 │  Dashboard   │ │                      │                                                    
 └──────▲───────┘ │  external Database   │                                                   
        │         │                      │
-       |         └──────────▲───────────┘                                                                    |                                              
+       |         └──────────▲───────────┘                                                              
        │      🌐            |       🔄                 💻                                    
   ┌────▼───────┐    ┌───────▼───────┐    ┌─────────────┐                                    
   │            │    │               │    │             │                                     
