@@ -8,12 +8,12 @@
 - Manage `message types`, `fields`, `services`,  `methods` and `enums` by using **cli commands**, or **Api-Server**.
 - Stores all Components in the **local Componentregistry**. <br>
 - Sync with **other registries** like gitey, or PostgreSQL.
-- **Roll back** to old protofile, or to an registry state using historical `.config` file, <br> or by using a external DB just like with **version control**.<br>
+- **Roll back** by using local safe-file, or by using a external DB just like with **version control**.<br>
 - **Preview** the Protofile-Code before actually building it and export any Component to **JSON**.
-- Automatically generates the corresponding `protobuf files` when making changes to the protofiles.<br>
+- **Automatically generates** the corresponding **protobuf files** when making changes to the protofiles.<br>
 - Comes with **Dashboard** for demo, debugging and **testing**.
 - The middleware will provide acid and **prevents race conditions**.
-- The implemented **Api-Server** lets you create your own **User Interface** to manage `Protocollbuffers` 
+- The implemented **Api-Server** lets you create your own **User Interface** to manage Protocollbuffers.
 ---
 #                      Getting Started
 **Install:**
