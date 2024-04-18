@@ -4,15 +4,15 @@
 ![NPM Downloads](https://img.shields.io/npm/dw/protobuffctl)
 
 
-- `protobuffctl` offers an  [API](https://ji-podhead.github.io/protobuffctl/) that enables you to automate all protobuf functions.
+- `Protobuffctl` offers an  [API](https://ji-podhead.github.io/protobuffctl/) that enables you to automate all protobuf functions.
 - Quickly create new `message types`, `fields`, `services`,  `methods` and `enums` by using **cli commands**.
 - Stores all Components in the **local Componentregistry**. <br> or push/pull from **external DB**.
 - **Roll back** to old protofile, or to an registry state using historical `.config` file, or using a external DB just like with **version control**.<br>
 - **Preview** the Protofile-Code before actually building it.
 - Automatically generates the corresponding `protobuf files` when making changes to the protofiles.<br>
-- comes with **Api-Server and Dashboard** for demo, debugging and **testing**.
+- Comes with **Dashboard** for demo, debugging and **testing**.
 - The middleware will provide acid and **prevents race conditions**.
-- Create your own **User Interface** and manage `Protocollbuffers` by using the [API](https://ji-podhead.github.io/protobuffctl/) 
+- The implemented **Api-Server** lets you create your own **User Interface** to manage `Protocollbuffers` 
 - **Export any Component to JSON**, or sync with **other registries** like gitey, or PostgreSQL
 ---
 #                      Getting Started
