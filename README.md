@@ -101,7 +101,7 @@ npm i protobuffctl
 - added a bun react **Dashboard** ✅
   
 ##                      Comming up
-- Set up **File Watcher** to monitor your proto files for any changes. => Rescan and update the Componentregistry 🚧 
+- Set up **File Watcher** to monitor your proto files for any changes. 🚧 
 - create **VC CODE EXTENSION** to manage the api in vs code  🚧  
 - sync with **external DB** 🚧 
 - create demo **Dashboard** 🚧
