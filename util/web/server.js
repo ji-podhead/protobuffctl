@@ -1,8 +1,8 @@
-const { getAll, get, create, toJson, stopAll, startAll, findAllUsages, del, pull, add, push, remove } = require("../src/shared");
-const { set } = require('../src/protoUtils');
+const { getAll, get, create, toJson, stopAll, startAll, findAllUsages, del, pull, add, push, remove } = require("../../src/shared");
+const { set } = require('../../src/protoUtils');
 
 
-const { Protobuffctl } = require("../src/protobuffctl");
+const { Protobuffctl } = require("../../src/protobuffctl");
 let protobuffctl
 
 
