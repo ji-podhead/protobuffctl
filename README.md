@@ -56,6 +56,33 @@ npm i protobuffctl
   └─────────────────────────────────►             │                          
                                     └─────────────┘                          
 ```
+## Architecture
+```
+                 ┌──────────────────────┐                                                   
+                 │                 `📚  │                                                   
+                 │  external Database   │                                                   
+┌──────────────┐ │                      │                                                   
+│ Dashboard 📊 │ └──────────▲───────────┘                                                   
+└──────▲───────┘            │                                                               
+       │                    │                                                               
+  ┌────▼───────┐    ┌───────▼───────┐    ┌─────────────┐                                    
+  │       🌐   │    │            🔄  │    │         💻  │                                     
+  │ Api Server ◄────►  Api Wrapper  ◄────┤     CLI     │                                    
+  │            │    │               │    │             │                                    
+  └────────────┘    └───────▲───────┘    └─────────────┘                                    
+                            │                                                               
+                    ┌───────▼────────┐                                                      
+                    │              👷│                                                      
+                    │ Service-Worker │                                                      
+                    │                │                                                      
+                    └───────▲────────┘                                                      
+                            │                                                               
+          ┌─────────────────▼───────────────────┐                                           
+          │                                  🗄️ │                                           
+          │   Protobuffctl - ComponentRegistry  │                                           
+          │                                     │                                           
+          └─────────────────────────────────────┘
+```
 ## CLI Guide
 **install globally**
 ```JavaScript
@@ -219,38 +246,6 @@ export namespace test { }
 
 
 ---
-# Flowchart
-
-```mermaid
-graph TD;
-    CLI["💻 Command Line Interface"]-->Api;
-CLI["💻 Command Line Interface"]-->Daemon;
-    Api-->ComponentRegistry;
-    FileWatcher-->Api;
-    Api-->ProtobuffFile;
-    Api-->ProtoFile;
-    ProtoFile-->ProtobuffFile;
-    ProtoFile-->ComponentRegistry;
-  
-    ProtobuffFile-->ComponentRegistry;
-
-  Daemon-->Api;
-    subgraph protobuffctl [🏢 protobuffctl]
-        Api;
-        FileWatcher;
-        ComponentRegistry;
-    end
-    subgraph components [🔧 Components]
-        ProtoFile;
-        ProtobuffFile;
-    end
-    style components fill:#f9d71c,stroke:#333,stroke-width:2px
-    style ComponentRegistry fill:#f9d71c,stroke:#333,stroke-width:2px
-    style components fill:#f9d71c,stroke:#333,stroke-width:2px
-    style ComponentRegistry fill:#f9d71c,stroke:#333,stroke-width:2px
-    style Daemon fill:#f9d71c,stroke:#333,stroke-width:2px
-
-```
 
 ---
 
