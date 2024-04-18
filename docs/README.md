@@ -18,6 +18,7 @@
 - Comes with **Dashboard** for demo, debugging and **testing**.
 - The middleware will provide acid and **prevents race conditions**.
 - The implemented **Api-Server** lets you create your own **User Interface** to manage Protocollbuffers.
+
 ---
 #                      Getting Started
 **Install:**
@@ -28,55 +29,6 @@ npm i protobuffctl
 **Docs:**  [see docs](https://ji-podhead.github.io/protobuffctl/) <br>
 **CLI Guide:** [see docs/cli-guide](https://github.com/ji-podhead/protobuffctl/blob/main/docs/CLI-guide.md) 
  
----
-# Flow Chart 
-```
-Architecture:                                                                                                  
-                  ┌───────────┐ ┌──────────────────────┐                 
-                  │ Dashboard │ │  external Database   │                    
-                  └─────▲─────┘ └──────────▲───────────┘                    
-                        │                  │                                                     
-                  ┌─────▼─────┐   ┌────────▼────────┐  ┌─────────────┐           
-                  │ Api Server◄───►   Api Wrapper   ◄──►     CLI     │          
-                  └───────────┘   └────────▲────────┘  └─────────────┘      
-                                           │                                
-                                  ┌────────▼─────────┐                                          
-                                  │  Service-Worker  │                                          
-                                  └────────▲─────────┘   
-                                           │             ┌─────────────────┐ 
-                                    ┌──────▼───────┐ ┌───► HashLookUpTable │           
-                                    │              │ │   └─────────────────┘
-                                    │ Protobuffctl ◄─┤                      
-                                    │              │ │     ┌─────────────┐  
-                                    └──────▲───────┘ └─────►  Relations  │                                           
-ER-Model                                   │               └─────────────┘ 
-                                     ┌─────▼───────┐         
-                ┌──────────┐         │             │                        
-    ┌───────────►ProtoFiles├─────────►             │                        
-    │           └─▲──▲─────┘         │             │                                             
-    │             │  │  ┌────────┐   │             │                        
-    │             │  └──┤Services├───►             │                        
-    │             │     └───▲────┘   │             │                                                            
-    │             │     ┌───┴───┐    │             │                        
-    │             │     │Methods├────►  Component  │                        
-    │             │     └───▲───┘    │      -      │                                              
-    │        ┌────┴┐        │        │  Registry   |                       
-    │        │Types├────────┴────────►             │                        
-    │        └▲───▲┘                 │             │                                               
-    │   ┌─────┴┐  │                  │             │                        
-    │   │Nested├──┼──────────────────►             │                        
-    │   └──▲─▲─┘  │                  │             │                        
- ┌──┴──┐   │ │   ┌┴─────┐            │             │                        
- │Enums├───┘ └───┤Fields├────────────►             │                        
- └─┬───┘         └──────┘            │             │                                              
-   └─────────────────────────────────►             │                        
-                                     └─────────────┘                           
-```
-
-
-
-
-
 ---
 ###                      Update
 - serialize **Protobuff Registry** for local storage ✅
