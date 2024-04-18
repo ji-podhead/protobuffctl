@@ -50,7 +50,7 @@ npm i protobuffctl
 - create **VC CODE EXTENSION** to manage the api in vs code  🚧  
 - sync with **external DB** 🚧 
 - create demo **Dashboard** 🚧
-- implement UUID hashing logic 
+- implement UUID hashing logic 🚧
 - add **tests** to Dashboard and a gRPC debug-Server 🚧 
 ---
 
