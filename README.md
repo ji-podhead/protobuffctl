@@ -24,7 +24,7 @@
 npm i protobuffctl
 ```
 **Docs:**  [see docs](https://ji-podhead.github.io/protobuffctl/guides) <br>
-**CLI Guide:** [see docs/cli-guide](https://github.com/ji-podhead/protobuffctl/blob/main/docs/CLI-guide.md) 
+**CLI Guide:** [see docs/guides](https://github.com/ji-podhead/protobuffctl/blob/main/docs/CLI-guide.md) 
  
 ---
 # Flow Chart 
