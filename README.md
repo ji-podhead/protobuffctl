@@ -98,5 +98,5 @@ npm i protobuffctl
 - 🚧 Get complete visual feedback for all related methods, components, and files directly with our **VC CODE EXTENSION**.<br> 
 - sync with **external DB**
 - create demo **Dashboard**
-
+- add **tests** to Dashboard and a gRPC debug-Server
 
