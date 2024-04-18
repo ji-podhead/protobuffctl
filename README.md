@@ -1,12 +1,12 @@
-| [About](https://ji-podhead.github.io/protobuffctl/) | [API](https://ji-podhead.github.io/protobuffctl/API) | [CLI Guide](https://ji-podhead.github.io/protobuffctl/guides) | [FlowChart](https://ji-podhead.github.io/protobuffctl/charts) |
-|:---|---|---|---:|
+| [About](https://ji-podhead.github.io/protobuffctl/) | [API](https://ji-podhead.github.io/protobuffctl/API) | [CLI Guide](https://ji-podhead.github.io/protobuffctl/guides) | [FlowChart](https://ji-podhead.github.io/protobuffctl/charts) | [Git-Repo](https://github.com/ji-podhead/protobuffctl) |
+
 # protobuffctl  [![npm version](https://img.shields.io/badge/🚧_under_construction_🚧-black)](https://www.npmjs.com/package/protobuffctl)
 [![npm version](https://img.shields.io/badge/protoc_v26.0-binary-blue)](https://www.npmjs.com/package/protobuffctl)
 [![npm version](https://badge.fury.io/js/protobuffctl.svg)](https://badge.fury.io/js/protobuffctl)
 ![NPM Downloads](https://img.shields.io/npm/dw/protobuffctl)
 
 
-- `Protobuffctl` offers an  [API](https://ji-podhead.github.io/protobuffctl/) that enables you to automate all protobuf functions.
+- [Protobuffctl](https://github.com/ji-podhead/protobuffctl) offers an  [API](https://ji-podhead.github.io/protobuffctl/) that enables you to automate all protobuf functions.
 - Manage `message types`, `fields`, `services`,  `methods` and `enums` by using **cli commands**, or **Api-Server**.
 - **Automatically generates** the corresponding **protobuf files** when making changes to the protofiles.<br>
 - Stores all Components in the **local Componentregistry**. <br>
