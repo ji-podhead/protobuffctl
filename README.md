@@ -23,7 +23,7 @@
 npm i protobuffctl
 ```
 **Docs:**  [API](https://ji-podhead.github.io/protobuffctl/docs) <br>
-**CLI Guide:** [in docs folder](https://ji-podhead.github.io/protobuffctl/docs/CLI-guide.md) 
+**CLI Guide:** [in docs folder](https://github.com/ji-podhead/protobuffctl/blob/main/docs/CLI-guide.md) 
  
 ---
 ##                         ER MODEL        
