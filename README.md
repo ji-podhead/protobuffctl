@@ -100,7 +100,7 @@ npm i protobuffctl
   
 ##                      Comming up
 - Set up **File Watcher** to monitor your proto files for any changes. => Rescan and update the Componentregistry 🚧 
-- Get complete visual feedback for all related methods, components, and files directly with our **VC CODE EXTENSION** 🚧  
+- create **VC CODE EXTENSION** to manage the api in vs code  🚧  
 - sync with **external DB** 🚧 
 - create demo **Dashboard** 🚧 
 - add **tests** to Dashboard and a gRPC debug-Server 🚧 
