@@ -1,6 +1,6 @@
 
 | [About](https://ji-podhead.github.io/protobuffctl/) | [API](https://ji-podhead.github.io/protobuffctl/API) | [CLI Guide](https://ji-podhead.github.io/protobuffctl/guides) | [FlowChart](https://ji-podhead.github.io/protobuffctl/charts) |
-|:---|---|---|---:|
+
 
 ## CLI Guide
 **install globally**
