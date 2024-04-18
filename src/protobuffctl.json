@@ -1,1 +1,310 @@
-{"relations":{"protoFiles":{"test":{"children":{"0":{"type":"enums","id":"enumTest"},"1":{"type":"types","id":"NONETYPE"},"2":{"type":"types","id":"testReq"},"3":{"type":"services","id":"testS"},"4":{"type":"services","id":"testS3"}},"parents":{"0":{"type":"types","id":"NONETYPE"}}}},"services":{"testS":{"children":{"0":{"type":"methods","id":"testReqM"},"1":{"type":"methods","id":"testRep2M"}},"parents":{"0":{"type":"protoFiles","id":"test"}}},"testS3":{"children":{"0":{"type":"methods","id":"testReqM"},"1":{"type":"methods","id":"testRep2M"}},"parents":{"0":{"type":"protoFiles","id":"test"}}}},"methods":{"testReqM":{"children":{"0":{"type":"types","id":"testReq"}},"parents":{"0":{"type":"services","id":"testS"},"1":{"type":"services","id":"testS3"}}},"testRep2M":{"children":{"0":{"type":"types","id":"testReq"}},"parents":{"0":{"type":"services","id":"testS"},"1":{"type":"services","id":"testS3"}}}},"types":{"NONETYPE":{"children":{"0":{"type":"protoFiles","id":"test"}},"parents":{}},"testReq":{"children":{"0":{"type":"fields","id":"val2"},"1":{"type":"fields","id":"val5"},"2":{"type":"fields","id":"e1"}},"parents":{"0":{"type":"protoFiles","id":"test"},"1":{"type":"methods","id":"testReqM"},"2":{"type":"methods","id":"testRep2M"}}}},"fields":{"e1":{"children":{"0":{"type":"enums","id":"enumTest"}},"parents":{"0":{"type":"types","id":"testReq"}}},"val2":{"children":{},"parents":{"0":{"type":"types","id":"testReq"}}},"val5":{"children":{},"parents":{"0":{"type":"types","id":"testReq"}}},"val1":{"children":{},"parents":{}}},"enums":{"enumTest":{"children":{},"parents":{"0":{"type":"protoFiles","id":"test"},"1":{"type":"fields","id":"e1"}}}}},"endPoints":{},"fields":{"val2":{"val2":{"type":"string","id":0}},"val5":{"val5":{"type":"string","id":1}},"e1":{"e1":{"type":"enumTest","id":2}},"val1":{"val1":{"type":"string","id":3}}},"services":{},"methods":{"testReqM":{"testReqM":{"requestType":"testReq","responseType":"NONETYPE"}},"testRep2M":{"testRep2M":{"requestType":"testReq","responseType":"testReq","responseStream":true}}},"types":{},"enums":{"enumTest":{"enumTest":{"A":1,"B":2}}},"enumValues":{},"protoFiles":{"test":{"protobuffFiles":{},"protobuffComponents":{},"protoUserComponent":{},"id":"test","options":"test_op","absolute_path":"/run/media/ji/myStuff/git/protobuffctl/test.proto","file_name":"test.proto","file_path":"/run/media/ji/myStuff/git/protobuffctl","syntax":"syntax=\"proto3\";","proto_package":"package test;"}},"protobuffComponents":{},"protobuffFiles":{},"clients":{},"Streams":{},"callbacks":{},"protoUserComponents":{},"protoUserFiles":{},"protoUsers":{},"protoFilePaths":{"test":"/run/media/ji/myStuff/git/protobuffctl/test.proto"},"protobuffFilePaths":{},"protoComponentAppearances":{},"options":{"test_op":{"0":"option java_multiple_files = true;","1":"option java_package = \"./\";","2":"option java_outer_classname = \"test\";","3":"option objc_class_prefix = \"HLW\";","4":"option go_package = \"./\";"}},"hashlookupTable":{"test_op":"options","enumTest":"enums","NONETYPE":"types","val2":"fields","val5":"fields","e1":"fields","val1":"fields","testReq":"types","testReqM":"methods","testRep2M":"methods","testS":"services","testS3":"services","test":"protoFiles"}}
+{
+    "relations": {
+        "protoFiles": {
+            "test": {
+                "children": {
+                    "0": {
+                        "type": "enums",
+                        "id": "enumTest"
+                    },
+                    "1": {
+                        "type": "types",
+                        "id": "NONETYPE"
+                    },
+                    "2": {
+                        "type": "types",
+                        "id": "testReq"
+                    },
+                    "3": {
+                        "type": "services",
+                        "id": "testS"
+                    },
+                    "4": {
+                        "type": "services",
+                        "id": "testS3"
+                    }
+                },
+                "parents": {
+                    "0": {
+                        "type": "types",
+                        "id": "NONETYPE"
+                    }
+                }
+            }
+        },
+        "services": {
+            "testS": {
+                "children": {
+                    "0": {
+                        "type": "methods",
+                        "id": "testReqM"
+                    },
+                    "1": {
+                        "type": "methods",
+                        "id": "testRep2M"
+                    }
+                },
+                "parents": {
+                    "0": {
+                        "type": "protoFiles",
+                        "id": "test"
+                    }
+                }
+            },
+            "testS3": {
+                "children": {
+                    "0": {
+                        "type": "methods",
+                        "id": "testReqM"
+                    },
+                    "1": {
+                        "type": "methods",
+                        "id": "testRep2M"
+                    }
+                },
+                "parents": {
+                    "0": {
+                        "type": "protoFiles",
+                        "id": "test"
+                    }
+                }
+            }
+        },
+        "methods": {
+            "testReqM": {
+                "children": {
+                    "0": {
+                        "type": "types",
+                        "id": "testReq"
+                    }
+                },
+                "parents": {
+                    "0": {
+                        "type": "services",
+                        "id": "testS"
+                    },
+                    "1": {
+                        "type": "services",
+                        "id": "testS3"
+                    }
+                }
+            },
+            "testRep2M": {
+                "children": {
+                    "0": {
+                        "type": "types",
+                        "id": "testReq"
+                    }
+                },
+                "parents": {
+                    "0": {
+                        "type": "services",
+                        "id": "testS"
+                    },
+                    "1": {
+                        "type": "services",
+                        "id": "testS3"
+                    }
+                }
+            }
+        },
+        "types": {
+            "NONETYPE": {
+                "children": {
+                    "0": {
+                        "type": "protoFiles",
+                        "id": "test"
+                    }
+                },
+                "parents": {}
+            },
+            "testReq": {
+                "children": {
+                    "0": {
+                        "type": "fields",
+                        "id": "val2"
+                    },
+                    "1": {
+                        "type": "fields",
+                        "id": "val5"
+                    },
+                    "2": {
+                        "type": "fields",
+                        "id": "e1"
+                    }
+                },
+                "parents": {
+                    "0": {
+                        "type": "protoFiles",
+                        "id": "test"
+                    },
+                    "1": {
+                        "type": "methods",
+                        "id": "testReqM"
+                    },
+                    "2": {
+                        "type": "methods",
+                        "id": "testRep2M"
+                    }
+                }
+            }
+        },
+        "fields": {
+            "e1": {
+                "children": {
+                    "0": {
+                        "type": "enums",
+                        "id": "enumTest"
+                    }
+                },
+                "parents": {
+                    "0": {
+                        "type": "types",
+                        "id": "testReq"
+                    }
+                }
+            },
+            "val2": {
+                "children": {},
+                "parents": {
+                    "0": {
+                        "type": "types",
+                        "id": "testReq"
+                    }
+                }
+            },
+            "val5": {
+                "children": {},
+                "parents": {
+                    "0": {
+                        "type": "types",
+                        "id": "testReq"
+                    }
+                }
+            },
+            "val1": {
+                "children": {},
+                "parents": {}
+            }
+        },
+        "enums": {
+            "enumTest": {
+                "children": {},
+                "parents": {
+                    "0": {
+                        "type": "protoFiles",
+                        "id": "test"
+                    },
+                    "1": {
+                        "type": "fields",
+                        "id": "e1"
+                    }
+                }
+            }
+        }
+    },
+    "endPoints": {},
+    "fields": {
+        "val2": {
+            "val2": {
+                "type": "string",
+                "id": 0
+            }
+        },
+        "val5": {
+            "val5": {
+                "type": "string",
+                "id": 1
+            }
+        },
+        "e1": {
+            "e1": {
+                "type": "enumTest",
+                "id": 2
+            }
+        },
+        "val1": {
+            "val1": {
+                "type": "string",
+                "id": 3
+            }
+        }
+    },
+    "services": {},
+    "methods": {
+        "testReqM": {
+            "testReqM": {
+                "requestType": "testReq",
+                "responseType": "NONETYPE"
+            }
+        },
+        "testRep2M": {
+            "testRep2M": {
+                "requestType": "testReq",
+                "responseType": "testReq",
+                "responseStream": true
+            }
+        }
+    },
+    "types": {},
+    "enums": {
+        "enumTest": {
+            "enumTest": {
+                "A": 1,
+                "B": 2
+            }
+        }
+    },
+    "enumValues": {},
+    "protoFiles": {
+        "test": {
+            "protobuffFiles": {},
+            "protobuffComponents": {},
+            "protoUserComponent": {},
+            "id": "test",
+            "options": "test_op",
+            "absolute_path": "/run/media/ji/myStuff/git/protobuffctl/test.proto",
+            "file_name": "test.proto",
+            "file_path": "/run/media/ji/myStuff/git/protobuffctl",
+            "syntax": "syntax=\"proto3\";",
+            "proto_package": "package test;"
+        }
+    },
+    "protobuffComponents": {},
+    "protobuffFiles": {},
+    "clients": {},
+    "Streams": {},
+    "callbacks": {},
+    "protoUserComponents": {},
+    "protoUserFiles": {},
+    "protoUsers": {},
+    "protoFilePaths": {
+        "test": "/run/media/ji/myStuff/git/protobuffctl/test.proto"
+    },
+    "protobuffFilePaths": {},
+    "protoComponentAppearances": {},
+    "options": {
+        "test_op": {
+            "0": "option java_multiple_files = true;",
+            "1": "option java_package = \"./\";",
+            "2": "option java_outer_classname = \"test\";",
+            "3": "option objc_class_prefix = \"HLW\";",
+            "4": "option go_package = \"./\";"
+        }
+    },
+    "hashlookupTable": {
+        "test_op": "options",
+        "enumTest": "enums",
+        "NONETYPE": "types",
+        "val2": "fields",
+        "val5": "fields",
+        "e1": "fields",
+        "val1": "fields",
+        "testReq": "types",
+        "testReqM": "methods",
+        "testRep2M": "methods",
+        "testS": "services",
+        "testS3": "services",
+        "test": "protoFiles"
+    }
+}

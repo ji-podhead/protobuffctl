@@ -6,9 +6,13 @@ const path = require('path');
 const serialize = require('serialize-javascript');
 const { fork } = require('child_process');
 const { ProtobuffGenerator } = require("protoc-helper")
-const { classDescriptions } = require("../descriptions/classdescriptions");
+const { classDescriptions } = require("../docs/descriptions/classdescriptions.js");
 const { time } = require('console');
 const {extractStringsFromArrayString,addS,componentTypes, childless } = require('../util/utils.js');
+const express = require('express');
+const redis = require('redis');
+
+
 class Filewatcher {
     constructor(protoFile) {
         this.proto = protoFile
@@ -155,62 +159,16 @@ class ComponentRegistry {
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
-/**         ------------------ Daemon ---------------------    
-* @descript0ion ${classDescriptions.Daemon.description}
-*/
-class Daemon {
-    constructor() {
-        if (Daemon.instance) {
-            return Daemon.instance;
-        }
-        Daemon.instance = this;
-        this.daemonProcess = null;
-        this.running = false;
-    }
-    async start() {
-        if (!this.running) {
 
-            this.running = true;
-            console.log("_____________ STARTING DAEMON ")
-
-            sleep(100000); // Wartet
-            console.log("daemon killed")
-        }
-        else{
-            console.log("_____________ DAEMON IS RUNNING ALREADY")
-        }
-    }
-    stop() {
-        if (this.running) {
-            this.daemonProcess.kill();
-            this.running = false;
-            console.log("daemon killed")
-        }
-    }
-    isRunning() {
-        return this.running;
-    }
-    sendMessage(message) {
-        if (this.running) {
-            this.daemonProcess.send(message);
-        } else {
-            console.error('Daemon is not running.');
-        }
-    }
-}
 /**         ------------------ Protobuffctl ---------------------    
  * @description ${classDescriptions.Protobuffctl.description}
  */
 class Protobuffctl {
     constructor() {
         if (Protobuffctl.instance) {
+            console.log("instance existing")
             return Protobuffctl.instance;
         }
-        Protobuffctl.instance = this;
-        this.MainEndpoint = "";
-        this.generator = new ProtobuffGenerator()
-        this.componentRegistry = new ComponentRegistry()
-        this.watchpaths = []
         const filePath = path.join(__dirname, 'protobuffctl.txt');
         if (!fs.existsSync(filePath)) {
             this.save()
@@ -218,29 +176,62 @@ class Protobuffctl {
         else {
             this.init()
         }
-        this.daemon = new Daemon()//.start()
         this.watcherManager = new WatcherManager(); // WatcherManager wird als Teil von Protobuffctl definiert
        // this.startDaemon()
     }
+
     /**
      * @description ${classDescriptions.Protobuffctl.methods.startDaemon}
      */
-    startDaemon() {
-        this.daemon.start();
+    /**
+     * @description ${classDescriptions.Protobuffctl.methods.startDaemon}
+     */
+    startApiServer(port) {
+        if (this.serverStatus!=false){ 
+            return console.log("server is already running");}
+        if(port) this.port=port;
+        this.apiServer = express(); 
+        this.apiServer.use(express.json());
+        this.apiServer.listen(this.port, () => {
+        console.log(`protobuffctl api server  is running on ${this.port}`);
+        const delay = ms => new Promise(resolve => setTimeout(resolve, ms))
+            this.serverStatus =new Promise(async(promise)=>{ 
+                for(;;) {
+                 await delay(100);
+                 console.log(this.serverStatus)
+                 if(this.serverStatus==false) return resolve()
+
+                }
+            })
+        })
     }
     /**
      * @description ${classDescriptions.Protobuffctl.methods.stopDaemon}
      */
-    stopDaemon() {
-        this.daemon.stop();
+    stopApiServer() {
+        if (this.apiServer) {
+            this.apiServer.close(() => {
+                console.log('protobuffctl api server stopped');
+            });
+            // Um das Promise zu lösen, rufen Sie die Funktion auf und verwenden Sie await, wenn nötig
+            // Stellen Sie sicher, dass serverStatus korrekt als Funktion definiert ist
+            this.serverStatus().then(() => {
+                console.log('Server status resolved');
+                this.serverStatus = false; // Setzen Sie serverStatus auf false, nachdem das Promise aufgelöst wurde
+            });
+        } else {
+            console.log('Server is not running');
+        }
     }
-    /**
-     * @description ${classDescriptions.Protobuffctl.methods.isDaemonRunning}
-     */
-    isDaemonRunning() {
-        return this.daemon.isRunning();
-    }
+
     init() {
+        Protobuffctl.instance = this;
+        this.MainEndpoint = "";
+        this.generator = new ProtobuffGenerator()
+        this.componentRegistry = new ComponentRegistry()
+        this.watchpaths = []
+        this.port=3001
+        this.serverStatus=false
         const filePath = path.join(__dirname, 'protobuffctl.txt');
         let readSerializedString = fs.readFileSync(filePath, 'utf8');
       //  console.log(readSerializedString);

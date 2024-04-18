@@ -7,6 +7,28 @@ const fs = require('fs');
 const { Protobuffctl } = require("./protobuffctl");
 const { getElementsRecoursive, getProtoContent, set, findAllU,getChildrenRec, getParentsRec, addMissingtype } = require('./protoUtils.js');
 const protobuffctl = new Protobuffctl()
+const runAll = require('npm-run-all');
+
+function startServer(){
+    protobuffctl.startApiServer()
+    
+}
+function stopServer(){
+    protobuffctl.stopApiServer()
+    
+}
+function startDashboard(){
+    // Führen Sie das npm-Skript 'start' aus
+    runAll(['start'], {
+        stdio: 'inherit', // Leitet die Standard-Ein-/Ausgabe um, sodass Sie die Ausgabe sehen können
+        cwd: './my-react-app' // Pfad zur React-App
+      }).then(() => {
+        console.log('Skript erfolgreich ausgeführt');
+      }).catch(err => {
+        console.error('Fehler beim Ausführen des Skripts:', err);
+      });
+
+}
 /**
  * Retrieves a specific component from the registry.
  * @example
@@ -707,7 +729,7 @@ function startAllWatchers() {
 *------------------------ exports --------------------
 */
 module.exports = {
-    getAll, remove, findAllUsages, add, del, protogenArr, pull, push, createFromConfig, get, toJson, create, addWatcher, removeWatcher, stopAllWatchers, startAllWatchers,
+    startServer,stopServer,getAll, remove, findAllUsages, add, del, protogenArr, pull, push, createFromConfig, get, toJson, create, addWatcher, removeWatcher, stopAllWatchers, startAllWatchers,
 };
 /*_______________________________________________________________
 *                           E N D 

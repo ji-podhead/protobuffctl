@@ -1,17 +1,17 @@
 const { Command } = require('commander');
-const {getAll,get,create,toJson,addWatcher,removeWatcher, stopAll,startAll, findAllUsages, del, pull, add, push, remove} =require("../src/shared");
+const {getAll,get,create,toJson,startServer,stopServer,findAllUsages, del, pull, add, push, remove} =require("../src/shared");
 const { set } = require('../src/protoUtils');
 
 
     const cli = new Command();
 cli
-    .command('startAll')
-    .description('Start all watchers')
-    .action(() => { startAll() });
+    .command('startServer')
+    .description('Starts the api Server')
+    .action(() => { startServer() });
 cli
-    .command('stopAll')
-    .description('Stop all watchers')
-    .action(() => { stopAll() });
+    .command('stopServer')
+    .description('Stops the api server')
+    .action(() => { stopServer() });
 cli
     .command('create <type> <arg1> [arg2] [arg3]>')
     .description('Initializes a new Proto-object,enum,type,service or ProtobuffFile in the registry')
