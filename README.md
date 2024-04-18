@@ -27,7 +27,7 @@ npm i protobuffctl
 ---
 # Flow Charts                              
 ```
-                                       ER MODEL
+                                       ER Model
                                                      
                                     ┌─────────────┐                          
                ┌──────────┐         │             │                          
