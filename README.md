@@ -5,7 +5,7 @@
 
 
 - `Protobuffctl` offers an  [API](https://ji-podhead.github.io/protobuffctl/) that enables you to automate all protobuf functions.
-- Create,delete and manage `message types`, `fields`, `services`,  `methods` and `enums` by using **cli commands**, or **Api-Server**.
+- Manage `message types`, `fields`, `services`,  `methods` and `enums` by using **cli commands**, or **Api-Server**.
 - Stores all Components in the **local Componentregistry**. <br>
 - Sync with **other registries** like gitey, or PostgreSQL.
 - **Roll back** by using local safe-file, or by using a external DB just like with **version control**.<br>
