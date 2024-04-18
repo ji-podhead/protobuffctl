@@ -21,7 +21,7 @@
 ```JavaScript
 npm i protobuffctl
 ```
-**Docs:**  [see docs](https://ji-podhead.github.io/protobuffctl/) <br>
+**Docs:**  [see docs](https://ji-podhead.github.io/protobuffctl/guides) <br>
 **CLI Guide:** [see docs/cli-guide](https://github.com/ji-podhead/protobuffctl/blob/main/docs/CLI-guide.md) 
  
 ---
