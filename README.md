@@ -16,7 +16,7 @@
 - Avoids recoursion when creating components *see ER Model below.
 - **Export any Component to JSON**, or sync with **other registries** like gitey, or PostgreSQL
 ---
-# Getting Started
+#                      Getting Started
 **Install:**
  
 ```JavaScript
@@ -26,7 +26,7 @@ npm i protobuffctl
 **CLI Guide:** [in docs folder](https://ji-podhead.github.io/protobuffctl/docs/CLI-guide.md) 
  
 ---
-##           >> PROTOBUFFCTL ER MODEL <<       
+##                         ER MODEL        
 ```                                                                                          
                                     ┌─────────────┐                          
                ┌──────────┐         │             │                          
@@ -58,7 +58,7 @@ npm i protobuffctl
   └─────────────────────────────────►             │                          
                                     └─────────────┘                          
 ```
-## Architecture
+##                    Architecture
 ```              
               📊                        📚                         
 ┌──────────────┐ ┌──────────────────────┐  
@@ -91,12 +91,12 @@ npm i protobuffctl
 
 
 ---
-### Update
+###                      Update
 - **Export to JSON**: All components are stored and can be reproduced. [See example JSON](https://github.com/ji-podhead/protobuffctl/blob/main/protobuffctl.json).
 - **automated Proto-gen**:  Related protobuf files will automatically get compiled to their target folders using the [protoc-helper repo](https://github.com/ji-podhead/protoc-helper).
 - **Fast Saving and Loading**: middleware keeps the process alive.
 - **Protobuff Registry**: Protobuff registry and creation are working fine.
-## Comming up
+##                      Comming up
 - 🚧 Set up **File Watcher** to monitor your proto files for any changes. => Rescan and update the Componentregistry.<br>
 - 🚧 Get complete visual feedback for all related methods, components, and files directly with our **VC CODE EXTENSION**.<br> 
 - sync with **external DB**
