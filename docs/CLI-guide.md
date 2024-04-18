@@ -1,4 +1,4 @@
-```
+
 ## CLI Guide
 **install globally**
 ```JavaScript
