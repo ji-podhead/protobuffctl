@@ -18,7 +18,7 @@
 - The middleware will provide acid and **prevents race conditions**.
 - The implemented **Api-Server** lets you create your own **User Interface** to manage Protocollbuffers.
 ---
-#                      Getting Started
+##                      Getting Started
 **Install:**
  
 ```JavaScript
@@ -28,7 +28,7 @@ npm i protobuffctl
 **CLI Guide:** [see docs/guides](https://github.com/ji-podhead/protobuffctl/blob/main/docs/CLI-guide.md) 
  
 ---
-# Flow Chart 
+## Flow Chart 
 ```
 Architecture:                                                                                                  
                   ┌───────────┐ ┌──────────────────────┐                 
