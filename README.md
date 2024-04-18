@@ -91,26 +91,15 @@ npm i protobuffctl
 
 
 ---
-
+### Update
+- **Export to JSON**: All components are stored and can be reproduced. [See example JSON](https://github.com/ji-podhead/protobuffctl/blob/main/protobuffctl.json).
+- **automated Proto-gen**:  Related protobuf files will automatically get compiled to their target folders using the [protoc-helper repo](https://github.com/ji-podhead/protoc-helper).
+- **Fast Saving and Loading**: middleware keeps the process alive.
+- **Protobuff Registry**: Protobuff registry and creation are working fine.
 ## Comming up
 - 🚧 Set up **File Watcher** to monitor your proto files for any changes. => Rescan and update the Componentregistry.<br>
 - 🚧 Get complete visual feedback for all related methods, components, and files directly with our **VC CODE EXTENSION**.<br> 
-
-
-
-
-### Update
-- **Fast Saving and Loading**: Added a daemon to keep the main object alive, including the registry.
-- **Protobuff Registry**: Protobuff registry and creation are working fine.
-- **Export to JSON**: All components are stored and can be reproduced. [See example JSON](https://github.com/ji-podhead/protobuffctl/blob/main/protobuffctl.json).
-- **New Services, Types, Enums**: Create new services, types, enums via CLI command by copying from the registry or via command. 
-- **automated Proto-gen**:  Related protobuf files will automatically get compiled to their target folders using the [protoc-helper repo](https://github.com/ji-podhead/protoc-helper).
-- this thing works, which is nice. complete api to edit your protobuff  projects and files. you can set every important value via cli know and ill add support to get all protofiles from certain folders.
-- you can apply changes via api know -> registry is getting updated -> protofiles are getting updates -> *protobuff-files are getting upddated* <- i actually need to implement that :)  but my db was created as a wrapper for protobuffjs, so i just need a bridge/method
-### TODO
-> **files and object cant be redundant**, however if failures arise due to the user, or missing drives, the config/save-file can get damaged which can lead to weird behaviour when automated processes are using the faulty objects, so i decided to add a health-state field for each object. **unhealthy files will be ignored and not further be processed**, but also the main statehandler wont delete that file, if it may become usuable again later.
-- **Health State Field**: Add a health-state field for each object to handle failures and misconfigurations.
-- **Health Check**: Add a health check to ensure the integrity of the objects.
-- ~~**Merge Function**: Add a merge function for the user to copy fields back over to a healthy file if there were misconfigurations.~~
+- sync with **external DB**
+- create demo **Dashboard**
 
 
