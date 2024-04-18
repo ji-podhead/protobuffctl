@@ -22,8 +22,8 @@
 ```JavaScript
 npm i protobuffctl
 ```
-**Docs:**  [API](https://ji-podhead.github.io/protobuffctl/) <br>
-**CLI Guide:** [in docs folder](https://github.com/ji-podhead/protobuffctl/blob/main/docs/CLI-guide.md) 
+**Docs:**  [see docs](https://ji-podhead.github.io/protobuffctl/) <br>
+**CLI Guide:** [see docs/cli-guide](https://github.com/ji-podhead/protobuffctl/blob/main/docs/CLI-guide.md) 
  
 ---
 ##                         ER MODEL        
