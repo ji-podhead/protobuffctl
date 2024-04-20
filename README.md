@@ -49,7 +49,7 @@ npm i protobuffctl
 - Set up **File Watcher** to monitor your proto files for any changes. 🚧 
 - create **VC CODE EXTENSION** to manage the api in vs code  🚧  
 - sync with **external DB** 🚧 
-- create demo **Dashboard** 🚧
+- finish  **Dashboard**  and use a web compiler for demo 🚧
 - implement UUID hashing logic 🚧
 - add **tests** to Dashboard and a gRPC debug-Server 🚧 
 ---
