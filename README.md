@@ -24,7 +24,6 @@
 - **Preview** the Protofile-Code before actually building it and export any Component to **JSON**.
 - Comes with **Dashboard** for demo, debugging and **testing**.
 - The middleware will provide acid and **prevents race conditions**.
-- The implemented **Api-Server** lets you create your own **User Interface** to manage Protocollbuffers.
 ---
 ##                      Getting Started
 **Install:**
