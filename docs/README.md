@@ -7,19 +7,20 @@
 [![npm version](https://img.shields.io/badge/protoc_v26.0-binary-blue)](https://www.npmjs.com/package/protobuffctl)
 [![npm version](https://badge.fury.io/js/protobuffctl.svg)](https://badge.fury.io/js/protobuffctl)
 
+## Automate Your Protobuf Workflow
+Protobuffctl is a comprehensive JavaScript API designed to streamline Protobuf development, offering features for creation, management, and automatic Protobuf generation, along with API server integration and a built-in dashboard for monitoring, testing and debugging.
 
-
-
-- [Protobuffctl](https://github.com/ji-podhead/protobuffctl) offers an  [API](https://ji-podhead.github.io/protobuffctl/) that enables you to automate all protobuf functions.
-- Manage `message types`, `fields`, `services`,  `methods` and `enums` by using **cli commands**, or **Api-Server**.
-- **Automatically generates** the corresponding **protobuf files** when making changes to the protofiles.<br>
-- Stores all Components in the **local Componentregistry**. <br>
-- Sync with **other registries** like gitey, or PostgreSQL.
-- **Roll back** by using local safe-file, or by using a external DB just like with **version control**.<br>
-- **Preview** the Protofile-Code before actually building it and export any Component to **JSON**.
-- Comes with **Dashboard** for demo, debugging and **testing**.
-- The middleware will provide acid and **prevents race conditions**.
-
+## Key Features
+- [Protobuffctl](https://github.com/ji-podhead/protobuffctl) offers an [API](https://ji-podhead.github.io/protobuffctl/) that enables you to automate all Protobuf functions.
+- Manage `message types`, `fields`, `services`, `methods`, and `enums` by using **CLI commands** or the **API server**.
+- **Automatically generates** the corresponding **Protobuf files** when making changes to the protofiles.
+- Stores all components in the **local Componentregistry**.
+- Sync with **other registries** like Gitey or PostgreSQL.
+- **Rollback** by using a local safe-file or by using an external database, similar to **version control**.
+- **Preview** the Protofile code before actually building it and export any component to **JSON**.
+- Comes with a **Dashboard** for demo, debugging, and **testing**.
+- **Monitoring** for individual `message types` and `services` using the dashboard and [D3.js](https://d3js.org/).
+- The middleware ensures **ACID** compliance and **prevents race conditions**
 
 ---
 ##                      Getting Started
