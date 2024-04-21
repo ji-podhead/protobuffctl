@@ -23,6 +23,7 @@
 - **Roll back** by using local safe-file, or by using a external DB just like with **version control**.<br>
 - **Preview** the Protofile-Code before actually building it and export any Component to **JSON**.
 - Comes with **Dashboard** for demo, debugging and **testing**.
+- **Monitoring** for individual `message types` and `services` using the dashboard and [D3](https://d3js.org/).
 - The middleware will provide acid and **prevents race conditions**.
 ---
 ##                      Getting Started
