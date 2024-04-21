@@ -1,6 +1,6 @@
 <img width ="100" align="right" object-fit="contain" src="https://github.com/ji-podhead/protobuffctl/blob/main/docs/protobuffctl.png?raw=true"/>  
 
-**| [Docs ](https://ji-podhead.github.io/protobuffctl/)|[API](https://ji-podhead.github.io/protobuffctl/API) | [CLI Guide](https://ji-podhead.github.io/protobuffctl/guides) | [FlowChart](https://ji-podhead.github.io/protobuffctl/charts) |** 
+**| [Docs ](https://ji-podhead.github.io/protobuffctl/)|[API](https://ji-podhead.github.io/protobuffctl/API) | [CLI Guide](https://ji-podhead.github.io/protobuffctl/guides) | [Architecture](https://ji-podhead.github.io/protobuffctl/charts) |** 
  
 #  Protobuffctl 
 
