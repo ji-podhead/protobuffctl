@@ -1,7 +1,9 @@
 
  | [About](https://ji-podhead.github.io/protobuffctl/) | [API](https://ji-podhead.github.io/protobuffctl/API) | [CLI Guide](https://ji-podhead.github.io/protobuffctl/guides) | [Architecture](https://ji-podhead.github.io/protobuffctl/architecture) | [Git-Repo](https://github.com/ji-podhead/protobuffctl) |
  
-## Codebase Organization:
+## Codebase Organization
+
+This section provides an overview of the project's file structure and the purpose of each file.
 **File-Structure:**
 ```
 ├── main.js
@@ -21,9 +23,7 @@
 │   └── utils.js
 └── util/dashboard/
 ```
-## Codebase Organization
 
-This section provides an overview of the project's file structure and the purpose of each file.
 
 ### Main Files
 
