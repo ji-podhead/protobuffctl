@@ -52,3 +52,25 @@ npm i protobuffctl
 - implement UUID hashing logic 
 - add **tests** to Dashboard and a gRPC debug-Server 🚧 
 
+## Contribution?
+
+ 👋 If you're thinking about giving Protobuffctl a little love, you're in the right place. Here's how you can get involved:
+
+### Fork
+- **Fork the Repo**: Just head over to GitHub and click the "Fork" button.
+- **Clone Your Fork**: Once you've forked the repo, clone it to your computer.
+- **Create a New Branch**: Make a new branch for your cool new feature or bug fix. Something descriptive would be awesome!
+- **Make Your Changes**: Get coding! 🚀
+- **Commit Your Changes**: When you're happy with your changes, commit them with a message that tells us what you did
+- **Push Your Changes**: Push your changes back to your fork on GitHub.
+- **Open a Pull Request**: If you're ready to share your work with the world, go back to the original Protobuffctl repo and open a pull request from your fork.
+
+### Here are a few other options:
+
+- **reach out via Discord**: DM me via Discord #podhead181818.
+- **Start a Discussion**: If you've got something to say, but maybe not something you're ready to code yet, you can start a discussion under the "Discussions" tab with the "Contribution" label.
+- **Open an Issue**: If you've found a bug or have a feature request, you can open an issue on GitHub.
+
+Thanks for thinking about contributing! 🙏 Whether you're coding, chatting, or just sharing ideas, every contribution helps make Protobuffctl better.
+
+
