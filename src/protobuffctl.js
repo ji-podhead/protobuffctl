@@ -9,8 +9,6 @@ const { ProtobuffGenerator } = require("protoc-helper")
 const { classDescriptions } = require("../docs/descriptions/classdescriptions.js");
 const { time } = require('console');
 const {extractStringsFromArrayString,addS,componentTypes, childless } = require('../util/utils.js');
-const express = require('express');
-const redis = require('redis');
 
 
 class Filewatcher {
@@ -186,51 +184,14 @@ class Protobuffctl {
     /**
      * @description ${classDescriptions.Protobuffctl.methods.startDaemon}
      */
-    startApiServer(port) {
-        if (this.serverStatus!=false){ 
-            return console.log("server is already running");}
-        if(port) this.port=port;
-        this.apiServer = express(); 
-        this.apiServer.use(express.json());
-        this.apiServer.listen(this.port, () => {
-        console.log(`protobuffctl api server  is running on ${this.port}`);
-        const delay = ms => new Promise(resolve => setTimeout(resolve, ms))
-            this.serverStatus =new Promise(async(promise)=>{ 
-                for(;;) {
-                 await delay(100);
-                 console.log(this.serverStatus)
-                 if(this.serverStatus==false) return resolve()
-
-                }
-            })
-        })
-    }
-    /**
-     * @description ${classDescriptions.Protobuffctl.methods.stopDaemon}
-     */
-    stopApiServer() {
-        if (this.apiServer) {
-            this.apiServer.close(() => {
-                console.log('protobuffctl api server stopped');
-            });
-            // Um das Promise zu lösen, rufen Sie die Funktion auf und verwenden Sie await, wenn nötig
-            // Stellen Sie sicher, dass serverStatus korrekt als Funktion definiert ist
-            this.serverStatus().then(() => {
-                console.log('Server status resolved');
-                this.serverStatus = false; // Setzen Sie serverStatus auf false, nachdem das Promise aufgelöst wurde
-            });
-        } else {
-            console.log('Server is not running');
-        }
-    }
+   
 
     init() {
         Protobuffctl.instance = this;
         this.generator = new ProtobuffGenerator()
         this.componentRegistry = new ComponentRegistry()
         this.watchpaths = []
-        this.port=3001
-        this.serverStatus=false
+
         const filePath = path.join(__dirname, 'protobuffctl.txt');
         let readSerializedString = fs.readFileSync(filePath, 'utf8');
       //  console.log(readSerializedString);

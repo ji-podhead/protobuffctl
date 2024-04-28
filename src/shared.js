@@ -9,14 +9,7 @@ const { getElementsRecoursive, getProtoContent, set, findAllU,getChildrenRec, ge
 const protobuffctl = new Protobuffctl()
 const runAll = require('npm-run-all');
 
-function startServer(){
-    protobuffctl.startApiServer()
-    
-}
-function stopServer(){
-    protobuffctl.stopApiServer()
-    
-}
+
 function startDashboard(){
     // Führen Sie das npm-Skript 'start' aus
     runAll(['start'], {
@@ -729,7 +722,7 @@ function startAllWatchers() {
 *------------------------ exports --------------------
 */
 module.exports = {
-    startServer,stopServer,getAll, remove, findAllUsages, add, del, protogenArr, pull, push, createFromConfig, get, toJson, create, addWatcher, removeWatcher, stopAllWatchers, startAllWatchers,
+  getAll, remove, findAllUsages, add, del, protogenArr, pull, push, createFromConfig, get, toJson, create, addWatcher, removeWatcher, stopAllWatchers, startAllWatchers,
 };
 /*_______________________________________________________________
 *                           E N D 

@@ -17,13 +17,15 @@ const functions = {
     push: push,
     remove: remove,
     set: set
- }
 
+ }
+ 
 process.on('message', (message) => {
-    const command = message.command
-    const args=message.args
-    const resp=functions[command](...args)
     console.log(`Worker received message: ${message}`);
+    const command = message["command"]
+    const args=message["args"]
+    const resp=functions[command](...args)
+    console.log(resp)
     // Führen Sie hier Ihre asynchronen Operationen durch
     // Zum Beispiel:
     // someAsyncOperation().then(() => {
